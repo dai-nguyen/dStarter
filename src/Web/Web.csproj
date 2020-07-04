@@ -18,8 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\dPortable\Infrastructure\Infrastructure.csproj" />
-    <ProjectReference Include="..\..\..\dPortable\Shared\Shared.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Roles\" />
   </ItemGroup>
 
 </Project>

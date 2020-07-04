@@ -1,0 +1,63 @@
+﻿<v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <template v-slot:activator="{ on }">
+        <v-btn color="primary" dar class="mb-2" v-on="on">New Item</v-btn>
+    </template>
+    <v-card>
+        <v-toolbar dark color="primary">
+            <v-btn icon dark v-on:click="close">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+                <v-btn dark text
+                        v-on:click="save"
+                        :disabled="!valid">Save</v-btn>
+            </v-toolbar-items>
+        </v-toolbar>
+
+        <v-container>
+            <v-form v-model="valid" ref="form" lazy-validation>
+                <v-text-field v-model="editedItem.userName"
+                              :rules="userNameRules"
+                              :counter="50"
+                              label="UserName"
+                              :disabled="editedIndex > -1"
+                              required>
+                </v-text-field>
+
+                <v-text-field v-model="editedItem.email"
+                              :rules="emailRules"
+                              :counter="50"
+                              label="Email"
+                              required>
+                </v-text-field>
+
+                <v-text-field v-model="editedItem.password"
+                              :rules="editedIndex == -1 ? passwordRules : ''"
+                              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                              v-on:click:append="showPassword = !showPassword"
+                              :type="showPassword ? 'text' : 'password'"
+                              :counter="50"
+                              label="Password">
+                </v-text-field>
+
+                <v-text-field v-model="editedItem.firstName"
+                              :rules="firstNameRules"
+                              :counter="50"
+                              label="First Name"
+                              required>
+                </v-text-field>
+
+                <v-text-field v-model="editedItem.lastName"
+                              :rules="lastNameRules"
+                              :counter="50"
+                              label="Last Name"
+                              required>
+                </v-text-field>
+
+            </v-form>
+        </v-container>
+
+    </v-card>
+</v-dialog>
