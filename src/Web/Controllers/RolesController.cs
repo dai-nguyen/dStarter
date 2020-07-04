@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Infrastructure.Interfaces;
+﻿using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
+using System.Threading.Tasks;
 using Web.Mappers;
 using Web.Models;
 
@@ -14,14 +11,14 @@ namespace Web.Controllers
     public class RolesController : Controller
     {
         private readonly ILogger<RolesController> _logger;
-        private readonly IUserStore _userStore;
+        private readonly IRoleStore _roleStore;
 
         public RolesController(
             ILogger<RolesController> logger,
-            IUserStore userStore)
+            IRoleStore roleStore)
         {
             _logger = logger;
-            _userStore = userStore;
+            _roleStore = roleStore;
         }
 
         public IActionResult Index()
@@ -30,16 +27,16 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<PageDto<UserDto>>> LoadData([FromBody] TableOption model)
+        public async Task<ActionResultDto<PageDto<RoleDto>>> LoadData([FromBody] TableOption model)
         {
-            var spec = model.ToUserSpecification();
-            return await _userStore.FindAsync(spec);
+            var spec = model.ToRoleSpecification();
+            return await _roleStore.FindAsync(spec);
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<UserDto>> GetData(string id)
+        public async Task<ActionResultDto<RoleDto>> GetData(string id)
         {
-            return await _userStore.GetAsync(id, Infrastructure.Stores.UserKey.Id);
+            return await _roleStore.GetAsync(id, Infrastructure.Stores.RoleKey.Id);
         }
     }
 }

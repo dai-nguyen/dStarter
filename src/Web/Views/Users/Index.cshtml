@@ -36,8 +36,8 @@
             </template>
 
             <template v-slot:item.action="{ item }">
-                <v-icon small class="mr-2" v-on:click="editItem(item)">edit</v-icon>
-                <v-icon small v-on:click="deleteItem(item)">delete</v-icon>
+                <v-icon small class="mr-2" v-on:click="editItem(item)">mdi-pencil</v-icon>
+                <v-icon small v-on:click="deleteItem(item)">mdi-delete</v-icon>
             </template>
             <template v-slot:no-data>
                 <v-btn color="primary" v-on:click="getData()">Reset</v-btn>
@@ -71,7 +71,7 @@
                     mustSort: false
                 },
                 headers: [
-                    { text: 'UserName', value: 'userName' },
+                    { text: 'User Name', value: 'userName' },
                     { text: 'Email', value: 'email' },
                     { text: 'First Name', value: 'firstName' },
                     { text: 'Last Name', value: 'lastName' },
@@ -85,12 +85,16 @@
                     firstName: '',
                     lastName: '',
                     email: '',
+                    attributes: [],
+                    roles: []
                 },
                 defaultItem: {
                     userName: '',
                     firstName: '',
                     lastName: '',
                     email: '',
+                    attributes: [],
+                    roles: []
                 },
                 userNameRules: [
                     v => !!v || 'UserName is required',
@@ -111,7 +115,8 @@
                 emailRules: [
                     v => !!v || 'Email is required',
                     v => v.length <= 50 || 'Email must be less than 51 characters'
-                ]
+                ],
+                editedAttr: null
             }
         },
         computed: {
@@ -126,6 +131,7 @@
                 }
             },
             dialog(val) {
+                
                 val || this.close();
             }
         },
@@ -231,6 +237,47 @@
                     })
                 vm.getData();
             },
+
+            addAttr() {
+                this.editedAttr = {
+                    id: this.getGuid(),
+                    type: '',
+                    value: ''
+                };
+
+                this.editedItem.attributes.push(Object.assign({}, this.editedAttr));
+            },
+
+            editAttr(attr) {
+                this.editedAttr = Object.assign({}, attr)
+            },
+
+            updateAttr() {
+
+                for (var i = 0; i < this.editedItem.attributes.length; i++) {
+                    if (this.editedItem.attributes[i].id == this.editedAttr.id) {
+                        this.editedItem.attributes[i] = Object.assign({}, this.editedAttr);
+                        break;
+                    }
+                }
+          
+                this.editedAttr = null;
+            },
+
+            cancelAttr() {
+                this.editedAttr = null;
+            },
+
+            removeAttr(attr) {
+                var index = this.editedItem.attributes.indexOf(attr);
+                this.editedItem.attributes.splice(index, 1);
+            },
+
+            getGuid() {
+                return([1e7]+ -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+                );
+            }
         }
     })
 </script>

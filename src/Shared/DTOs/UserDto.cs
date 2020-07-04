@@ -25,6 +25,7 @@ namespace Shared.DTOs
 
     public class UserAttributeDto
     {
+        public string Id { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
     }

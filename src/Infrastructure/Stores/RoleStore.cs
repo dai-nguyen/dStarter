@@ -344,6 +344,26 @@ namespace Infrastructure.Stores
             return action;
         }
 
+        public virtual async Task<ActionResultDto<RoleDto[]>> ListAllAsync()
+        {
+            var action = new ActionResultDto<RoleDto[]>();
+
+            try
+            {
+                var entity = await RoleManager.Roles
+                        .AsNoTracking()
+                        .ToListAsync();
+
+                action.Result = entity == null ? null : Mapper.Map<RoleDto[]>(entity);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Unable to execute ListAllAsync method {UserName}",
+                    UserSession.UserName);
+            }
+            return action;
+        }
+
         protected virtual async Task UpsertAttributesAsync(AppRole entity, RoleDto dto)
         {
             if (dto.Attributes == null)

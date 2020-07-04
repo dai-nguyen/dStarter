@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Infrastructure.Interfaces;
+﻿using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
+using System.Threading.Tasks;
 using Web.Mappers;
 using Web.Models;
 
@@ -36,10 +33,31 @@ namespace Web.Controllers
             return await _userStore.FindAsync(spec);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResultDto<UserDto>> GetData(string id)
         {
             return await _userStore.GetAsync(id, Infrastructure.Stores.UserKey.Id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResultDto<UserDto>> Upsert([FromBody] UserDto dto)
+        {
+            if (string.IsNullOrEmpty(dto.Id))
+            {
+                // create
+                return await _userStore.AddAsync(dto);
+            }
+            else
+            {
+                // update
+                return await _userStore.UpdateAsync(dto);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResultDto<bool>> Delete(string id)
+        {
+            return await _userStore.DeleteAsync(id);
         }
     }
 }

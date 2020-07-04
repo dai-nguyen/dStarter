@@ -13,5 +13,6 @@ namespace Infrastructure.Interfaces
         Task<ActionResultDto<TDto>> UpdateAsync(TDto dto);
         Task<ActionResultDto<TDto[]>> UpdateRangeAsync(TDto[] dtos);
         Task<ActionResultDto<TDto>> GetByExternalIdAsync(string externalId);
+        Task<ActionResultDto<TDto[]>> ListAllAsync();
     }
 }

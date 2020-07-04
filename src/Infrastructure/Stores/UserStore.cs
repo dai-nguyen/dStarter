@@ -224,6 +224,7 @@ namespace Infrastructure.Stores
                     dto.Attributes = attrs
                         .Select(_ => new UserAttributeDto()
                         {
+                            Id = Guid.NewGuid().ToString(),
                             Type = _.Type,
                             Value = _.Value
                         }).ToArray();
