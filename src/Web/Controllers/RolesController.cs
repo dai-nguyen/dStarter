@@ -33,10 +33,37 @@ namespace Web.Controllers
             return await _roleStore.FindAsync(spec);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResultDto<RoleDto>> GetData(string id)
         {
             return await _roleStore.GetAsync(id, Infrastructure.Stores.RoleKey.Id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResultDto<RoleDto>> Upsert([FromBody] RoleDto dto)
+        {
+            if (string.IsNullOrEmpty(dto.Id))
+            {
+                // create
+                return await _roleStore.AddAsync(dto);
+            }
+            else
+            {
+                // update
+                return await _roleStore.UpdateAsync(dto);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResultDto<bool>> Delete(string id)
+        {
+            return await _roleStore.DeleteAsync(id);
+        }
+
+        [HttpGet]
+        public async Task<ActionResultDto<RoleDto[]>> Roles()
+        {
+            return await _roleStore.ListAllAsync();
         }
     }
 }

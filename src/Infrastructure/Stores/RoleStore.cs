@@ -131,7 +131,11 @@ namespace Infrastructure.Stores
                 var colMaps = new Dictionary<string, Expression<Func<AppRole, object>>>()
                 {
                     ["Id"] = _ => _.Id,
-                    ["Name"] = _ => _.Name
+                    ["Name"] = _ => _.Name,
+                    ["DateCreated"] = _ => _.DateCreated,
+                    ["DateUpdated"] = _ => _.DateUpdated,
+                    ["CreatedBy"] = _ => _.CreatedBy,
+                    ["UpdatedBy"] = _ => _.UpdatedBy,
                 };
 
                 if (!string.IsNullOrEmpty(spec.SortBy)

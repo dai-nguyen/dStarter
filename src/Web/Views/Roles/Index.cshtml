@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "Roles";
 }
 
 <div id="appDiv">
@@ -26,11 +26,11 @@
 
             <template v-slot:top>
                 <v-toolbar flat color="white">
-                    <v-toolbar-title>Users</v-toolbar-title>
+                    <v-toolbar-title>Roles</v-toolbar-title>
                     <v-divider class="mx-4" insert vertical></v-divider>
                     <v-spacer></v-spacer>
 
-                    <partial name="~/Views/Users/_User.cshtml" />
+                    <partial name="~/Views/Roles/_Role.cshtml" />
 
                 </v-toolbar>
             </template>
@@ -63,7 +63,7 @@
                 options: {
                     page: 1,
                     itemPerPage: 10,
-                    sortBy: ['userName'],
+                    sortBy: ['name'],
                     sortDesc: [false],
                     groupBy: [],
                     groupDesc: [],
@@ -71,58 +71,32 @@
                     mustSort: false
                 },
                 headers: [
-                    { text: 'User Name', value: 'userName' },
-                    { text: 'Email', value: 'email' },
-                    { text: 'First Name', value: 'firstName' },
-                    { text: 'Last Name', value: 'lastName' },
+                    { text: 'Name', value: 'name' },
+                    { text: 'Date Updated', value: 'dateUpdatedFormatted' },
+                    { text: 'Updated By', value: 'updatedBy' },
                     { text: 'Action', value: 'action', sortable: false }
                 ],
                 valid: false,
                 dialog: false,
                 editedIndex: -1,
                 editedItem: {
-                    userName: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
+                    name: '',
                     attributes: [],
-                    roles: []
                 },
                 defaultItem: {
-                    userName: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
+                    name: [],
                     attributes: [],
-                    roles: []
                 },
-                userNameRules: [
-                    v => !!v || 'UserName is required',
-                    v => v.length <= 50 || 'User Name must be less than 51 characters'
-                ],
-                passwordRules: [
-                    v => !!v || 'Password is required',
-                    v => v.length <= 50 || 'Password must be less than 51 characters'
-                ],
-                firstNameRules: [
-                    v => !!v || 'First Name is required',
-                    v => v.length <= 50 || 'First Name must be less than 51 characters'
-                ],
-                lastNameRules: [
-                    v => !!v || 'Last Name is required',
-                    v => v.length <= 50 || 'Last Name must be less than 51 characters'
-                ],
-                emailRules: [
-                    v => !!v || 'Email is required',
-                    v => v.length <= 50 || 'Email must be less than 51 characters'
+                nameRules: [
+                    v => !!v || 'Name is required',
+                    v => v.length <= 50 || 'Name must be less than 51 characters'
                 ],
                 editedAttr: null,
-                roles: []
             }
         },
         computed: {
             formTitle() {
-                return this.editedIndex === -1 ? 'New User' : 'Edit User';
+                return this.editedIndex === -1 ? 'New Role' : 'Edit Role';
             }
         },
         watch: {
@@ -144,7 +118,7 @@
             getData () {
                 this.loading = true;
                 axios
-                    .post('@Url.Action("LoadData", "Users")', this.options)
+                    .post('@Url.Action("LoadData", "Roles")', this.options)
                     .then(response => {
                         this.items = response.data.result.data;
                         this.totalItems = response.data.result.total;
@@ -159,31 +133,23 @@
                 //this.dialog = true;
 
                 axios
-                    .get('@Url.Action("GetData", "Users")/' + item.id)
+                    .get('@Url.Action("GetData", "Roles")/' + item.id)
                     .then(response => {
                         //console.log('editedItem', response.data);
 
                         if (response.data.result != null) {
                             this.editedItem = Object.assign({}, response.data.result);
                             this.dialog = true;
-
-                            axios
-                                .get('@Url.Action("Roles", "Roles")')
-                                .then(res => {
-                                    if (res.data.result != null) {
-                                        this.roles = res.data.result;
-                                    }
-                                });
                         }
                     });
             },
 
             deleteItem (item) {
                 //const index = this.items.indexOf(item);
-                if (confirm('Are you sure you want to delete this user?')) {
+                if (confirm('Are you sure you want to delete this role?')) {
                     var vm = this;
 
-                    axios.delete('@Url.Action("Delete", "Users")/' + item.id)
+                    axios.delete('@Url.Action("Delete", "Roles")/' + item.id)
                         .then(function (response) {
                             console.log(response);
 
@@ -217,7 +183,7 @@
                 e.preventDefault();
                 var vm = this;
 
-                axios.post('@Url.Action("Upsert", "Users")', this.editedItem)
+                axios.post('@Url.Action("Upsert", "Roles")', this.editedItem)
                     .then(function (response) {
                         vm.editedIndex = -1;
 

@@ -25,6 +25,9 @@ namespace Web.Mappers
             {
                 sortBy = option.SortBy.First().UppercaseFirst();
                 sortDir = option.SortDesc.First() ? "desc" : "asc";
+
+                if (sortBy == "DateUpdatedFormatted")
+                    sortBy = "DateUpdated";
             }
 
             return new RoleSpecification("", sortBy, sortDir, pageSize, pageNumber);

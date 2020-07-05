@@ -18,52 +18,13 @@
 
         <v-container>
             <v-form v-model="valid" ref="form" lazy-validation>
-                <v-text-field v-model="editedItem.userName"
-                              :rules="userNameRules"
+                <v-text-field v-model="editedItem.name"
+                              :rules="nameRules"
                               :counter="50"
-                              label="User Name"
+                              label="Name"
                               :disabled="editedIndex > -1"
                               required>
                 </v-text-field>
-
-                <v-text-field v-model="editedItem.email"
-                              :rules="emailRules"
-                              :counter="50"
-                              label="Email"
-                              required>
-                </v-text-field>
-
-                <v-text-field v-model="editedItem.password"
-                              :rules="editedIndex == -1 ? passwordRules : ''"
-                              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                              v-on:click:append="showPassword = !showPassword"
-                              :type="showPassword ? 'text' : 'password'"
-                              :counter="50"
-                              label="Password">
-                </v-text-field>
-
-                <v-text-field v-model="editedItem.firstName"
-                              :rules="firstNameRules"
-                              :counter="50"
-                              label="First Name"
-                              required>
-                </v-text-field>
-
-                <v-text-field v-model="editedItem.lastName"
-                              :rules="lastNameRules"
-                              :counter="50"
-                              label="Last Name"
-                              required>
-                </v-text-field>
-
-                <v-select :items="roles"
-                          v-model="editedItem.roles"
-                          item-text="name"
-                          item-value="name"
-                          multiple
-                          label="Roles">
-
-                </v-select>
 
                 <v-simple-table>
                     <template v-slot:default>

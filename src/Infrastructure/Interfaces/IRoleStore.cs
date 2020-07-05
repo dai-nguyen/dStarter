@@ -16,6 +16,7 @@ namespace Infrastructure.Interfaces
         Task<ActionResultDto<RoleDto>> UpdateAsync(RoleDto dto);
         Task<ActionResultDto<bool>> DeleteAsync(string id);
         Task<ActionResultDto<RoleDto>> GetByExternalIdAsync(string externalId);
+        Task<ActionResultDto<RoleDto[]>> ListAllAsync();
 
     }
 }
