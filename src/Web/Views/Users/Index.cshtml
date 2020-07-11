@@ -129,10 +129,11 @@
             options: {
                 handler() {
                     this.getData();
+                    this.getRoles();
                 }
             },
             dialog(val) {
-                
+
                 val || this.close();
             }
         },
@@ -166,14 +167,16 @@
                         if (response.data.result != null) {
                             this.editedItem = Object.assign({}, response.data.result);
                             this.dialog = true;
+                        }
+                    });
+            },
 
-                            axios
-                                .get('@Url.Action("Roles", "Roles")')
-                                .then(res => {
-                                    if (res.data.result != null) {
-                                        this.roles = res.data.result;
-                                    }
-                                });
+            getRoles() {
+                axios
+                    .get('@Url.Action("Roles", "Roles")')
+                    .then(res => {
+                        if (res.data.result != null) {
+                            this.roles = res.data.result;
                         }
                     });
             },
@@ -269,7 +272,7 @@
                         break;
                     }
                 }
-          
+
                 this.editedAttr = null;
             },
 

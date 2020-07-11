@@ -10,5 +10,11 @@
             public static string UserId = "UserId";
             public static string Roles = "Roles";
         }
+
+        public static class BackgroundTaskStatus
+        {
+            public static string Ready = "Ready";
+            public static string Started = "Started";
+        }
     }
 }

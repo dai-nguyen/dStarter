@@ -1,13 +1,15 @@
 ﻿using Infrastructure.Interfaces;
+using Infrastructure.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using System.Threading.Tasks;
-using Web.Mappers;
 using Web.Models;
 
 namespace Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly ILogger<UsersController> _logger;
@@ -27,7 +29,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<PageDto<UserDto>>> LoadData([FromBody] TableOption model)
+        public async Task<ActionResultDto<PageDto<UserDto>>> LoadData([FromBody] TableOptionDto model)
         {
             var spec = model.ToUserSpecification();
             return await _userStore.FindAsync(spec);

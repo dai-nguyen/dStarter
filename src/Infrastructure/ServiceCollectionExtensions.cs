@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Hangfire;
+using Hangfire.Storage.SQLite;
 
 namespace Infrastructure
 {
@@ -28,6 +30,16 @@ namespace Infrastructure
             services.AddTransient<Interfaces.IUserStore, UserStore>();
             services.AddTransient<Interfaces.IRoleStore, RoleStore>();
             services.AddScoped<IUserSession, UserSession>();
+
+            // background services
+            services.AddHostedService<TimedHostedService>();
+            services.AddHostedService<QueuedHostedService>();
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+
+            services.AddHangfire(cfg =>
+                cfg.UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSQLiteStorage());
 
             return services;
         }

@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Infrastructure.Entities
+﻿namespace Shared.DTOs
 {
-    public class BgSchedule : BaseEntity
+    public class BgScheduleDto : BaseDto
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -18,7 +16,5 @@ namespace Infrastructure.Entities
         public int StartHour { get; set; }
         public int StartMinute { get; set; }
         public int RepeatInMinute { get; set; }
-
-        public IEnumerable<BgJob> BgJobs { get; set; }
     }
 }

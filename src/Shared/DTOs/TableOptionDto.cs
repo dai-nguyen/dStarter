@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Web.Models
+namespace Shared.DTOs
 {
-    public class TableOption
+    public class TableOptionDto
     {
         public int Page { get; set; }
         public int ItemsPerPage { get; set; }

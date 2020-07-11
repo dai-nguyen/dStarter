@@ -28,32 +28,6 @@ namespace Web
         {
             services.UseInfrastructure(Configuration);
 
-            //var migrationsAssembly = typeof(AppDbContext).Assembly.GetName();
-            //var migrationsAssemblyName = migrationsAssembly.Name;
-
-            //var useSqlServer = Convert.ToBoolean(Configuration["Infrastructure:UseSqlServer"] ?? "false");
-            //var dbConnString = useSqlServer
-            //    ? Configuration.GetConnectionString("DefaultConnection")
-            //    : $"Filename={Configuration.GetConnectionString("SqliteConnection")}";
-
-            //void DbContextOptionsBuilder(DbContextOptionsBuilder builder)
-            //{
-            //    if (useSqlServer)
-            //    {
-            //        builder.UseSqlServer(dbConnString, sql => sql.MigrationsAssembly(migrationsAssemblyName));
-            //    }
-            //    else if (Convert.ToBoolean(Configuration["Infrastructure:UsePostgresServer"] ?? "false"))
-            //    {
-            //        builder.UseNpgsql(Configuration.GetConnectionString("PostgresConnection"), sql => sql.MigrationsAssembly(migrationsAssemblyName));
-            //    }
-            //    else
-            //    {
-            //        builder.UseSqlite(dbConnString, sql => sql.MigrationsAssembly(migrationsAssemblyName));
-            //    }
-            //}
-
-            //services.AddDbContext<AppDbContext>(DbContextOptionsBuilder);
-
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();

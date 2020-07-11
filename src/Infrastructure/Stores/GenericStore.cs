@@ -314,25 +314,25 @@ namespace Infrastructure.Stores
             return action;
         }
 
-        public virtual async Task<ActionResultDto<TDto[]>> ListAllAsync()
-        {
-            var action = new ActionResultDto<TDto[]>();
+        //public virtual async Task<ActionResultDto<TDto[]>> ListAllAsync()
+        //{
+        //    var action = new ActionResultDto<TDto[]>();
 
-            try
-            {
-                var data = await DbContext.Set<TEntity>()
-                    .AsNoTracking()
-                    .ToListAsync();
+        //    try
+        //    {
+        //        var data = await DbContext.Set<TEntity>()
+        //            .AsNoTracking()
+        //            .ToListAsync();
 
-                action.Result = data == null ? null : Mapper.Map<TDto[]>(data);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "Unable to execute ListAllAsync {UserName}",
-                    UserSession.UserName);
-            }
-            return action;
-        }
+        //        action.Result = data == null ? null : Mapper.Map<TDto[]>(data);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.LogError(ex, "Unable to execute ListAllAsync {UserName}",
+        //            UserSession.UserName);
+        //    }
+        //    return action;
+        //}
 
         private IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> spec)
         {

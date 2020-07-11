@@ -1,20 +1,19 @@
-﻿using Infrastructure;
-using Infrastructure.Data;
+﻿using Infrastructure.Data;
 using Infrastructure.Helpers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 
-namespace UnitTest
+namespace Infrastructure
 {
-    public sealed class TestFactory
+    public sealed class BackgroundFactory
     {
-        private static readonly Lazy<TestFactory> lazy = 
-            new Lazy<TestFactory>(() => new TestFactory());
+        private static readonly Lazy<BackgroundFactory> lazy = 
+            new Lazy<BackgroundFactory>(() => new BackgroundFactory());
 
-        public static TestFactory Instance
+        public static BackgroundFactory Instance
         {
             get { return lazy.Value; }
         }
@@ -22,12 +21,12 @@ namespace UnitTest
         ServiceProvider ServiceProvider;
         IConfigurationRoot Configuration;
 
-        private TestFactory()
+        private BackgroundFactory()
         {
             IServiceCollection services = new ServiceCollection();
-
+            
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Helper.CurrentFolder) //Directory.GetCurrentDirectory())
+                .SetBasePath(Helper.CurrentFolder)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
             Configuration = builder.Build();
 
@@ -74,9 +73,5 @@ namespace UnitTest
             { }
             return default(T);
         }
-
-        
-
-        
     }
 }

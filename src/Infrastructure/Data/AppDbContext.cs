@@ -18,8 +18,6 @@ namespace Infrastructure.Data
         public DbSet<UserAttribute> UserAttributes { get; set; }
         public DbSet<RoleAttribute> RoleAttributes { get; set; }
 
-        public DbSet<BgSchedule> BgSchedules { get; set; }
-        public DbSet<BgJob> BgJobs { get; set; }
 
         public AppDbContext(
             DbContextOptions<AppDbContext> options,
@@ -36,8 +34,7 @@ namespace Infrastructure.Data
         {
             builder.ApplyConfiguration(new UserAttributeConfiguration());
             builder.ApplyConfiguration(new RoleAttributeConfiguration());
-            builder.ApplyConfiguration(new BgScheduleConfiguration());
-            builder.ApplyConfiguration(new BgJobConfiguration());
+
 
             base.OnModelCreating(builder);
         }
