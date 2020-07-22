@@ -5,6 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200714023448_update_ticket.cs" />
+    <Compile Remove="Migrations\20200714023448_update_ticket.Designer.cs" />
+    <Compile Remove="Migrations\20200714023742_update_ticket.cs" />
+    <Compile Remove="Migrations\20200714023742_update_ticket.Designer.cs" />
+    <Compile Remove="Migrations\20200714023832_update_ticket.cs" />
+    <Compile Remove="Migrations\20200714023832_update_ticket.Designer.cs" />
+    <Compile Remove="Migrations\20200714023950_update_ticket.cs" />
+    <Compile Remove="Migrations\20200714023950_update_ticket.Designer.cs" />
+    <Compile Remove="Migrations\20200714024046_updat_ticket.cs" />
+    <Compile Remove="Migrations\20200714024046_updat_ticket.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.11" />
@@ -27,6 +40,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Modules\CRM\Interfaces\" />
+    <Folder Include="Modules\CRM\Mappers\" />
+    <Folder Include="Modules\CRM\Stores\" />
+    <Folder Include="Modules\CRM\Services\" />
   </ItemGroup>
 
 </Project>

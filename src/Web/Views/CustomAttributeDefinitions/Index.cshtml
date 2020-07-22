@@ -26,11 +26,11 @@
 
             <template v-slot:top>
                 <v-toolbar flat color="white">
-                    <v-toolbar-title>Users</v-toolbar-title>
+                    <v-toolbar-title>Custom Attribute Definitions</v-toolbar-title>
                     <v-divider class="mx-4" insert vertical></v-divider>
                     <v-spacer></v-spacer>
 
-                    <partial name="~/Views/Users/_User.cshtml" />
+                    <partial name="~/Views/CustomAttributeDefinitions/_CustomAttributeDefinition.cshtml" />
 
                 </v-toolbar>
             </template>
@@ -63,7 +63,7 @@
                 options: {
                     page: 1,
                     itemPerPage: 10,
-                    sortBy: ['userName'],
+                    sortBy: ['objectName'],
                     sortDesc: [false],
                     groupBy: [],
                     groupDesc: [],
@@ -71,30 +71,26 @@
                     mustSort: false
                 },
                 headers: [
-                    { text: 'User Name', value: 'userName' },
-                    { text: 'Email', value: 'email' },
-                    { text: 'First Name', value: 'firstName' },
-                    { text: 'Last Name', value: 'lastName' },
+                    { text: 'Entity', value: 'objectName' },
+                    { text: 'Name', value: 'name' },
+                    { text: 'Display Name', value: 'displayName' },
+                    { text: 'Data Type', value: 'dataType' },
                     { text: 'Action', value: 'action', sortable: false }
                 ],
                 valid: false,
                 dialog: false,
                 editedIndex: -1,
                 editedItem: {
-                    userName: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    attributes: [],
-                    roles: []
+                    objectName: '',
+                    name: '',
+                    displayName: '',
+                    dataType: ''
                 },
                 defaultItem: {
-                    userName: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    attributes: [],
-                    roles: []
+                    objectName: '',
+                    name: '',
+                    displayName: '',
+                    dataType: ''
                 },
                 userNameRules: [
                     v => !!v || 'UserName is required',

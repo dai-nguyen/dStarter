@@ -1,0 +1,123 @@
+﻿<v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <template v-slot:activator="{ on }">
+        <v-btn color="primary" dar class="mb-2" v-on="on">New Item</v-btn>
+    </template>
+    <v-card>
+        <v-toolbar dark color="primary">
+            <v-btn icon dark v-on:click="close">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+                <v-btn dark text
+                        v-on:click="save"
+                        :disabled="!valid">Save</v-btn>
+            </v-toolbar-items>
+        </v-toolbar>
+
+        <v-container>
+            <v-form v-model="valid" ref="form" lazy-validation>
+                <v-text-field v-model="editedItem.userName"
+                              :rules="userNameRules"
+                              :counter="50"
+                              label="User Name"
+                              :disabled="editedIndex > -1"
+                              required>
+                </v-text-field>
+
+                <v-text-field v-model="editedItem.email"
+                              :rules="emailRules"
+                              :counter="50"
+                              label="Email"
+                              required>
+                </v-text-field>
+
+                <v-text-field v-model="editedItem.password"
+                              :rules="editedIndex == -1 ? passwordRules : ''"
+                              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                              v-on:click:append="showPassword = !showPassword"
+                              :type="showPassword ? 'text' : 'password'"
+                              :counter="50"
+                              label="Password">
+                </v-text-field>
+
+                <v-text-field v-model="editedItem.firstName"
+                              :rules="firstNameRules"
+                              :counter="50"
+                              label="First Name"
+                              required>
+                </v-text-field>
+
+                <v-text-field v-model="editedItem.lastName"
+                              :rules="lastNameRules"
+                              :counter="50"
+                              label="Last Name"
+                              required>
+                </v-text-field>
+
+                <v-select :items="roles"
+                          v-model="editedItem.roles"
+                          item-text="name"
+                          item-value="name"
+                          multiple
+                          label="Roles">
+
+                </v-select>
+
+                <v-simple-table>
+                    <template v-slot:default>
+                        <thead>
+                            <tr>
+                                <th class="text-left">
+                                    Attribute Type
+                                    <v-icon small
+                                            v-on:click="addAttr"
+                                            v-if="!editedAttr">mdi-plus</v-icon>
+                                </th>
+                                <th class="text-left">Attribute Value</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in editedItem.attributes" :key="item.id">
+                                <td v-if="!editedAttr || editedAttr.id != item.id">{{ item.type }}</td>
+                                <td v-if="editedAttr && item.id == editedAttr.id">
+                                    <v-text-field v-model="editedAttr.type"
+                                                  :counter="50"
+                                                  label="Key"
+                                                  :rules="[v => !!v || 'Key is required']"
+                                                  required></v-text-field>
+                                </td>
+                                <td v-if="!editedAttr || editedAttr.id != item.id">{{ item.value }}</td>
+                                <td v-if="editedAttr && item.id == editedAttr.id">
+                                    <v-text-field v-model="editedAttr.value"
+                                                  :counter="50"
+                                                  label="Value"
+                                                  :rules="[v => !!v || 'Value is required']"
+                                                  required></v-text-field>
+                                </td>
+                                <td>
+                                    <v-icon small class="mr-2"
+                                            v-if="!editedAttr"
+                                            v-on:click="editAttr(item)">mdi-pencil</v-icon>
+                                    <v-icon small class="mr-2"
+                                            v-if="editedAttr && editedAttr.id == item.id"
+                                            v-on:click="updateAttr()">mdi-content-save</v-icon>
+                                    <v-icon small
+                                            v-if="editedAttr && editedAttr.id == item.id"
+                                            v-on:click="cancelAttr()">mdi-cancel</v-icon>
+                                    <v-icon small
+                                            v-if="!editedAttr"
+                                            v-on:click="removeAttr(item)">mdi-delete</v-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </v-simple-table>
+
+            </v-form>
+        </v-container>
+
+    </v-card>
+</v-dialog>

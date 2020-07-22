@@ -1,6 +1,8 @@
 ﻿using Infrastructure.Data.Configurations;
 using Infrastructure.Entities;
 using Infrastructure.Interfaces;
+using Infrastructure.Modules.CRM.Configurations;
+using Infrastructure.Modules.CRM.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +19,14 @@ namespace Infrastructure.Data
 
         public DbSet<UserAttribute> UserAttributes { get; set; }
         public DbSet<RoleAttribute> RoleAttributes { get; set; }
+        public DbSet<CustomAttribute> CustomAttributes { get; set; }
+        public DbSet<AppConfig> AppConfigs { get; set; }
+
+        // CRM module
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<LaborHour> LaborHours { get; set; }
 
 
         public AppDbContext(
@@ -34,7 +44,14 @@ namespace Infrastructure.Data
         {
             builder.ApplyConfiguration(new UserAttributeConfiguration());
             builder.ApplyConfiguration(new RoleAttributeConfiguration());
+            builder.ApplyConfiguration(new CustomAttributeConfiguration());
+            builder.ApplyConfiguration(new AppConfigConfiguration());
 
+            // CRM module
+            builder.ApplyConfiguration(new CustomerConfiguration());
+            builder.ApplyConfiguration(new ContactConfiguration());
+            builder.ApplyConfiguration(new TicketConfiguration());
+            builder.ApplyConfiguration(new LaborHourConfiguration());
 
             base.OnModelCreating(builder);
         }

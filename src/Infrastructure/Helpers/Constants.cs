@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Helpers
+﻿using Infrastructure.Data;
+
+namespace Infrastructure.Helpers
 {
     public static class Constants
     {
@@ -11,10 +13,10 @@
             public static string Roles = "Roles";
         }
 
-        public static class BackgroundTaskStatus
+        public static class ParentNames
         {
-            public static string Ready = "Ready";
-            public static string Started = "Started";
+            public static string User = nameof(AppUser);
+            public static string Role = nameof(AppRole);
         }
     }
 }
