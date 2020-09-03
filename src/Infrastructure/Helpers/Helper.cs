@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Update;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -19,6 +21,28 @@ namespace Infrastructure.Helpers
             char[] a = s.ToCharArray();
             a[0] = char.ToUpper(a[0]);
             return new string(a);
+        }
+
+        public static string[] GetParentNames()
+        {
+            var type = typeof(Constants.ParentNames);
+            FieldInfo[] fields = type.GetFields(
+                BindingFlags.Public | BindingFlags.Static);
+
+            return fields.Select(_ => _.Name)
+                .OrderBy(_ => _)
+                .ToArray();
+        }
+
+        public static string[] GetDataTypes()
+        {
+            var type = typeof(Constants.DataTypes);
+            FieldInfo[] fields = type.GetFields(
+                BindingFlags.Public | BindingFlags.Static);
+
+            return fields.Select(_ => _.Name)
+                .OrderBy(_ => _)
+                .ToArray();
         }
     }
 }

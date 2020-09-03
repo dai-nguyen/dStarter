@@ -5,7 +5,7 @@ namespace Shared.DTOs
 {
     public class BaseFilterDto
     {
-        public IEnumerable<int> IDs { get; set; } = null;
+        public int[] IDs { get; set; } = null;
         public DateTime? DateCreated { get; set; } = null;
         public DateTime? DateUpdated { get; set; } = null;
         public string CreatedBy { get; set; } = "";
@@ -17,5 +17,24 @@ namespace Shared.DTOs
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 25;
         public bool IsPagingEnabled { get; set; } = false;
+
+        public BaseFilterDto()
+        { }
+
+        public BaseFilterDto(
+            int[] ids,
+            string sortBy,
+            string sortDir,
+            int pageNumber,
+            int pageSize,
+            bool isPagingEnabled)
+        {
+            IDs = ids;
+            SortBy = sortBy;
+            SortDirection = sortDir;
+            PageNumber = pageNumber;
+            PageSize = pageSize;
+            IsPagingEnabled = isPagingEnabled;
+        }
     }
 }

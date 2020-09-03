@@ -15,7 +15,7 @@ namespace Shared.DTOs
 
         public string DateUpdatedFormatted { get { return DateUpdated.ToString("MM/dd/yyyy"); } }
 
-        public IEnumerable<RoleAttributeDto> Attributes { get; set; } = new List<RoleAttributeDto>();
+        public IEnumerable<RoleAttributeDto> Attributes { get; set; }
     }
 
     public class RoleAttributeDto

@@ -18,6 +18,9 @@ namespace Infrastructure.Data.Configurations
             builder.HasIndex(_ => _.ExternalId);
 
             builder.Property(_ => _.Value);
+            builder.Property(_ => _.ParentId);
+            builder.HasIndex(_ => _.ParentId);
+            builder.HasIndex(_ => new { _.DefinitionId, _.ParentId }).IsUnique(true);
 
             builder.HasOne(_ => _.Definition)
                 .WithMany(_ => _.CustomAttributes)

@@ -19,6 +19,7 @@ namespace Infrastructure.Data
 
         public DbSet<UserAttribute> UserAttributes { get; set; }
         public DbSet<RoleAttribute> RoleAttributes { get; set; }
+        public DbSet<CustomAttributeDefinition> CustomAttributeDefinitions { get; set; }
         public DbSet<CustomAttribute> CustomAttributes { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
 
@@ -44,6 +45,7 @@ namespace Infrastructure.Data
         {
             builder.ApplyConfiguration(new UserAttributeConfiguration());
             builder.ApplyConfiguration(new RoleAttributeConfiguration());
+            builder.ApplyConfiguration(new CustomAttributeDefinitionConfiguration());
             builder.ApplyConfiguration(new CustomAttributeConfiguration());
             builder.ApplyConfiguration(new AppConfigConfiguration());
 

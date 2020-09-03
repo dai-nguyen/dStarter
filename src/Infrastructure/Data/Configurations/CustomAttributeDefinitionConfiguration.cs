@@ -8,7 +8,7 @@ namespace Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CustomAttributeDefinition> builder)
         {
-            builder.ToTable("CustomAttributes");
+            builder.ToTable("CustomAttributeDefinitions");
             builder.HasKey(_ => _.Id);
             builder.Property(_ => _.DateCreated);
             builder.Property(_ => _.DateUpdated);
@@ -18,8 +18,8 @@ namespace Infrastructure.Data.Configurations
             builder.HasIndex(_ => _.ExternalId);
 
             builder.Property(_ => _.ObjectName).HasMaxLength(100);
-            builder.HasIndex(_ => _.ObjectName);
             builder.Property(_ => _.Name).HasMaxLength(100);
+            builder.HasIndex(_ => new { _.ObjectName, _.Name });
             builder.Property(_ => _.DisplayName).HasMaxLength(100);
             builder.Property(_ => _.DataType).HasMaxLength(100);
         }

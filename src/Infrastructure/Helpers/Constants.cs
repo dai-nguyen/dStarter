@@ -18,5 +18,12 @@ namespace Infrastructure.Helpers
             public static string User = nameof(AppUser);
             public static string Role = nameof(AppRole);
         }
+
+        public static class DataTypes
+        {
+            public static string Numeric = nameof(Numeric);
+            public static string Text = nameof(Text);
+            public static string Date = nameof(Date);
+        }
     }
 }

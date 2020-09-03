@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Shared.DTOs
+﻿namespace Shared.DTOs
 {
     public class CustomAttributeDefinitionDto : BaseDto
     {

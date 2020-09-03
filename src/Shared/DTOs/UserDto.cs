@@ -19,8 +19,8 @@ namespace Shared.DTOs
         public string LastName { get; set; }
         public string Password { get; set; }
 
-        public IEnumerable<string> Roles { get; set; } = new List<string>();
-        public IEnumerable<UserAttributeDto> Attributes { get; set; } = new List<UserAttributeDto>();
+        public IEnumerable<string> Roles { get; set; }
+        public IEnumerable<UserAttributeDto> Attributes { get; set; }
     }
 
     public class UserAttributeDto

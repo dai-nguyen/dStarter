@@ -49,11 +49,11 @@ namespace Infrastructure.Specifications
             {
                 if (baseFilter.SortDirection.Equals("asc", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    ApplyOrderBy(_ => columnMaps[baseFilter.SortBy]);
+                    ApplyOrderBy(columnMaps[baseFilter.SortBy]);
                 }
                 else if (baseFilter.SortDirection.Equals("desc", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    ApplyOrderByDescending(_ => columnMaps[baseFilter.SortBy]);
+                    ApplyOrderByDescending(columnMaps[baseFilter.SortBy]);
                 }
             }
         }

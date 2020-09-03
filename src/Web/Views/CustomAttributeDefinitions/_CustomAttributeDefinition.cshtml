@@ -18,103 +18,39 @@
 
         <v-container>
             <v-form v-model="valid" ref="form" lazy-validation>
-                <v-text-field v-model="editedItem.userName"
-                              :rules="userNameRules"
+
+                <v-select :items="objectNames"
+                          v-model="editedItem.objectName"
+                          item-text="name"
+                          item-value="name"
+                          :disabled="editedIndex > -1"
+                          label="Object Name">
+
+                </v-select>
+
+                <v-text-field v-model="editedItem.name"
+                              :rules="[v => !!v || 'Name is required', v => v.length <= 50 || 'Name must be less than 51 characters']"
                               :counter="50"
-                              label="User Name"
+                              label="Name"
                               :disabled="editedIndex > -1"
                               required>
                 </v-text-field>
 
-                <v-text-field v-model="editedItem.email"
-                              :rules="emailRules"
+                <v-text-field v-model="editedItem.displayName"
+                              :rules="[v => !!v || 'Display Name is required', v => v.length <= 50 || 'Display Name must be less than 51 characters']"
                               :counter="50"
-                              label="Email"
+                              label="Name Display"
                               required>
                 </v-text-field>
 
-                <v-text-field v-model="editedItem.password"
-                              :rules="editedIndex == -1 ? passwordRules : ''"
-                              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                              v-on:click:append="showPassword = !showPassword"
-                              :type="showPassword ? 'text' : 'password'"
-                              :counter="50"
-                              label="Password">
-                </v-text-field>
-
-                <v-text-field v-model="editedItem.firstName"
-                              :rules="firstNameRules"
-                              :counter="50"
-                              label="First Name"
-                              required>
-                </v-text-field>
-
-                <v-text-field v-model="editedItem.lastName"
-                              :rules="lastNameRules"
-                              :counter="50"
-                              label="Last Name"
-                              required>
-                </v-text-field>
-
-                <v-select :items="roles"
-                          v-model="editedItem.roles"
+                <v-select :items="dataTypes"
+                          v-model="editedItem.dataType"
                           item-text="name"
                           item-value="name"
-                          multiple
-                          label="Roles">
+                          :disabled="editedIndex > -1"
+                          label="Data Type">
 
                 </v-select>
-
-                <v-simple-table>
-                    <template v-slot:default>
-                        <thead>
-                            <tr>
-                                <th class="text-left">
-                                    Attribute Type
-                                    <v-icon small
-                                            v-on:click="addAttr"
-                                            v-if="!editedAttr">mdi-plus</v-icon>
-                                </th>
-                                <th class="text-left">Attribute Value</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="item in editedItem.attributes" :key="item.id">
-                                <td v-if="!editedAttr || editedAttr.id != item.id">{{ item.type }}</td>
-                                <td v-if="editedAttr && item.id == editedAttr.id">
-                                    <v-text-field v-model="editedAttr.type"
-                                                  :counter="50"
-                                                  label="Key"
-                                                  :rules="[v => !!v || 'Key is required']"
-                                                  required></v-text-field>
-                                </td>
-                                <td v-if="!editedAttr || editedAttr.id != item.id">{{ item.value }}</td>
-                                <td v-if="editedAttr && item.id == editedAttr.id">
-                                    <v-text-field v-model="editedAttr.value"
-                                                  :counter="50"
-                                                  label="Value"
-                                                  :rules="[v => !!v || 'Value is required']"
-                                                  required></v-text-field>
-                                </td>
-                                <td>
-                                    <v-icon small class="mr-2"
-                                            v-if="!editedAttr"
-                                            v-on:click="editAttr(item)">mdi-pencil</v-icon>
-                                    <v-icon small class="mr-2"
-                                            v-if="editedAttr && editedAttr.id == item.id"
-                                            v-on:click="updateAttr()">mdi-content-save</v-icon>
-                                    <v-icon small
-                                            v-if="editedAttr && editedAttr.id == item.id"
-                                            v-on:click="cancelAttr()">mdi-cancel</v-icon>
-                                    <v-icon small
-                                            v-if="!editedAttr"
-                                            v-on:click="removeAttr(item)">mdi-delete</v-icon>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </template>
-                </v-simple-table>
 
             </v-form>
         </v-container>

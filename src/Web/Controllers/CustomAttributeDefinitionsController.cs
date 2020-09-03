@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Entities;
+using Infrastructure.Helpers;
 using Infrastructure.Interfaces;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Authorization;
@@ -61,6 +62,22 @@ namespace Web.Controllers
         public async Task<ActionResultDto<bool>> Delete(int id)
         {
             return await _store.DeleteAsync(id);
+        }
+
+        [HttpGet]
+        public ActionResultDto<string[]> ObjectNames()
+        {
+            var action = new ActionResultDto<string[]>();
+            action.Result = Helper.GetParentNames();
+            return action;
+        }
+
+        [HttpGet]
+        public ActionResultDto<string[]> DataTypes()
+        {
+            var action = new ActionResultDto<string[]>();
+            action.Result = Helper.GetDataTypes();
+            return action;
         }
     }
 }

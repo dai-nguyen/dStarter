@@ -11,4 +11,9 @@ namespace Shared.DTOs
         public string UpdatedBy { get; set; } = "?";
         public string ExternalId { get; set; }
     }
+
+    public class BaseWithAttrDto : BaseDto
+    {
+        public CustomAttributeDto[] CustomAttributes { get; set; }
+    }
 }
