@@ -17,44 +17,39 @@
             </v-btn>
         </v-snackbar>
 
-        <v-card>
-            <v-card-title>
-                Users
-                <v-spacer></v-spacer>
-                <v-text-field v-model="options.search"
-                              append-icon="mdi-magnify"
-                              label="Search"
-                              single-line
-                              hide-details></v-text-field>
-            </v-card-title>
-            <v-data-table :headers="headers"
-                          :items="items"
-                          :options.sync="options"
-                          :server-items-length="totalItems"
-                          :loading="loading"
-                          class="elevation-1">
+        <v-data-table :headers="headers"
+                        :items="items"
+                        :options.sync="options"
+                        :server-items-length="totalItems"
+                        :loading="loading"
+                        class="elevation-1">
 
-                <template v-slot:top>
-                    <v-toolbar flat color="white">
-                        <v-toolbar-title></v-toolbar-title>
-                        @*<v-divider class="mx-4" insert vertical></v-divider>*@
-                        <v-spacer></v-spacer>
+            <template v-slot:top>
+                <v-toolbar flat color="white">
+                    <v-toolbar-title>Users</v-toolbar-title>
+                    @*<v-divider class="mx-4" insert vertical></v-divider>*@
+                    <v-spacer></v-spacer>
+                    <v-text-field v-model="search"
+                                    v-on:keyup.enter="searchEntered"
+                                    append-icon="mdi-magnify"
+                                    label="Search"
+                                    single-line
+                                    hide-details></v-text-field>
+                    <v-spacer></v-spacer>
 
-                        <partial name="~/Views/Users/_User.cshtml" />
+                    <partial name="~/Views/Users/_User.cshtml" />
 
-                    </v-toolbar>
-                </template>
+                </v-toolbar>
+            </template>
 
-                <template v-slot:item.action="{ item }">
-                    <v-icon small class="mr-2" v-on:click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small v-on:click="deleteItem(item)">mdi-delete</v-icon>
-                </template>
-                <template v-slot:no-data>
-                    <v-btn color="primary" v-on:click="getData()">Reset</v-btn>
-                </template>
-            </v-data-table>
-        </v-card>
-
+            <template v-slot:item.action="{ item }">
+                <v-icon small class="mr-2" v-on:click="editItem(item)">mdi-pencil</v-icon>
+                <v-icon small v-on:click="deleteItem(item)">mdi-delete</v-icon>
+            </template>
+            <template v-slot:no-data>
+                <v-btn color="primary" v-on:click="getData()">Reset</v-btn>
+            </template>
+        </v-data-table>
         
     </v-app>
 </div>
@@ -84,6 +79,7 @@
                     mustSort: false,
                     search: ''
                 },
+                search: '',
                 headers: [
                     { text: 'User Name', value: 'userName' },
                     { text: 'Email', value: 'email' },
@@ -303,6 +299,14 @@
                 return([1e7]+ -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
                     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
                 );
+            },
+
+            searchEntered() {
+                this.options.search = this.search;
+
+                if (this.options.search.length == 0) {
+                    this.getData();
+                }
             }
         }
     })

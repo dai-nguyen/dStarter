@@ -1,9 +1,6 @@
-﻿using Infrastructure.Entities;
-using System.Collections.Generic;
-
-namespace Infrastructure.Modules.CRM.Entities
+﻿namespace Shared.DTOs.CRM
 {
-    public class Customer : BaseEntity
+    public class CustomerDto : BaseWithAttrDto
     {
         public string Name { get; set; }
         public string Address1 { get; set; }
@@ -13,8 +10,5 @@ namespace Infrastructure.Modules.CRM.Entities
         public string Zip { get; set; }
         public string Country { get; set; }
         public string Phone { get; set; }
-
-        public virtual IEnumerable<Contact> Contacts { get; set; }
-        public virtual IEnumerable<Ticket> Tickets { get; set; }
     }
 }

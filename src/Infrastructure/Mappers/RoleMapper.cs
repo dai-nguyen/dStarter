@@ -28,6 +28,7 @@ namespace Infrastructure.Mappers
             var sortDir = "asc";
             var pageNumber = option.Page;
             var pageSize = option.ItemsPerPage;
+            var search = option.Search ?? "";
 
             if (option.SortBy != null
                 && option.SortBy.Any()
@@ -41,7 +42,7 @@ namespace Infrastructure.Mappers
                     sortBy = "DateUpdated";
             }
 
-            return new RoleSpecification("", sortBy, sortDir, pageSize, pageNumber);
+            return new RoleSpecification(search, sortBy, sortDir, pageSize, pageNumber);
         }
     }
 }

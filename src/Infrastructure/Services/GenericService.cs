@@ -1,19 +1,14 @@
 ﻿using AutoMapper;
-using Infrastructure.Data;
 using Infrastructure.Entities;
 using Infrastructure.Interfaces;
 using Infrastructure.Mappers;
 using Infrastructure.Specifications;
-using Infrastructure.Stores;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -61,9 +56,8 @@ namespace Infrastructure.Services
                 var typeName = type.Name;
 
                 var defSpec = new CustomAttributeDefinitionSpecification(
+                    "",
                     typeName, 
-                    "", 
-                    "", 
                     new BaseFilterDto(null, "DisplayName", "asc", 0, 0, false),
                     CustomAttributeDefinitionMapper.CustAttrDefColMaps);
 
@@ -184,6 +178,11 @@ namespace Infrastructure.Services
             }
 
             return action;
+        }
+
+        public virtual async Task<ActionResultDto<PageDto<TDto>>> FindAsync(ISpecification<TEntity> spec)
+        {
+            return await Store.FindAsync(spec);
         }
 
         protected virtual async Task UpsertCustomAttributesAsync(TaDto adto)

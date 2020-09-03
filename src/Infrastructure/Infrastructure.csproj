@@ -44,7 +44,6 @@
 
   <ItemGroup>
     <Folder Include="Modules\CRM\Interfaces\" />
-    <Folder Include="Modules\CRM\Mappers\" />
     <Folder Include="Modules\CRM\Stores\" />
     <Folder Include="Modules\CRM\Services\" />
   </ItemGroup>

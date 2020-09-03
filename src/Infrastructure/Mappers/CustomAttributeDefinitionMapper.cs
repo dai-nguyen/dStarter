@@ -34,11 +34,10 @@ namespace Infrastructure.Mappers
             if (option == null)
                 throw new ArgumentNullException("TableOption is required.");
 
-
             var baseFilter = option.ToBaseFilterDtoSpecification();
 
             return new CustomAttributeDefinitionSpecification(
-                "", "", "", baseFilter, CustAttrDefColMaps);
+                option.Search ?? "", "", baseFilter, CustAttrDefColMaps);
 
 
         }

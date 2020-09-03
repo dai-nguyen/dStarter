@@ -9,15 +9,13 @@ namespace Infrastructure.Specifications
     public class CustomAttributeDefinitionSpecification : BaseSpecification<CustomAttributeDefinition>
     {
         public CustomAttributeDefinitionSpecification(
+            string search,
             string objectName,
-            string name,
-            string displayName,
             BaseFilterDto baseFilter = null, 
             Dictionary<string, Expression<Func<CustomAttributeDefinition, object>>> columnMaps = null) 
             : base(
-                  _ => (string.IsNullOrEmpty(objectName) || _.ObjectName == objectName)
-                  && (string.IsNullOrEmpty(name) || _.Name == name)
-                  && (string.IsNullOrEmpty(displayName) || _.DisplayName == displayName), 
+                  _ => (string.IsNullOrEmpty(search) || _.ObjectName == search || _.Name == search || _.DisplayName == search)
+                  && (string.IsNullOrEmpty(objectName) || _.ObjectName == objectName),
                   baseFilter, 
                   columnMaps)
         {

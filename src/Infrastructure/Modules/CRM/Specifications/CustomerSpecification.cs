@@ -14,7 +14,7 @@ namespace Infrastructure.Modules.CRM.Specifications
             BaseFilterDto baseFilter = null,
             Dictionary<string, Expression<Func<Customer, object>>> columnMaps = null)
             : base(
-                  _ => (string.IsNullOrEmpty(name) || _.Name.StartsWith(name)),
+                  _ => (string.IsNullOrEmpty(name) || _.Name.Contains(name)),
                   baseFilter,
                   columnMaps)
         {

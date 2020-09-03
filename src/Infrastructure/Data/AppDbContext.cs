@@ -3,7 +3,6 @@ using Infrastructure.Entities;
 using Infrastructure.Interfaces;
 using Infrastructure.Modules.CRM.Configurations;
 using Infrastructure.Modules.CRM.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

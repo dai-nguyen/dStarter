@@ -1,8 +1,6 @@
-﻿using Infrastructure.Entities;
-
-namespace Infrastructure.Modules.CRM.Entities
+﻿namespace Shared.DTOs.CRM
 {
-    public class Contact : BaseEntity
+    public class ContactDto : BaseWithAttrDto
     {
         public string Title { get; set; }
         public string FirstName { get; set; }
@@ -11,6 +9,5 @@ namespace Infrastructure.Modules.CRM.Entities
         public string Phone { get; set; }
 
         public int CustomerId { get; set; }
-        public virtual Customer Customer { get; set; }
     }
 }

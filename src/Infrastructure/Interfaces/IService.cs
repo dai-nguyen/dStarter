@@ -12,6 +12,8 @@ namespace Infrastructure.Interfaces
 
         Task<ActionResultDto<TaDto>> GetAsync(int id);
         Task<ActionResultDto<TaDto>> AddAsync(TaDto adto);
+        Task<ActionResultDto<TaDto>> UpdateAsync(TaDto adto);
+        Task<ActionResultDto<PageDto<TDto>>> FindAsync(ISpecification<TEntity> spec);
 
     }
 }
