@@ -10,5 +10,6 @@
         public bool[] GroupDesc { get; set; }
         public bool MultiSort { get; set; }
         public bool MustSort { get; set; }
+        public string Search { get; set; }
     }
 }
