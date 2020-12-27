@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Infrastructure.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace Infrastructure.Data
 {
@@ -10,5 +12,7 @@ namespace Infrastructure.Data
         public virtual string CreatedBy { get; set; } = "?";
         public virtual string UpdatedBy { get; set; } = "?";
         public virtual string ExternalId { get; set; }
+
+        public ICollection<CustomAttribute> CustomAttributes { get; set; }
     }
 }

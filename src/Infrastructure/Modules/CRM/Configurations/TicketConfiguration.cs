@@ -16,6 +16,8 @@ namespace Infrastructure.Modules.CRM.Configurations
             builder.Property(_ => _.UpdatedBy).HasMaxLength(100).HasDefaultValue("?");
             builder.Property(_ => _.ExternalId).HasMaxLength(100);
             builder.HasIndex(_ => _.ExternalId);
+            builder.Property(_ => _.CustomAttributes)
+                .HasColumnType("jsonb");
 
             builder.Property(_ => _.Title).HasMaxLength(100).IsRequired();
             builder.Property(_ => _.Description);

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using System.Threading.Tasks;
-using Web.Models;
 
 namespace Web.Controllers
 {
@@ -29,7 +28,8 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<PageDto<RoleDto>>> LoadData([FromBody] TableOptionDto model)
+        public async Task<ActionResultDto<PageDto<RoleDto>>> LoadData(
+            [FromBody] TableOptionDto model)
         {
             var spec = model.ToRoleSpecification();
             return await _roleStore.FindAsync(spec);
@@ -42,7 +42,8 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<RoleDto>> Upsert([FromBody] RoleDto dto)
+        public async Task<ActionResultDto<RoleDto>> Upsert(
+            [FromBody] RoleDto dto)
         {
             if (string.IsNullOrEmpty(dto.Id))
             {

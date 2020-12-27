@@ -1,14 +1,11 @@
-﻿using Infrastructure.Modules.CRM.Entities;
+﻿using Infrastructure.Interfaces;
+using Infrastructure.Modules.CRM.Entities;
 using Infrastructure.Modules.CRM.Mappers;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using Shared.DTOs.CRM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Web.Controllers.CRM
@@ -17,14 +14,15 @@ namespace Web.Controllers.CRM
     public class CustomersController : Controller
     {
         private readonly ILogger<CustomersController> _logger;
-        private readonly GenericService<Customer, CustomerDto, CustomerDto> _service;
-
+        private readonly IStore<Customer, CustomerDto> _customerStore;
+        
         public CustomersController(
             ILogger<CustomersController> logger,
-            GenericService<Customer, CustomerDto, CustomerDto> service)
+            IStore<Customer, CustomerDto> customerStore
+            )
         {
             _logger = logger;
-            _service = service;
+            _customerStore = customerStore;
         }
 
         public IActionResult Index()
@@ -33,10 +31,39 @@ namespace Web.Controllers.CRM
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<PageDto<CustomerDto>>> LoadData([FromBody] TableOptionDto model)
+        public async Task<ActionResultDto<PageDto<CustomerDto>>> LoadData(
+            [FromBody] TableOptionDto model)
         {
             var spec = model.ToCustomerSpecification();
-            return await _service.FindAsync(spec);
+            return await _customerStore.FindAsync(spec);
+        }
+
+        [HttpGet]
+        public async Task<ActionResultDto<CustomerDto>> GetData(int id)
+        {
+            return await _customerStore.GetAsync(id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResultDto<CustomerDto>> Upsert(
+            [FromBody] CustomerDto dto)
+        {
+            if (dto.Id <= 0)
+            {
+                // create
+                return await _customerStore.AddAsync(dto);
+            }
+            else
+            {
+                // update
+                return await _customerStore.UpdateAsync(dto);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResultDto<bool>> Delete(int id)
+        {
+            return await _customerStore.DeleteAsync(id);
         }
     }
 }

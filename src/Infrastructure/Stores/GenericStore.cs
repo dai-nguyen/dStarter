@@ -286,7 +286,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute UpdateAsync UpdateRangeAsync {@0}",
+                Logger.LogError(ex, "Unable to execute UpdateRangeAsync {@0}",
                     dtos, UserSession.UserName);
             }
             return action;

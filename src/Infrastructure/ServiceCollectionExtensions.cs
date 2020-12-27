@@ -9,8 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Hangfire;
-using Hangfire.Storage.SQLite;
 
 namespace Infrastructure
 {
@@ -36,11 +34,6 @@ namespace Infrastructure
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 
-            services.AddHangfire(cfg =>
-                cfg.UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UseSQLiteStorage());
-
             return services;
         }
 
@@ -50,28 +43,33 @@ namespace Infrastructure
             return builder.UseMiddleware<UserSessionMiddleware>();
         }
 
-        public static void GetDbContextOption(DbContextOptionsBuilder builder,
+        public static void GetDbContextOption(
+            DbContextOptionsBuilder builder,
             IConfiguration configuration)
         {
             var migrationsAssembly = typeof(AppDbContext).Assembly.GetName();
-            var useSqlServer = Convert.ToBoolean(configuration["Infrastructure:UseSqlServer"] 
-                ?? "false");
-            var dbConnString = useSqlServer
-                ? configuration.GetConnectionString("DefaultConnection")
-                : $"Filename={configuration.GetConnectionString("SqliteConnection")}";
 
-            if (useSqlServer)
-            {
-                builder.UseSqlServer(dbConnString, sql => sql.MigrationsAssembly(migrationsAssembly.Name));
-            }
-            else if (Convert.ToBoolean(configuration["BlazorBoilerplate:UsePostgresServer"] ?? "false"))
-            {
-                builder.UseNpgsql(configuration.GetConnectionString("PostgresConnection"), sql => sql.MigrationsAssembly(migrationsAssembly.Name));
-            }
-            else
-            {
-                builder.UseSqlite(dbConnString, sql => sql.MigrationsAssembly(migrationsAssembly.Name));
-            }
+            builder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+                sql => sql.MigrationsAssembly(migrationsAssembly.Name));
+                //.UseSnakeCaseNamingConvention();
+
+            //var useSqlServer = configuration.GetValue<bool>("Infrastructure:UseSqlServer");
+            //var dbConnString = useSqlServer
+            //    ? configuration.GetConnectionString("DefaultConnection")
+            //    : $"Filename={configuration.GetConnectionString("SqliteConnection")}";
+
+            //if (useSqlServer)
+            //{
+            //    builder.UseSqlServer(dbConnString, sql => sql.MigrationsAssembly(migrationsAssembly.Name));
+            //}
+            //else if (configuration.GetValue<bool>("Infrastructure:UsePostgresServer"))
+            //{
+            //    builder.UseNpgsql(configuration.GetConnectionString("PostgresConnection"), sql => sql.MigrationsAssembly(migrationsAssembly.Name));
+            //}
+            //else
+            //{
+            //    builder.UseSqlite(dbConnString, sql => sql.MigrationsAssembly(migrationsAssembly.Name));
+            //}
 
         }
     }

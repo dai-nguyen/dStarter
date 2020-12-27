@@ -111,7 +111,6 @@ namespace Infrastructure.Stores
                     return action;
                 }
 
-                await UpsertAttributesAsync(entity, dto);
                 await UpsertRolesAsync(entity, dto);
 
                 action = await this.GetAsync(dto.UserName, UserKey.UserName);
@@ -214,22 +213,6 @@ namespace Infrastructure.Stores
 
                 var dto = Mapper.Map<UserDto>(entity);
 
-                var attrs = await _dbContext.UserAttributes
-                    .AsNoTracking()
-                    .Where(_ => _.UserId == entity.Id)
-                    .ToListAsync();
-
-                if (attrs != null)
-                {
-                    dto.Attributes = attrs
-                        .Select(_ => new UserAttributeDto()
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            Type = _.Type,
-                            Value = _.Value
-                        }).ToArray();
-                }
-
                 var roles = await UserManager.GetRolesAsync(entity);
 
                 if (roles != null)
@@ -301,7 +284,6 @@ namespace Infrastructure.Stores
                     Logger.LogInformation($"Reset user {dto.Email} password - {passReset.Succeeded}");
                 }
 
-                await UpsertAttributesAsync(entity, dto);
                 await UpsertRolesAsync(entity, dto);
 
                 action = await this.GetAsync(dto.UserName, UserKey.UserName);
@@ -332,18 +314,6 @@ namespace Infrastructure.Stores
                 var claims = await UserManager.GetClaimsAsync(user);
                 if (claims != null && claims.Any())
                     await UserManager.RemoveClaimsAsync(user, claims);
-
-                // remove attrs
-                var attrs = await _dbContext.UserAttributes
-                    .AsNoTracking()
-                    .Where(_ => _.UserId == user.Id)
-                    .ToListAsync();
-
-                if (attrs != null && attrs.Any())
-                {
-                    _dbContext.UserAttributes.RemoveRange(attrs);
-                    await _dbContext.SaveChangesAsync();
-                }
 
                 // delete user
                 var result = await UserManager.DeleteAsync(user);
@@ -394,95 +364,6 @@ namespace Infrastructure.Stores
                     externalId, UserSession.UserName);
             }
             return action;
-        }
-
-        protected virtual async Task UpsertAttributesAsync(AppUser entity, UserDto dto)
-        {
-            if (dto.Attributes == null)
-                dto.Attributes = new List<UserAttributeDto>();
-
-            var attrs = await _dbContext.UserAttributes
-                .AsNoTracking()
-                .Where(_ => _.UserId == entity.Id)
-                .ToListAsync();
-
-            var claims = await UserManager.GetClaimsAsync(entity);
-            if (claims == null) claims = new List<Claim>();
-
-            var date = DateTime.Now;
-            var username = UserSession.UserName;
-
-            // update             
-            foreach (var attr in attrs)
-            {
-                var found = dto.Attributes
-                    .FirstOrDefault(_ => _.Type == attr.Type);
-                if (found == null) continue;
-                if (found.Value == attr.Value) continue;
-
-                attr.Value = found.Value;
-                attr.DateUpdated = date;
-                attr.UpdatedBy = username;
-
-                _dbContext.UserAttributes.Update(attr);
-            }
-
-            foreach (var claim in claims)
-            {
-                var found = dto.Attributes
-                    .FirstOrDefault(_ => _.Type == claim.Type);
-                if (found == null) continue;
-                if (found.Value == claim.Value) continue;
-
-                await UserManager.ReplaceClaimAsync(entity, claim,
-                    new Claim(found.Type, found.Value));
-            }
-
-            // add
-            foreach (var attr in dto.Attributes)
-            {
-                var found = attrs.FirstOrDefault(_ => _.Type == attr.Type);
-                if (found != null) continue;
-
-                _dbContext.UserAttributes.Add(new UserAttribute()
-                {
-                    Type = attr.Type,
-                    Value = attr.Value,
-                    UserId = entity.Id,
-                    DateCreated = date,
-                    DateUpdated = date,
-                    UpdatedBy = username,
-                    CreatedBy = username
-                });
-            }
-
-            foreach (var attr in dto.Attributes)
-            {
-                var found = claims.FirstOrDefault(_ => _.Type == attr.Type);
-                if (found != null) continue;
-
-                await UserManager.AddClaimAsync(entity, 
-                    new Claim(attr.Type, attr.Value));
-            }
-
-            // remove
-            foreach (var attr in attrs)
-            {
-                var found = dto.Attributes.Any(_ => _.Type == attr.Type);
-                if (found) continue;
-
-                _dbContext.UserAttributes.Remove(attr);
-            }
-
-            foreach (var claim in claims)
-            {
-                var found = dto.Attributes.Any(_ => _.Type == claim.Type);
-                if (found) continue;
-
-                await UserManager.RemoveClaimAsync(entity, claim);
-            }
-
-            await _dbContext.SaveChangesAsync();
         }
 
         protected virtual async Task UpsertRolesAsync(AppUser entity, UserDto dto)

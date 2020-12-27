@@ -100,8 +100,6 @@ namespace Infrastructure.Stores
                     return action;
                 }
 
-                await UpsertAttributesAsync(entity, dto);
-
                 action = await this.GetAsync(dto.Name, RoleKey.Name);
             }
             catch (Exception ex)
@@ -194,21 +192,6 @@ namespace Infrastructure.Stores
 
                 var dto = Mapper.Map<RoleDto>(entity);
 
-                var attrs = await _dbContext.RoleAttributes
-                    .AsNoTracking()
-                    .Where(_ => _.RoleId == entity.Id)
-                    .ToListAsync();
-
-                if (attrs != null)
-                {
-                    dto.Attributes = attrs
-                        .Select(_ => new RoleAttributeDto()
-                        {
-                            Type = _.Type,
-                            Value = _.Value
-                        }).ToArray();
-                }
-
                 action.Result = dto;
             }
             catch (Exception ex)
@@ -266,8 +249,6 @@ namespace Infrastructure.Stores
                     return action;
                 }
 
-                await UpsertAttributesAsync(entity, dto);
-
                 action = await this.GetAsync(dto.Name, RoleKey.Name);
             }
             catch (Exception ex)
@@ -300,18 +281,6 @@ namespace Infrastructure.Stores
                     {
                         await RoleManager.RemoveClaimAsync(role, claim);
                     }
-                }
-
-                // remove attrs
-                var attrs = await _dbContext.RoleAttributes
-                    .AsNoTracking()
-                    .Where(_ => _.RoleId == role.Id)
-                    .ToListAsync();
-
-                if (attrs != null && attrs.Any())
-                {
-                    _dbContext.RoleAttributes.RemoveRange(attrs);
-                    await _dbContext.SaveChangesAsync();
                 }
 
                 // delete
@@ -366,94 +335,6 @@ namespace Infrastructure.Stores
                     UserSession.UserName);
             }
             return action;
-        }
-
-        protected virtual async Task UpsertAttributesAsync(AppRole entity, RoleDto dto)
-        {
-            if (dto.Attributes == null)
-                dto.Attributes = new List<RoleAttributeDto>();
-
-            var attrs = await _dbContext.RoleAttributes
-                .AsNoTracking()
-                .Where(_ => _.RoleId == entity.Id)
-                .ToListAsync();
-
-            var claims = await RoleManager.GetClaimsAsync(entity);
-            if (claims == null) claims = new List<Claim>();
-
-            var date = DateTime.Now;
-            var username = UserSession.UserName;
-
-            // update
-            foreach (var attr in attrs)
-            {
-                var found = dto.Attributes.FirstOrDefault(_ => _.Type == attr.Type);
-                if (found == null) continue;
-                if (found.Value == attr.Value) continue;
-
-                attr.Value = found.Value;
-                attr.DateUpdated = date;
-                attr.UpdatedBy = username;
-
-                _dbContext.RoleAttributes.Update(attr);
-            }
-
-            foreach (var claim in claims)
-            {
-                var found = dto.Attributes
-                    .FirstOrDefault(_ => _.Type == claim.Type);
-                if (found == null) continue;
-                if (found.Value == claim.Value) continue;
-
-                await RoleManager.RemoveClaimAsync(entity, claim);
-                await RoleManager.AddClaimAsync(entity, new Claim(found.Type, found.Value));
-            }
-
-            // add
-            foreach (var attr in dto.Attributes)
-            {
-                var found = attrs.FirstOrDefault(_ => _.Type == attr.Type);
-                if (found != null) continue;
-
-                _dbContext.RoleAttributes.Add(new RoleAttribute()
-                {
-                    Type = attr.Type,
-                    Value = attr.Value,
-                    RoleId = entity.Id,
-                    DateCreated = date,
-                    DateUpdated = date,
-                    UpdatedBy = username,
-                    CreatedBy = username
-                });
-            }
-
-            foreach (var attr in dto.Attributes)
-            {
-                var found = claims.FirstOrDefault(_ => _.Type == attr.Type);
-                if (found != null) continue;
-
-                await RoleManager.AddClaimAsync(entity,
-                    new Claim(attr.Type, attr.Value));
-            }
-
-            // remove
-            foreach (var attr in attrs)
-            {
-                var found = dto.Attributes.Any(_ => _.Type == attr.Type);
-                if (found) continue;
-
-                _dbContext.RoleAttributes.Remove(attr);
-            }
-
-            foreach (var claim in claims)
-            {
-                var found = dto.Attributes.Any(_ => _.Type == claim.Type);
-                if (found) continue;
-
-                await RoleManager.RemoveClaimAsync(entity, claim);
-            }
-
-            await _dbContext.SaveChangesAsync();
         }
 
     }

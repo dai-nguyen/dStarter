@@ -16,10 +16,6 @@ namespace Infrastructure.Data
         private readonly ILoggerFactory _loggerFactory;
         //private readonly IUserSession _userSession;
 
-        public DbSet<UserAttribute> UserAttributes { get; set; }
-        public DbSet<RoleAttribute> RoleAttributes { get; set; }
-        public DbSet<CustomAttributeDefinition> CustomAttributeDefinitions { get; set; }
-        public DbSet<CustomAttribute> CustomAttributes { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
 
         // CRM module
@@ -42,10 +38,18 @@ namespace Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new UserAttributeConfiguration());
-            builder.ApplyConfiguration(new RoleAttributeConfiguration());
-            builder.ApplyConfiguration(new CustomAttributeDefinitionConfiguration());
-            builder.ApplyConfiguration(new CustomAttributeConfiguration());
+            builder.Entity<AppUser>(b =>
+            {
+                b.Property(_ => _.CustomAttributes)
+                    .HasColumnType("jsonb");
+            });
+
+            builder.Entity<AppRole>(b =>
+            {
+                b.Property(_ => _.CustomAttributes)
+                    .HasColumnType("jsonb");
+            });
+
             builder.ApplyConfiguration(new AppConfigConfiguration());
 
             // CRM module

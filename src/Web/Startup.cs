@@ -10,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.AspNetCore;
 
 namespace Web
 {
@@ -48,13 +47,13 @@ namespace Web
             //services.AddScoped<IUserSession, UserSession>();
             services.AddHttpContextAccessor();
 
-            services.Configure<RequestLoggingOptions>(o =>
-            {
-                o.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-                {
-                    diagnosticContext.Set("RemoteIpAddress", httpContext.Connection.RemoteIpAddress.MapToIPv4());
-                };
-            });
+            //services.Configure<RequestLoggingOptions>(o =>
+            //{
+            //    o.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+            //    {
+            //        diagnosticContext.Set("RemoteIpAddress", httpContext.Connection.RemoteIpAddress.MapToIPv4());
+            //    };
+            //});
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -67,7 +66,7 @@ namespace Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                //app.UseDatabaseErrorPage();
             }
             else
             {

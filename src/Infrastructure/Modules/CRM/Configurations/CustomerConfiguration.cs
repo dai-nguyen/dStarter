@@ -9,13 +9,15 @@ namespace Infrastructure.Modules.CRM.Configurations
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder.ToTable("Customers");
-            builder.HasKey(_ => _.Id);
+            builder.Property(_ => _.Id).UseHiLo();
             builder.Property(_ => _.DateCreated);
             builder.Property(_ => _.DateUpdated);
             builder.Property(_ => _.CreatedBy).HasMaxLength(100).HasDefaultValue("?");
             builder.Property(_ => _.UpdatedBy).HasMaxLength(100).HasDefaultValue("?");
             builder.Property(_ => _.ExternalId).HasMaxLength(100);
             builder.HasIndex(_ => _.ExternalId);
+            builder.Property(_ => _.CustomAttributes)
+                .HasColumnType("jsonb");
 
             builder.Property(_ => _.Name).HasMaxLength(100).IsRequired();
             builder.HasIndex(_ => _.Name).IsUnique(true);

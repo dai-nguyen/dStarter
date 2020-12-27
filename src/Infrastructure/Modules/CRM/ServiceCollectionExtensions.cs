@@ -6,6 +6,8 @@ namespace Infrastructure.Modules.CRM
     {
         public static IServiceCollection UseCRM(this IServiceCollection services)
         {
+            
+
             return services;
         }
     }

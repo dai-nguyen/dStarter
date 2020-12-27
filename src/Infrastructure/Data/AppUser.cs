@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Infrastructure.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace Infrastructure.Data
 {
@@ -13,5 +15,7 @@ namespace Infrastructure.Data
 
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
+
+        public ICollection<CustomAttribute> CustomAttributes { get; set; }
     }
 }
