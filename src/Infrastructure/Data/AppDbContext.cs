@@ -16,6 +16,7 @@ namespace Infrastructure.Data
         private readonly ILoggerFactory _loggerFactory;
         //private readonly IUserSession _userSession;
 
+        public DbSet<LogMsg> Logs { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
 
         // CRM module
@@ -50,6 +51,7 @@ namespace Infrastructure.Data
                     .HasColumnType("jsonb");
             });
 
+            builder.ApplyConfiguration(new LogMsgConfiguration());
             builder.ApplyConfiguration(new AppConfigConfiguration());
 
             // CRM module

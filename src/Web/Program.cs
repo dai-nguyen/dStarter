@@ -1,6 +1,11 @@
+using Infrastructure.Data;
+using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NpgsqlTypes;
 using Serilog;
 using Serilog.Events;
@@ -33,11 +38,12 @@ namespace Web
                 {"exception", new ExceptionColumnWriter(NpgsqlDbType.Text) },
                 {"properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
                 {"props_test", new PropertiesColumnWriter(NpgsqlDbType.Jsonb) },
-                {"machine_name", new SinglePropertyColumnWriter("MachineName", PropertyWriteMethod.ToString, NpgsqlDbType.Text, "l") }
+                {"machine_name", new SinglePropertyColumnWriter("MachineName", PropertyWriteMethod.ToString, NpgsqlDbType.Text, "l") },
+                {"user_name", new SinglePropertyColumnWriter("UserName", PropertyWriteMethod.ToString, NpgsqlDbType.Text) }
             };
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+                .MinimumLevel.Information()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 //.WriteTo.File(
@@ -46,32 +52,48 @@ namespace Web
                 //    rollOnFileSizeLimit: true,
                 //    shared: true,
                 //    flushToDiskInterval: TimeSpan.FromSeconds(1))
-                .WriteTo.PostgreSQL(
+                .WriteTo.PostgreSql(
                     connStr, 
                     tableName, 
                     columnWriters, 
-                    needAutoCreateTable: true,
-                    respectCase: true
+                    //needAutoCreateTable: true,
+                    useCopy: true
                     )
+                .Enrich.WithMachineName()
                 .CreateLogger();
 
             try
             {
                 Log.Information("Starting web host");
-                CreateHostBuilder(args).Build().Run();
-                //return 0;
+                var host = CreateHostBuilder(args).Build();
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var services = scope.ServiceProvider;
+                    try
+                    {
+                        var dbContext = services.GetRequiredService<AppDbContext>();
+                        var logFactory = services.GetRequiredService<ILoggerFactory>();
+                        var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                        var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+                        AsyncHelper.RunSync(() => AppDbContextSeed.SeedAsync(dbContext, userManager, roleManager, logFactory));
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "An error occurred");
+                    }
+                }
+
+                host.Run();
             }
             catch (Exception ex)
             {
                 Log.Fatal(ex, "Host terminated unexpectedly");
-                //return 1;
             }
             finally
             {
                 Log.CloseAndFlush();
             }
-
-            //CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
