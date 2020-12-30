@@ -90,11 +90,11 @@
                 editedIndex: -1,
                 editedItem: {
                     name: '',
-                    attributes: [],
+                    customAttributes: [],
                 },
                 defaultItem: {
                     name: [],
-                    attributes: [],
+                    customAttributes: [],
                 },
                 nameRules: [
                     v => !!v || 'Name is required',
@@ -225,11 +225,11 @@
             addAttr() {
                 this.editedAttr = {
                     id: this.getGuid(),
-                    type: '',
+                    name: '',
                     value: ''
                 };
 
-                this.editedItem.attributes.push(Object.assign({}, this.editedAttr));
+                this.editedItem.customAttributes.push(Object.assign({}, this.editedAttr));
             },
 
             editAttr(attr) {
@@ -238,9 +238,9 @@
 
             updateAttr() {
 
-                for (var i = 0; i < this.editedItem.attributes.length; i++) {
-                    if (this.editedItem.attributes[i].id == this.editedAttr.id) {
-                        this.editedItem.attributes[i] = Object.assign({}, this.editedAttr);
+                for (var i = 0; i < this.editedItem.customAttributes.length; i++) {
+                    if (this.editedItem.customAttributes[i].id == this.editedAttr.id) {
+                        this.editedItem.customAttributes[i] = Object.assign({}, this.editedAttr);
                         break;
                     }
                 }
@@ -253,8 +253,8 @@
             },
 
             removeAttr(attr) {
-                var index = this.editedItem.attributes.indexOf(attr);
-                this.editedItem.attributes.splice(index, 1);
+                var index = this.editedItem.customAttributes.indexOf(attr);
+                this.editedItem.customAttributes.splice(index, 1);
             },
 
             getGuid() {

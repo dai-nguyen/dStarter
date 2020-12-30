@@ -1,11 +1,21 @@
 ﻿namespace Shared.DTOs
 {
-    public class CustomAttributeDto : BaseDto
+    public class CustomAttributeDto
     {
+        public string Name { get; set; }
         public string Value { get; set; }
+        public string Id { get; set; } // for ui only
 
-        public int DefinitionId { get; set; }
-        public int ParentId { get; set; }
-        public CustomAttributeDefinitionDto Definition { get; set; }
+        public CustomAttributeDto()
+        {
+            Name = "";
+            Value = "";
+        }
+
+        public CustomAttributeDto(string name, string value)
+        {
+            Name = name;
+            Value = value;
+        }
     }
 }

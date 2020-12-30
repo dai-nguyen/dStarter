@@ -20,13 +20,6 @@ namespace Shared.DTOs
         public string Password { get; set; }
 
         public IEnumerable<string> Roles { get; set; }
-        public IEnumerable<UserAttributeDto> Attributes { get; set; }
-    }
-
-    public class UserAttributeDto
-    {
-        public string Id { get; set; }
-        public string Type { get; set; }
-        public string Value { get; set; }
+        public IEnumerable<CustomAttributeDto> CustomAttributes { get; set; }
     }
 }
