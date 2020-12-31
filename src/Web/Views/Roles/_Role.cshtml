@@ -26,7 +26,9 @@
                               required>
                 </v-text-field>
 
-                <v-simple-table>
+                <custom-attribute-component v-bind:customeAttribute="editedItem.customAttributes"></custom-attribute-component>
+
+                @*<v-simple-table>
                     <template v-slot:default>
                         <thead>
                             <tr>
@@ -75,7 +77,7 @@
                             </tr>
                         </tbody>
                     </template>
-                </v-simple-table>
+                </v-simple-table>*@
 
             </v-form>
         </v-container>

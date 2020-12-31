@@ -2,8 +2,12 @@
     ViewData["Title"] = "Roles";
 }
 
+<partial name="~/Views/Shared/_CustomAttributePartial.cshtml" />
+@*<script src="~/js/custom-attribute-component.js"></script>*@
+
 <div id="appDiv">
     <v-app>
+
         <v-snackbar v-model="showAlert"
                     :top="true"
                     :right="true"
@@ -115,7 +119,7 @@
                 }
             },
             dialog(val) {
-                
+
                 val || this.close();
             }
         },
@@ -222,46 +226,46 @@
                 vm.getData();
             },
 
-            addAttr() {
-                this.editedAttr = {
-                    id: this.getGuid(),
-                    name: '',
-                    value: ''
-                };
+            //addAttr() {
+            //    this.editedAttr = {
+            //        id: this.getGuid(),
+            //        name: '',
+            //        value: ''
+            //    };
 
-                this.editedItem.customAttributes.push(Object.assign({}, this.editedAttr));
-            },
+            //    this.editedItem.customAttributes.push(Object.assign({}, this.editedAttr));
+            //},
 
-            editAttr(attr) {
-                this.editedAttr = Object.assign({}, attr)
-            },
+            //editAttr(attr) {
+            //    this.editedAttr = Object.assign({}, attr)
+            //},
 
-            updateAttr() {
+            //updateAttr() {
 
-                for (var i = 0; i < this.editedItem.customAttributes.length; i++) {
-                    if (this.editedItem.customAttributes[i].id == this.editedAttr.id) {
-                        this.editedItem.customAttributes[i] = Object.assign({}, this.editedAttr);
-                        break;
-                    }
-                }
-          
-                this.editedAttr = null;
-            },
+            //    for (var i = 0; i < this.editedItem.customAttributes.length; i++) {
+            //        if (this.editedItem.customAttributes[i].id == this.editedAttr.id) {
+            //            this.editedItem.customAttributes[i] = Object.assign({}, this.editedAttr);
+            //            break;
+            //        }
+            //    }
 
-            cancelAttr() {
-                this.editedAttr = null;
-            },
+            //    this.editedAttr = null;
+            //},
 
-            removeAttr(attr) {
-                var index = this.editedItem.customAttributes.indexOf(attr);
-                this.editedItem.customAttributes.splice(index, 1);
-            },
+            //cancelAttr() {
+            //    this.editedAttr = null;
+            //},
 
-            getGuid() {
-                return([1e7]+ -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-                );
-            },
+            //removeAttr(attr) {
+            //    var index = this.editedItem.customAttributes.indexOf(attr);
+            //    this.editedItem.customAttributes.splice(index, 1);
+            //},
+
+            //getGuid() {
+            //    return([1e7]+ -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            //        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            //    );
+            //},
 
             searchEntered() {
                 this.options.search = this.search;

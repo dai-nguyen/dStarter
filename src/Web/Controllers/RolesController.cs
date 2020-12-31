@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
         private readonly ILogger<RolesController> _logger;
