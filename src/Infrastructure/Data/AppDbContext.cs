@@ -43,12 +43,21 @@ namespace Infrastructure.Data
             {
                 b.Property(_ => _.CustomAttributes)
                     .HasColumnType("jsonb");
+                b.HasIndex(_ => new
+                {
+                    _.UserName,
+                    _.FirstName,
+                    _.LastName,
+                    _.Email
+                }).IsTsVectorExpressionIndex("english");
             });
 
             builder.Entity<AppRole>(b =>
             {
+                b.HasIndex(_ => _.Name);
                 b.Property(_ => _.CustomAttributes)
                     .HasColumnType("jsonb");
+                b.HasIndex(_ => _.Name).IsTsVectorExpressionIndex("english");
             });
 
             builder.ApplyConfiguration(new LogMsgConfiguration());

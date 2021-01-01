@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Infrastructure.Data;
-using Infrastructure.Entities;
 using Infrastructure.Interfaces;
 using Infrastructure.Specifications;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Stores
@@ -136,9 +134,12 @@ namespace Infrastructure.Stores
                 if (!string.IsNullOrEmpty(spec.Search) && !string.IsNullOrWhiteSpace(spec.Search))
                 {
                     query = query
-                        .Where(_ => _.FirstName.Contains(spec.Search)
-                            || _.LastName.Contains(spec.Search)
-                            || _.Email.Contains(spec.Search));
+                        .Where(_ => EF.Functions.ToTsVector("english",
+                            _.UserName + " " + _.FirstName + " " + _.LastName + " " + _.Email)
+                                .Matches(spec.Search));
+                        //.Where(_ => _.FirstName.Contains(spec.Search)
+                        //    || _.LastName.Contains(spec.Search)
+                        //    || _.Email.Contains(spec.Search));
                 }
 
                 var colMaps = new Dictionary<string, Expression<Func<AppUser, object>>>()

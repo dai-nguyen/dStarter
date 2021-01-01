@@ -21,11 +21,10 @@ namespace Infrastructure.Data.Configurations
                 .HasColumnType("jsonb");
             builder.Property(_ => _.machine_name);
             builder.Property(_ => _.user_name);
+            builder.HasIndex(_ => _.user_name);
             builder.HasIndex(_ => new 
             { 
                 _.message, 
-                _.message_template, 
-                _.properties,
                 _.exception 
             }).IsTsVectorExpressionIndex("english");
             builder.HasNoKey();

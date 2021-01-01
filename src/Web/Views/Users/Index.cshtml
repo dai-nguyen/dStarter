@@ -2,6 +2,8 @@
     ViewData["Title"] = "Users";
 }
 
+<partial name="~/Views/Shared/_CustomAttributeComponent.cshtml" />
+
 <div id="appDiv">
     <v-app>
         <v-snackbar v-model="showAlert"
@@ -58,77 +60,75 @@
     new Vue({
         el: '#appDiv',
         vuetify: new Vuetify(),
-        data() {
-            return {
-                showPassword: false,
-                items: [],
-                totalItems: 0,
-                loading: true,
-                showAlert: false,
-                alertMsg: "",
-                alertColor: '',
-                alertTimeout: 6000,
-                options: {
-                    page: 1,
-                    itemPerPage: 10,
-                    sortBy: ['userName'],
-                    sortDesc: [false],
-                    groupBy: [],
-                    groupDesc: [],
-                    multiSort: false,
-                    mustSort: false,
-                    search: ''
-                },
-                search: '',
-                headers: [
-                    { text: 'User Name', value: 'userName' },
-                    { text: 'Email', value: 'email' },
-                    { text: 'First Name', value: 'firstName' },
-                    { text: 'Last Name', value: 'lastName' },
-                    { text: 'Action', value: 'action', sortable: false }
-                ],
-                valid: false,
-                dialog: false,
-                editedIndex: -1,
-                editedItem: {
-                    userName: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    attributes: [],
-                    roles: []
-                },
-                defaultItem: {
-                    userName: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    attributes: [],
-                    roles: []
-                },
-                userNameRules: [
-                    v => !!v || 'UserName is required',
-                    v => v.length <= 50 || 'User Name must be less than 51 characters'
-                ],
-                passwordRules: [
-                    v => !!v || 'Password is required',
-                    v => v.length <= 50 || 'Password must be less than 51 characters'
-                ],
-                firstNameRules: [
-                    v => !!v || 'First Name is required',
-                    v => v.length <= 50 || 'First Name must be less than 51 characters'
-                ],
-                lastNameRules: [
-                    v => !!v || 'Last Name is required',
-                    v => v.length <= 50 || 'Last Name must be less than 51 characters'
-                ],
-                emailRules: [
-                    v => !!v || 'Email is required',
-                    v => v.length <= 50 || 'Email must be less than 51 characters'
-                ],
-                editedAttr: null,
+        data: {
+            showPassword: false,
+            items: [],
+            totalItems: 0,
+            loading: true,
+            showAlert: false,
+            alertMsg: "",
+            alertColor: '',
+            alertTimeout: 6000,
+            options: {
+                page: 1,
+                itemPerPage: 10,
+                sortBy: ['userName'],
+                sortDesc: [false],
+                groupBy: [],
+                groupDesc: [],
+                multiSort: false,
+                mustSort: false,
+                search: ''
+            },
+            search: '',
+            headers: [
+                { text: 'User Name', value: 'userName' },
+                { text: 'Email', value: 'email' },
+                { text: 'First Name', value: 'firstName' },
+                { text: 'Last Name', value: 'lastName' },
+                { text: 'Action', value: 'action', sortable: false }
+            ],
+            valid: false,
+            dialog: false,
+            editedIndex: -1,
+            editedItem: {
+                userName: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                attributes: [],
                 roles: []
-            }
+            },
+            defaultItem: {
+                userName: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                attributes: [],
+                roles: []
+            },
+            userNameRules: [
+                v => !!v || 'UserName is required',
+                v => v.length <= 50 || 'User Name must be less than 51 characters'
+            ],
+            passwordRules: [
+                v => !!v || 'Password is required',
+                v => v.length <= 50 || 'Password must be less than 51 characters'
+            ],
+            firstNameRules: [
+                v => !!v || 'First Name is required',
+                v => v.length <= 50 || 'First Name must be less than 51 characters'
+            ],
+            lastNameRules: [
+                v => !!v || 'Last Name is required',
+                v => v.length <= 50 || 'Last Name must be less than 51 characters'
+            ],
+            emailRules: [
+                v => !!v || 'Email is required',
+                v => v.length <= 50 || 'Email must be less than 51 characters'
+            ],
+            editedAttr: null,
+            roles: []
         },
         computed: {
             formTitle() {
@@ -258,47 +258,6 @@
                         vm.showAlert = true;
                     })
                 vm.getData();
-            },
-
-            addAttr() {
-                this.editedAttr = {
-                    id: this.getGuid(),
-                    type: '',
-                    value: ''
-                };
-
-                this.editedItem.attributes.push(Object.assign({}, this.editedAttr));
-            },
-
-            editAttr(attr) {
-                this.editedAttr = Object.assign({}, attr)
-            },
-
-            updateAttr() {
-
-                for (var i = 0; i < this.editedItem.attributes.length; i++) {
-                    if (this.editedItem.attributes[i].id == this.editedAttr.id) {
-                        this.editedItem.attributes[i] = Object.assign({}, this.editedAttr);
-                        break;
-                    }
-                }
-
-                this.editedAttr = null;
-            },
-
-            cancelAttr() {
-                this.editedAttr = null;
-            },
-
-            removeAttr(attr) {
-                var index = this.editedItem.attributes.indexOf(attr);
-                this.editedItem.attributes.splice(index, 1);
-            },
-
-            getGuid() {
-                return([1e7]+ -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-                );
             },
 
             searchEntered() {

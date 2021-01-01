@@ -1,8 +1,5 @@
 ﻿<script type="text/x-template" id="custom-attribute-tpl">
-
-    <v-btn color="primary" v-on:click="count++">{{count}}</v-btn>
-
-    @*<v-simple-table>
+    <v-simple-table>
         <template v-slot:default>
             <thead>
                 <tr>
@@ -17,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in customAttributes" :key="item.id">
+                <tr v-for="item in customattributes" :key="item.id">
                     <td v-if="!editedAttr || editedAttr.id != item.id">{{ item.name }}</td>
                     <td v-if="editedAttr && item.id == editedAttr.id">
                         <v-text-field v-model="editedAttr.name"
@@ -51,30 +48,18 @@
                 </tr>
             </tbody>
         </template>
-    </v-simple-table>*@
+    </v-simple-table>
 </script>
 
 <script>
     Vue.component('custom-attribute-component', {
-        props: ['customAttributes'],
+        props: ['customattributes'],
         template: '#custom-attribute-tpl',
-
         data() {
             return {
-                count: 0
+                editedAttr: null,
             }
         },
-
-        methods: {
-
-        }
-    })
-</script>
-
-@*<script>
-    Vue.component('custom-attribute-component', {
-        props: ['customAttributes'],
-        template: '#custom-attribute-tpl',
         methods: {
             addAttr() {
                 this.editedAttr = {
@@ -83,7 +68,7 @@
                     value: ''
                 };
 
-                this.editedItem.customAttributes.push(Object.assign({}, this.editedAttr));
+                this.customattributes.push(Object.assign({}, this.editedAttr));
             },
 
             editAttr(attr) {
@@ -92,9 +77,18 @@
 
             updateAttr() {
 
-                for (var i = 0; i < this.editedItem.customAttributes.length; i++) {
-                    if (this.editedItem.customAttributes[i].id == this.editedAttr.id) {
-                        this.editedItem.customAttributes[i] = Object.assign({}, this.editedAttr);
+                // validate
+                for (var i = 0; i < this.customattributes.length; i++) {
+                    if (this.customattributes[i].name == this.editedAttr.name
+                        && this.customattributes[i].id != this.editedAttr.id) {
+                        return;
+                    }
+                }
+
+                // update
+                for (var i = 0; i < this.customattributes.length; i++) {
+                    if (this.customattributes[i].id == this.editedAttr.id) {
+                        this.customattributes[i] = Object.assign({}, this.editedAttr);
                         break;
                     }
                 }
@@ -107,8 +101,8 @@
             },
 
             removeAttr(attr) {
-                var index = this.editedItem.customAttributes.indexOf(attr);
-                this.editedItem.customAttributes.splice(index, 1);
+                var index = this.customattributes.indexOf(attr);
+                this.customattributes.splice(index, 1);
             },
 
             getGuid() {
@@ -118,4 +112,4 @@
             },
         }
     })
-</script>*@
+</script>

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201227222931_initial")]
+    [Migration("20210101223208_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -155,6 +158,9 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
+                    b.HasIndex("UserName", "FirstName", "LastName", "Email")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
+
                     b.ToTable("AspNetUsers");
                 });
 
@@ -211,6 +217,46 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("AppConfigs");
+                });
+
+            modelBuilder.Entity("Infrastructure.Entities.LogMsg", b =>
+                {
+                    b.Property<string>("exception")
+                        .HasColumnType("text");
+
+                    b.Property<string>("level")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("machine_name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("message")
+                        .HasColumnType("text");
+
+                    b.Property<string>("message_template")
+                        .HasColumnType("text");
+
+                    b.Property<string>("properties")
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("props_test")
+                        .HasColumnType("jsonb");
+
+                    b.Property<DateTime>("raise_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("user_name")
+                        .HasColumnType("text");
+
+                    b.HasIndex("level");
+
+                    b.HasIndex("user_name");
+
+                    b.HasIndex("message", "exception")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
+
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Contact", b =>

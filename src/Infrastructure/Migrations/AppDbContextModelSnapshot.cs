@@ -61,6 +61,9 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
+
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
@@ -153,6 +156,9 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
+                    b.HasIndex("UserName", "FirstName", "LastName", "Email")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
+
                     b.ToTable("AspNetUsers");
                 });
 
@@ -211,38 +217,8 @@ namespace Infrastructure.Migrations
                     b.ToTable("AppConfigs");
                 });
 
-            modelBuilder.Entity("Infrastructure.Entities.Log", b =>
+            modelBuilder.Entity("Infrastructure.Entities.LogMsg", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseHiLo("EntityFrameworkHiLoSequence");
-
-                    b.Property<string>("CreatedBy")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasDefaultValue("?");
-
-                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
-                        .HasColumnType("jsonb");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateUpdated")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("ExternalId")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("UpdatedBy")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasDefaultValue("?");
-
                     b.Property<string>("exception")
                         .HasColumnType("text");
 
@@ -271,13 +247,11 @@ namespace Infrastructure.Migrations
                     b.Property<string>("user_name")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExternalId");
-
                     b.HasIndex("level");
 
-                    b.HasIndex("message", "message_template", "exception")
+                    b.HasIndex("user_name");
+
+                    b.HasIndex("message", "exception")
                         .HasAnnotation("Npgsql:TsVectorConfig", "english");
 
                     b.ToTable("Logs");

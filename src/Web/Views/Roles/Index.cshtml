@@ -2,8 +2,7 @@
     ViewData["Title"] = "Roles";
 }
 
-<partial name="~/Views/Shared/_CustomAttributePartial.cshtml" />
-@*<script src="~/js/custom-attribute-component.js"></script>*@
+<partial name="~/Views/Shared/_CustomAttributeComponent.cshtml" />
 
 <div id="appDiv">
     <v-app>
@@ -61,51 +60,50 @@
     new Vue({
         el: '#appDiv',
         vuetify: new Vuetify(),
-        data() {
-            return {
-                showPassword: false,
-                items: [],
-                totalItems: 0,
-                loading: true,
-                showAlert: false,
-                alertMsg: "",
-                alertColor: '',
-                alertTimeout: 6000,
-                options: {
-                    page: 1,
-                    itemPerPage: 10,
-                    sortBy: ['name'],
-                    sortDesc: [false],
-                    groupBy: [],
-                    groupDesc: [],
-                    multiSort: false,
-                    mustSort: false,
-                    search: ''
-                },
-                search: '',
-                headers: [
-                    { text: 'Name', value: 'name' },
-                    { text: 'Date Updated', value: 'dateUpdatedFormatted' },
-                    { text: 'Updated By', value: 'updatedBy' },
-                    { text: 'Action', value: 'action', sortable: false }
-                ],
-                valid: false,
-                dialog: false,
-                editedIndex: -1,
-                editedItem: {
-                    name: '',
-                    customAttributes: [],
-                },
-                defaultItem: {
-                    name: [],
-                    customAttributes: [],
-                },
-                nameRules: [
-                    v => !!v || 'Name is required',
-                    v => v.length <= 50 || 'Name must be less than 51 characters'
-                ],
-                editedAttr: null,
-            }
+        data: {
+            showPassword: false,
+            items: [],
+            totalItems: 0,
+            loading: true,
+            showAlert: false,
+            alertMsg: "",
+            alertColor: '',
+            alertTimeout: 6000,
+            options: {
+                page: 1,
+                itemPerPage: 10,
+                sortBy: ['name'],
+                sortDesc: [false],
+                groupBy: [],
+                groupDesc: [],
+                multiSort: false,
+                mustSort: false,
+                search: ''
+            },
+            search: '',
+            headers: [
+                { text: 'Name', value: 'name' },
+                { text: 'Date Updated', value: 'dateUpdatedFormatted' },
+                { text: 'Updated By', value: 'updatedBy' },
+                { text: 'Action', value: 'action', sortable: false }
+            ],
+            valid: false,
+            dialog: false,
+            editedIndex: -1,
+            editedItem: {
+                name: '',
+                customAttributes: [],
+            },
+            defaultItem: {
+                name: [],
+                customAttributes: [],
+            },
+            nameRules: [
+                v => !!v || 'Name is required',
+                v => v.length <= 50 || 'Name must be less than 51 characters'
+            ],
+            editedAttr: null,
+            
         },
         computed: {
             formTitle() {
@@ -225,47 +223,6 @@
                     })
                 vm.getData();
             },
-
-            //addAttr() {
-            //    this.editedAttr = {
-            //        id: this.getGuid(),
-            //        name: '',
-            //        value: ''
-            //    };
-
-            //    this.editedItem.customAttributes.push(Object.assign({}, this.editedAttr));
-            //},
-
-            //editAttr(attr) {
-            //    this.editedAttr = Object.assign({}, attr)
-            //},
-
-            //updateAttr() {
-
-            //    for (var i = 0; i < this.editedItem.customAttributes.length; i++) {
-            //        if (this.editedItem.customAttributes[i].id == this.editedAttr.id) {
-            //            this.editedItem.customAttributes[i] = Object.assign({}, this.editedAttr);
-            //            break;
-            //        }
-            //    }
-
-            //    this.editedAttr = null;
-            //},
-
-            //cancelAttr() {
-            //    this.editedAttr = null;
-            //},
-
-            //removeAttr(attr) {
-            //    var index = this.editedItem.customAttributes.indexOf(attr);
-            //    this.editedItem.customAttributes.splice(index, 1);
-            //},
-
-            //getGuid() {
-            //    return([1e7]+ -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-            //        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-            //    );
-            //},
 
             searchEntered() {
                 this.options.search = this.search;

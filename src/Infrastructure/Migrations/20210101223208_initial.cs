@@ -115,6 +115,24 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Logs",
+                columns: table => new
+                {
+                    message = table.Column<string>(type: "text", nullable: true),
+                    message_template = table.Column<string>(type: "text", nullable: true),
+                    level = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    raise_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    exception = table.Column<string>(type: "text", nullable: true),
+                    properties = table.Column<string>(type: "jsonb", nullable: true),
+                    props_test = table.Column<string>(type: "jsonb", nullable: true),
+                    machine_name = table.Column<string>(type: "text", nullable: true),
+                    user_name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -332,6 +350,12 @@ namespace Infrastructure.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoles_Name",
+                table: "AspNetRoles",
+                column: "Name")
+                .Annotation("Npgsql:TsVectorConfig", "english");
+
+            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
@@ -356,6 +380,12 @@ namespace Infrastructure.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_UserName_FirstName_LastName_Email",
+                table: "AspNetUsers",
+                columns: new[] { "UserName", "FirstName", "LastName", "Email" })
+                .Annotation("Npgsql:TsVectorConfig", "english");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -395,6 +425,22 @@ namespace Infrastructure.Migrations
                 column: "TicketId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Logs_level",
+                table: "Logs",
+                column: "level");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Logs_message_exception",
+                table: "Logs",
+                columns: new[] { "message", "exception" })
+                .Annotation("Npgsql:TsVectorConfig", "english");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Logs_user_name",
+                table: "Logs",
+                column: "user_name");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tickets_ContactId",
                 table: "Tickets",
                 column: "ContactId");
@@ -432,6 +478,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "LaborHours");
+
+            migrationBuilder.DropTable(
+                name: "Logs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

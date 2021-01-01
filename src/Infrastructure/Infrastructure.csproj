@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="Modules\CRM\Interfaces\" />
     <Folder Include="Modules\CRM\Stores\" />
     <Folder Include="Modules\CRM\Services\" />
