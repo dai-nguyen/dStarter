@@ -14,6 +14,7 @@ namespace Infrastructure.Data.Configurations
             builder.Property(_ => _.level).HasMaxLength(50);
             builder.HasIndex(_ => _.level);
             builder.Property(_ => _.raise_date);
+            builder.HasIndex(_ => _.raise_date);
             builder.Property(_ => _.exception);
             builder.Property(_ => _.properties)
                 .HasColumnType("jsonb");

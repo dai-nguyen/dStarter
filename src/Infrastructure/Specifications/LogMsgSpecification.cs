@@ -1,7 +1,12 @@
-﻿namespace Infrastructure.Specifications
+﻿using System;
+
+namespace Infrastructure.Specifications
 {
     public class LogMsgSpecification
     {
+        public string UserName { get; private set; }
+        public DateTime Date { get; private set; }
+        public string[] Levels { get; private set; }
         public string Search { get; private set; }
         public string SortBy { get; private set; }
         public string SortDirection { get; private set; }
@@ -9,6 +14,9 @@
         public int PageNumber { get; private set; }
 
         public LogMsgSpecification(
+            string username,
+            DateTime date,
+            string[] levels,
             string search = "",
             string sortBy = "",
             string sortDir = "",
@@ -16,6 +24,9 @@
             int pageNumber = 0
             )
         {
+            UserName = username;
+            Date = date;
+            Levels = levels;
             Search = search;
             SortBy = sortBy;
             SortDirection = sortDir;

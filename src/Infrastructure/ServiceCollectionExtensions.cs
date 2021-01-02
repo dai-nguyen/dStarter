@@ -27,6 +27,7 @@ namespace Infrastructure
             services.AddTransient(typeof(IStore<,>), typeof(GenericStore<,>));
             services.AddTransient<Interfaces.IUserStore, UserStore>();
             services.AddTransient<Interfaces.IRoleStore, RoleStore>();
+            services.AddTransient<Interfaces.ILogMsgStore, LogMsgStore>();
             services.AddScoped<IUserSession, UserSession>();
 
             // background services

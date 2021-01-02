@@ -10,12 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Stores
 {
-    public class LogStore
+    public class LogMsgStore : ILogMsgStore
     {
         protected readonly ILogger Logger;
         protected IMapper Mapper;
@@ -23,8 +22,8 @@ namespace Infrastructure.Stores
 
         protected readonly AppDbContext _dbContext;
 
-        public LogStore(
-            ILogger<LogStore> logger,
+        public LogMsgStore(
+            ILogger<LogMsgStore> logger,
             IMapper mapper,
             IUserSession userSession,
             AppDbContext dbContext)
@@ -35,13 +34,9 @@ namespace Infrastructure.Stores
             _dbContext = dbContext;
         }
 
-        public virtual void Delete(DateTime date)
+        public virtual async Task<int> DeleteAsync(DateTime date)
         {
-            var query = _dbContext.Logs
-                .Where(_ => _.raise_date <= date)
-                .ToArray();
-
-            _dbContext.Logs.RemoveRange(query);
+            return await _dbContext.Database.ExecuteSqlRawAsync("delete from public.\"Logs\" where raise_date <= {0}", date);
         }
 
         public virtual async Task<ActionResultDto<PageDto<LogMsgDto>>> FindAsync(LogMsgSpecification spec)
@@ -54,10 +49,29 @@ namespace Infrastructure.Stores
                     .AsNoTracking()
                     .AsQueryable();
 
-                if (!string.IsNullOrEmpty(spec.Search) && !string.IsNullOrWhiteSpace(spec.Search))
+                if (!string.IsNullOrEmpty(spec.UserName) 
+                    && !string.IsNullOrWhiteSpace(spec.UserName))
                 {
                     query = query
-                        .Where(_ => _.message.Contains(spec.Search));
+                        .Where(_ => _.user_name == spec.UserName);
+                }
+
+                query = query
+                    .Where(_ => _.raise_date >= spec.Date.Date && _.raise_date < spec.Date.Date.AddHours(24));
+
+                if (spec.Levels != null && spec.Levels.Any())
+                {
+                    query = query
+                        .Where(_ => spec.Levels.Contains(_.level));
+                }
+
+                if (!string.IsNullOrEmpty(spec.Search) 
+                    && !string.IsNullOrWhiteSpace(spec.Search))
+                {
+                    query = query
+                        .Where(_ => EF.Functions.ToTsVector("english",
+                            _.message + " " + _.exception)
+                                .Matches(spec.Search));
                 }
 
                 var colMaps = new Dictionary<string, Expression<Func<LogMsg, object>>>()

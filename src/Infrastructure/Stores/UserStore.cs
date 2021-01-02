@@ -137,9 +137,6 @@ namespace Infrastructure.Stores
                         .Where(_ => EF.Functions.ToTsVector("english",
                             _.UserName + " " + _.FirstName + " " + _.LastName + " " + _.Email)
                                 .Matches(spec.Search));
-                        //.Where(_ => _.FirstName.Contains(spec.Search)
-                        //    || _.LastName.Contains(spec.Search)
-                        //    || _.Email.Contains(spec.Search));
                 }
 
                 var colMaps = new Dictionary<string, Expression<Func<AppUser, object>>>()

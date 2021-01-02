@@ -1,15 +1,8 @@
-﻿using Infrastructure.Entities;
-using Infrastructure.Helpers;
-using Infrastructure.Interfaces;
-using Infrastructure.Mappers;
-using Infrastructure.Specifications;
-using Microsoft.EntityFrameworkCore.Internal;
+﻿using Infrastructure.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Shared.DTOs;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +31,7 @@ namespace Infrastructure.Services
             _logger.LogInformation("Timed Hosted Service running.");
 
             _timer = new Timer(DoWorkAsync, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(5));
+                TimeSpan.FromMinutes(1));
 
             return Task.CompletedTask;
         }
@@ -58,6 +51,15 @@ namespace Infrastructure.Services
             {
                 using (var scope = _serviceProvider.CreateScope())
                 {
+                    var logMsgRepo = scope.ServiceProvider.GetRequiredService<ILogMsgStore>();
+
+                    if (logMsgRepo != null)
+                    {
+                        _logger.LogInformation("deleting old log");
+                        int count = await logMsgRepo.DeleteAsync(DateTime.Now.AddMonths(-3));
+                        _logger.LogInformation($"deleted {count}");
+                    }
+
 
                     await Task.FromResult(0);
                 }
