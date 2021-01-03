@@ -1,1 +1,131 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Logs";
+}
+
+<div id="appDiv">
+    <v-app>
+
+        <v-snackbar v-model="showAlert"
+                    :top="true"
+                    :right="true"
+                    :color="alertColor"
+                    :timeout="alertTimeout">
+            {{ alertMsg }}
+            <v-btn dark
+                   text
+                   v-on:click="showAlert = false">
+                Close
+            </v-btn>
+        </v-snackbar>
+
+        <v-data-table :headers="headers"
+                      :items="items"
+                      :options.sync="options"
+                      :server-items-length="totalItems"
+                      :loading="loading"
+                      class="elevation-1">
+
+            <template v-slot:top>
+                <v-toolbar flat color="white">
+                    <v-toolbar-title>Logs</v-toolbar-title>
+                    @*<v-divider class="mx-4" insert vertical></v-divider>*@
+                    <v-spacer></v-spacer>
+                    <v-text-field v-model="search"
+                                  v-on:keyup.enter="searchEntered"
+                                  append-icon="mdi-magnify"
+                                  label="Search"
+                                  single-line
+                                  hide-details></v-text-field>
+                    <v-spacer></v-spacer>
+
+                </v-toolbar>
+            </template>
+
+            <template v-slot:no-data>
+                <v-btn color="primary" v-on:click="getData()">Reset</v-btn>
+            </template>
+        </v-data-table>
+    </v-app>
+</div>
+
+<script>
+    new Vue({
+        el: '#appDiv',
+        vuetify: new Vuetify(),
+        data: {
+            items: [],
+            totalItems: 0,
+            loading: true,
+            showAlert: false,
+            alertMsg: "",
+            alertColor: '',
+            alertTimeout: 6000,
+            options: {
+                page: 1,
+                itemPerPage: 10,
+                sortBy: ['name'],
+                sortDesc: [false],
+                groupBy: [],
+                groupDesc: [],
+                multiSort: false,
+                mustSort: false,
+                search: '',
+                userName: '',
+                logLevels: []
+            },
+            userNames: [],
+            logLevels: [],
+            search: '',
+            headers: [
+                { text: 'Date', value: 'raise_date' },
+                { text: 'Level', value: 'level' },
+                { text: 'Username', value: 'user_name' },
+                { text: 'Machine', value: 'machine_name' },
+                { text: 'Message', value: 'message' },
+            ],
+            valid: false,
+            dialog: false,
+            editedIndex: -1,
+            editedItem: {
+                message: '',
+            },
+        },
+        watch: {
+            options: {
+                handler() {
+                    this.getData();
+                }
+            },
+        },
+        created() {
+            //this.getData();
+        },
+        methods: {
+
+            getData () {
+                this.loading = true;
+                axios
+                    .post('@Url.Action("LoadData", "Logs")', this.options)
+                    .then(response => {
+                        this.items = response.data.result.data;
+                        this.totalItems = response.data.result.total;
+                        this.loading = false;
+                        //console.log(response.data.result.data);
+                    });
+            },
+
+            editItem (item) {
+                this.editedIndex = this.items.indexOf(item);
+                this.editedItem = Object.assign({}, item);
+            },
+
+            searchEntered() {
+                this.options.search = this.search;
+
+                if (this.options.search.length == 0) {
+                    this.getData();
+                }
+            }
+        }
+    })
+</script>

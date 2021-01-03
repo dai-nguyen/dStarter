@@ -49,15 +49,24 @@ namespace Infrastructure.Stores
                     .AsNoTracking()
                     .AsQueryable();
 
-                if (!string.IsNullOrEmpty(spec.UserName) 
+                var userName = UserSession.UserName;
+
+                if (UserSession.Roles.Contains("Admin")
+                    && !string.IsNullOrEmpty(spec.UserName)
                     && !string.IsNullOrWhiteSpace(spec.UserName))
                 {
+                    userName = spec.UserName;
+                }
+
+                if (!string.IsNullOrEmpty(userName))
+                {
                     query = query
-                        .Where(_ => _.user_name == spec.UserName);
+                        .Where(_ => _.user_name == userName);
                 }
 
                 query = query
-                    .Where(_ => _.raise_date >= spec.Date.Date && _.raise_date < spec.Date.Date.AddHours(24));
+                    .Where(_ => _.raise_date >= spec.Date.Date 
+                        && _.raise_date < spec.Date.Date.AddHours(24));
 
                 if (spec.Levels != null && spec.Levels.Any())
                 {
