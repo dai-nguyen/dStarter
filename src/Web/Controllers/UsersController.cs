@@ -9,7 +9,7 @@ using Web.Models;
 
 namespace Web.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly ILogger<UsersController> _logger;

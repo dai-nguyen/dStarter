@@ -1,10 +1,21 @@
-﻿using Infrastructure.Specifications;
+﻿using AutoMapper;
+using Infrastructure.Entities;
+using Infrastructure.Specifications;
 using Shared.DTOs;
 using System;
 using System.Linq;
 
 namespace Infrastructure.Mappers
 {
+    public class LogMsgMapperProfile : Profile
+    {
+        public LogMsgMapperProfile()
+        {
+            CreateMap<LogMsg, LogMsgDto>()
+                .ReverseMap();
+        }
+    }
+
     public static class LogMsgMapper
     {
         public static LogMsgSpecification ToLogMsgSpecification(this LogMsgTableOptionDto option)
@@ -12,7 +23,7 @@ namespace Infrastructure.Mappers
             if (option == null)
                 throw new ArgumentNullException("LogMsgTableOptionDto is required.");
 
-            var sortBy = "Id";
+            var sortBy = "raise_date";
             var sortDir = "asc";
             var pageNumber = option.Page;
             var pageSize = option.ItemsPerPage;
@@ -24,13 +35,15 @@ namespace Infrastructure.Mappers
                 && option.SortDesc.Any())
             {
                 sortBy = option.SortBy.First();
+                if (sortBy == "raise_date_formatted")
+                    sortBy = "raise_date";
                 sortDir = option.SortDesc.First() ? "desc" : "asc";
             }
 
             return new LogMsgSpecification(
-                option.Username,
+                option.Usernames,
                 option.Date,
-                option.Levels,
+                option.LogLevels,
                 search, 
                 sortBy, 
                 sortDir, 

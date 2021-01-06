@@ -14,5 +14,6 @@ namespace Infrastructure.Interfaces
         Task<ActionResultDto<bool>> DeleteAsync(string id);
         Task<ActionResultDto<bool>> IsEmailAvail(string email);
         Task<ActionResultDto<UserDto>> GetByExternalIdAsync(string externalId);
+        Task<ActionResultDto<string[]>> GetAllUserNamesAsync();
     }
 }

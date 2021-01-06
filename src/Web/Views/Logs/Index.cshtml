@@ -30,13 +30,24 @@
                     <v-toolbar-title>Logs</v-toolbar-title>
                     @*<v-divider class="mx-4" insert vertical></v-divider>*@
                     <v-spacer></v-spacer>
-                    <v-text-field v-model="search"
-                                  v-on:keyup.enter="searchEntered"
-                                  append-icon="mdi-magnify"
-                                  label="Search"
-                                  single-line
-                                  hide-details></v-text-field>
+                    <v-select :items="logLevels"
+                              v-model="options.logLevels"
+                              multiple
+                              label="Level"></v-select>
                     <v-spacer></v-spacer>
+                    <v-select :items="userNames"
+                              v-model="options.userNames"
+                              multiple
+                              label="User"></v-select>
+
+                    @*<v-text-field v-model="search"
+        v-on:keyup.enter="searchEntered"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details></v-text-field>*@
+
+
 
                 </v-toolbar>
             </template>
@@ -63,21 +74,23 @@
             options: {
                 page: 1,
                 itemPerPage: 10,
-                sortBy: ['name'],
+                sortBy: ['raise_date'],
                 sortDesc: [false],
                 groupBy: [],
                 groupDesc: [],
                 multiSort: false,
                 mustSort: false,
                 search: '',
-                userName: '',
-                logLevels: []
+                userNames: [],
+                logLevels: ['Debug', 'Error'],
+                date: new Date()
             },
             userNames: [],
-            logLevels: [],
+            logLevels: ['Information', 'Warning', 'Debug', 'Error'],
+            userProfile: {},
             search: '',
             headers: [
-                { text: 'Date', value: 'raise_date' },
+                { text: 'Date', value: 'raise_date_formatted' },
                 { text: 'Level', value: 'level' },
                 { text: 'Username', value: 'user_name' },
                 { text: 'Machine', value: 'machine_name' },
@@ -98,7 +111,8 @@
             },
         },
         created() {
-            //this.getData();
+            this.getUserProfile();
+            this.getUsers();
         },
         methods: {
 
@@ -125,6 +139,23 @@
                 if (this.options.search.length == 0) {
                     this.getData();
                 }
+            },
+
+            getUsers() {
+                axios
+                    .get('@Url.Action("GetUsers", "Logs")')
+                    .then(response => {
+                        this.userNames = response.data.result;
+                    });
+            },
+
+            getUserProfile() {
+                axios
+                    .get('@Url.Action("GetProfile", "Profile")')
+                    .then(response => {
+                        this.userProfile = response.data.result;
+                        this.options.userName = response.date.result.userName;
+                    });
             }
         }
     })

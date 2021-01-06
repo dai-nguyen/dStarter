@@ -16,7 +16,7 @@ namespace Infrastructure.Stores
 {
     public class LogMsgStore : ILogMsgStore
     {
-        protected readonly ILogger Logger;
+        protected readonly ILogger<LogMsgStore> Logger;
         protected IMapper Mapper;
         protected IUserSession UserSession;
 
@@ -36,7 +36,17 @@ namespace Infrastructure.Stores
 
         public virtual async Task<int> DeleteAsync(DateTime date)
         {
-            return await _dbContext.Database.ExecuteSqlRawAsync("delete from public.\"Logs\" where raise_date <= {0}", date);
+            var sql = $"delete from public.\"Logs\" where raise_date <= '{date.ToString("yyyyMMdd")}'";
+            try
+            { 
+                return await _dbContext.Database.ExecuteSqlRawAsync(sql);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Unable to execute DeleteAsync {@0} {UserName}",
+                    sql, UserSession.UserName);
+            }
+            return -1;
         }
 
         public virtual async Task<ActionResultDto<PageDto<LogMsgDto>>> FindAsync(LogMsgSpecification spec)
@@ -45,28 +55,40 @@ namespace Infrastructure.Stores
 
             try
             {
+                Logger.LogDebug("spec {0} {UserName}",
+                    spec, UserSession.UserName);
+
                 var query = _dbContext.Logs
                     .AsNoTracking()
                     .AsQueryable();
 
-                var userName = UserSession.UserName;
+                var userNames = new List<string>();
 
                 if (UserSession.Roles.Contains("Admin")
-                    && !string.IsNullOrEmpty(spec.UserName)
-                    && !string.IsNullOrWhiteSpace(spec.UserName))
+                    && spec.UserNames != null
+                    && spec.UserNames.Any())
                 {
-                    userName = spec.UserName;
+                    userNames.AddRange(spec.UserNames);
+                }
+                else if (!UserSession.Roles.Contains("Admin"))
+                {
+                    userNames.Add(UserSession.UserName);
                 }
 
-                if (!string.IsNullOrEmpty(userName))
+                if (userNames.Contains("Unknown"))
                 {
                     query = query
-                        .Where(_ => _.user_name == userName);
+                        .Where(_ => userNames.Contains(_.user_name) || _.user_name == null);
+                }
+                else
+                {
+                    query = query
+                        .Where(_ => userNames.Contains(_.user_name));
                 }
 
                 query = query
                     .Where(_ => _.raise_date >= spec.Date.Date 
-                        && _.raise_date < spec.Date.Date.AddHours(24));
+                        && _.raise_date <= spec.Date.Date.AddHours(24));
 
                 if (spec.Levels != null && spec.Levels.Any())
                 {

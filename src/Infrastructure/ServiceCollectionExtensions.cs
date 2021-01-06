@@ -51,7 +51,7 @@ namespace Infrastructure
             var migrationsAssembly = typeof(AppDbContext).Assembly.GetName();
 
             builder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
-                sql => sql.MigrationsAssembly(migrationsAssembly.Name));
+                sql => sql.MigrationsAssembly(migrationsAssembly.Name).UseNodaTime());
                 //.UseSnakeCaseNamingConvention();
 
             //var useSqlServer = configuration.GetValue<bool>("Infrastructure:UseSqlServer");

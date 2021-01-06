@@ -4,7 +4,7 @@ namespace Infrastructure.Specifications
 {
     public class LogMsgSpecification
     {
-        public string UserName { get; private set; }
+        public string[] UserNames { get; private set; }
         public DateTime Date { get; private set; }
         public string[] Levels { get; private set; }
         public string Search { get; private set; }
@@ -14,7 +14,7 @@ namespace Infrastructure.Specifications
         public int PageNumber { get; private set; }
 
         public LogMsgSpecification(
-            string username,
+            string[] usernames,
             DateTime date,
             string[] levels,
             string search = "",
@@ -24,7 +24,7 @@ namespace Infrastructure.Specifications
             int pageNumber = 0
             )
         {
-            UserName = username;
+            UserNames = usernames;
             Date = date;
             Levels = levels;
             Search = search;

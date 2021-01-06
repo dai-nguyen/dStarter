@@ -5,6 +5,7 @@ using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 namespace Infrastructure.Services
@@ -62,13 +63,18 @@ namespace Infrastructure.Services
             {
                 UserName = httpContext.User.Identity.Name;
 
-                UserId = httpContext.User.Claims.GetClaim(Constants.Claims.UserId);
-                Email = httpContext.User.Claims.GetClaim(Constants.Claims.Email);
-                FirstName = httpContext.User.Claims.GetClaim(Constants.Claims.FirstName);
-                LastName = httpContext.User.Claims.GetClaim(Constants.Claims.LastName);
+                UserId = httpContext.User.Claims.GetClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+                Email = httpContext.User.Claims.GetClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress");
+                //FirstName = httpContext.User.Claims.GetClaim(Constants.Claims.FirstName);
+                //LastName = httpContext.User.Claims.GetClaim(Constants.Claims.LastName);
 
-                Claims = httpContext.User.Claims;
-                Roles = httpContext.User.Claims.GetRoles();
+                Claims = httpContext.User.Claims.ToArray();
+                //Roles = httpContext.User.Claims.GetRoles();
+
+                Roles = httpContext.User.Claims
+                    .Where(_ => _.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
+                    .Select(_ => _.Value)
+                    .ToArray();
             }
             else
                 this.ClearUserSession();

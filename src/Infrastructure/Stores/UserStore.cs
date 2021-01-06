@@ -364,6 +364,26 @@ namespace Infrastructure.Stores
             return action;
         }
 
+        public virtual async Task<ActionResultDto<string[]>> GetAllUserNamesAsync()
+        {
+            var action = new ActionResultDto<string[]>();
+
+            try
+            {
+                action.Result = await UserManager.Users
+                    .Select(_ => _.UserName)
+                    .OrderBy(_ => _)
+                    .ToArrayAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Unable to execute GetAllUsersAsync method {UserName}",
+                    UserSession.UserName);
+            }
+
+            return action;
+        }
+
         protected virtual async Task UpsertRolesAsync(AppUser entity, UserDto dto)
         {
             if (dto.Roles == null)

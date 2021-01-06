@@ -4,8 +4,8 @@ namespace Shared.DTOs
 {
     public class LogMsgTableOptionDto : TableOptionDto
     {
-        public string Username { get; set; }
+        public string[] Usernames { get; set; }
         public DateTime Date { get; set; }
-        public string[] Levels { get; set; }
+        public string[] LogLevels { get; set; }
     }
 }
