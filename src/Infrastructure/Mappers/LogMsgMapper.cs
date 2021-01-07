@@ -12,7 +12,7 @@ namespace Infrastructure.Mappers
         public LogMsgMapperProfile()
         {
             CreateMap<LogMsg, LogMsgDto>()
-                .ReverseMap();
+                .ForMember(dest => dest.id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
         }
     }
 

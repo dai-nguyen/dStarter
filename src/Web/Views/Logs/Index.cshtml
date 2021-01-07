@@ -23,6 +23,9 @@
                       :options.sync="options"
                       :server-items-length="totalItems"
                       :loading="loading"
+                      :expanded.sync="expanded"
+                      item-key="id"
+                      show-expand
                       class="elevation-1">
 
             <template v-slot:top>
@@ -39,17 +42,32 @@
                               v-model="options.userNames"
                               multiple
                               label="User"></v-select>
-
-                    @*<v-text-field v-model="search"
-        v-on:keyup.enter="searchEntered"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details></v-text-field>*@
-
-
+                    <v-spacer></v-spacer>
+                    <v-menu v-model="menu2"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="290px">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-text-field v-model="options.date"
+                                          label="Date"
+                                          prepend-icon="mdi-calendar"
+                                          readonly
+                                          v-bind="attrs"
+                                          v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker v-model="options.date"
+                                       @@input="menu2 = false"></v-date-picker>
+                    </v-menu>
 
                 </v-toolbar>
+            </template>
+
+            <template v-slot:expanded-item="{ headers, item }">
+                <td :colspan="headers.length">
+                    {{ item.message }}
+                </td>
             </template>
 
             <template v-slot:no-data>
@@ -83,7 +101,7 @@
                 search: '',
                 userNames: [],
                 logLevels: ['Debug', 'Error'],
-                date: new Date()
+                date: new Date().toISOString().substr(0, 10)
             },
             userNames: [],
             logLevels: ['Information', 'Warning', 'Debug', 'Error'],
@@ -94,7 +112,7 @@
                 { text: 'Level', value: 'level' },
                 { text: 'Username', value: 'user_name' },
                 { text: 'Machine', value: 'machine_name' },
-                { text: 'Message', value: 'message' },
+                { text: 'Message', value: 'message_shorten' },
             ],
             valid: false,
             dialog: false,
@@ -154,7 +172,7 @@
                     .get('@Url.Action("GetProfile", "Profile")')
                     .then(response => {
                         this.userProfile = response.data.result;
-                        this.options.userName = response.date.result.userName;
+                        this.options.userNames.push(response.date.result.userName);
                     });
             }
         }

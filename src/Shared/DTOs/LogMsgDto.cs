@@ -4,6 +4,7 @@ namespace Shared.DTOs
 {
     public class LogMsgDto
     {
+        public string id { get; set; } // for ui
         public string message { get; set; }
         public string message_template { get; set; }
         public string level { get; set; }
@@ -14,5 +15,18 @@ namespace Shared.DTOs
         public string props_test { get; set; }
         public string machine_name { get; set; }
         public string user_name { get; set; }
+        public string message_shorten 
+        { 
+            get
+            {
+                if (!string.IsNullOrEmpty(message)
+                    && message.Length > 50)
+                {
+                    return message.Substring(0, 50) + "...";
+                }
+
+                return message;
+            }
+        }
     }
 }
