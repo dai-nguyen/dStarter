@@ -2,6 +2,7 @@ using Infrastructure.Data;
 using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -73,6 +74,8 @@ namespace Web
                     try
                     {
                         var dbContext = services.GetRequiredService<AppDbContext>();
+                        dbContext.Database.Migrate();
+
                         var logFactory = services.GetRequiredService<ILoggerFactory>();
                         var userManager = services.GetRequiredService<UserManager<AppUser>>();
                         var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
