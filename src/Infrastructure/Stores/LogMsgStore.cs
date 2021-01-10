@@ -36,10 +36,11 @@ namespace Infrastructure.Stores
 
         public virtual async Task<int> DeleteAsync(DateTime date)
         {
-            var sql = $"delete from public.\"Logs\" where raise_date <= '{date.ToString("yyyyMMdd")}'";
+            //var sql = $"delete from public.\"Logs\" where raise_date <= '{date.ToString("yyyyMMdd")}'";
+            var sql = "delete from public.\"Logs\" where raise_date <= {0}";
             try
             { 
-                return await _dbContext.Database.ExecuteSqlRawAsync(sql);
+                return await _dbContext.Database.ExecuteSqlRawAsync(sql, date);
             }
             catch (Exception ex)
             {
@@ -55,7 +56,7 @@ namespace Infrastructure.Stores
 
             try
             {
-                Logger.LogDebug("spec {0} {UserName}",
+                Logger.LogInformation("spec {@0} {UserName}",
                     spec, UserSession.UserName);
 
                 var query = _dbContext.Logs
@@ -68,11 +69,11 @@ namespace Infrastructure.Stores
                     && spec.UserNames != null
                     && spec.UserNames.Any())
                 {
-                    userNames.AddRange(spec.UserNames);
+                    userNames.AddRange(spec.UserNames.Select(_ => $"\"{_}\"").ToArray());
                 }
                 else if (!UserSession.Roles.Contains("Admin"))
                 {
-                    userNames.Add(UserSession.UserName);
+                    userNames.Add($"\"{UserSession.UserName}\"");
                 }
 
                 if (userNames.Contains("Unknown"))

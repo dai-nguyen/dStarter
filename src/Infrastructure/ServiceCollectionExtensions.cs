@@ -50,7 +50,9 @@ namespace Infrastructure
         {
             var migrationsAssembly = typeof(AppDbContext).Assembly.GetName();
 
-            builder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+            string connStr = configuration.GetSection("DefaultConnection").Value;
+
+            builder.UseNpgsql(connStr, //.GetConnectionString("DefaultConnection"),
                 sql => sql.MigrationsAssembly(migrationsAssembly.Name).UseNodaTime());
                 //.UseSnakeCaseNamingConvention();
 

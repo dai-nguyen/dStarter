@@ -22,7 +22,7 @@ namespace Infrastructure.Stores
 
     public class RoleStore : IRoleStore
     {
-        protected readonly ILogger Logger;
+        protected readonly ILogger<RoleStore> Logger;
         protected readonly RoleManager<AppRole> RoleManager;
         protected IMapper Mapper;
         protected IUserSession UserSession;
@@ -78,6 +78,9 @@ namespace Infrastructure.Stores
                 entity.DateUpdated = date;
                 entity.CreatedBy = username;
                 entity.UpdatedBy = username;
+
+                Logger.LogInformation("Adding Dto {@0} Entity {@1} {UserName}",
+                    dto, entity, UserSession.UserName);
 
                 var created = await RoleManager.CreateAsync(entity);
 
@@ -232,6 +235,9 @@ namespace Infrastructure.Stores
                 entity.DateUpdated = date;
                 entity.UpdatedBy = username;
 
+                Logger.LogInformation("Updating Dto {@0} Entity {@1} {UserName}",
+                    dto, entity, UserSession.UserName);
+
                 var updated = await RoleManager.UpdateAsync(entity);
 
                 Logger.LogInformation($"Update role {dto.Name} - {updated.Succeeded}");
@@ -282,6 +288,9 @@ namespace Infrastructure.Stores
                         await RoleManager.RemoveClaimAsync(role, claim);
                     }
                 }
+
+                Logger.LogInformation("Removing {@0} {UserName}",
+                    role, UserSession.UserName);
 
                 // delete
                 var result = await RoleManager.DeleteAsync(role);

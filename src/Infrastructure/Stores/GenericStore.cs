@@ -61,6 +61,9 @@ namespace Infrastructure.Stores
                 entity.CreatedBy = username;
                 entity.UpdatedBy = username;
 
+                Logger.LogInformation("Adding Dto {@0} Entity {@1} {UserName}",
+                    dto, entity, UserSession.UserName);
+
                 await DbContext.Set<TEntity>().AddAsync(entity);
                 await DbContext.SaveChangesAsync();
 
@@ -104,6 +107,9 @@ namespace Infrastructure.Stores
                     entity.UpdatedBy = username;
                 }
 
+                Logger.LogInformation("Adding DTOs {@0} Entities {@1} {UserName}",
+                    dtos, entities, UserSession.UserName);
+
                 await DbContext.Set<TEntity>().AddRangeAsync(entities);
                 await DbContext.SaveChangesAsync();
                 action.Result = Mapper.Map<TDto[]>(entities);
@@ -130,6 +136,9 @@ namespace Infrastructure.Stores
                     Logger.LogError($"Entity with Id {id} not found.");
                     return action;
                 }
+
+                Logger.LogInformation("Removimg entity {@0} {UserName}",
+                    entity, UserSession.UserName);
 
                 DbContext.Set<TEntity>().Remove(entity);
 
@@ -223,6 +232,9 @@ namespace Infrastructure.Stores
                 entity.DateUpdated = date;
                 entity.UpdatedBy = username;
 
+                Logger.LogInformation("Updating Dto {@0} Entity {@1} {UserName}",
+                    dto, entity, UserSession.UserName);
+
                 DbContext.Set<TEntity>().Update(entity);
                 //DbContext.Entry(entity).State = EntityState.Modified;
 
@@ -278,6 +290,9 @@ namespace Infrastructure.Stores
                     entity.DateUpdated = date;
                     entity.UpdatedBy = username;
                 }
+
+                Logger.LogInformation("Updating DTOs {@0} Entities {@1} {UserName}",
+                    dtos, entities, UserSession.UserName);
 
                 DbContext.Set<TEntity>().UpdateRange(entities);
 

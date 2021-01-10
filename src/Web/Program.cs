@@ -26,7 +26,7 @@ namespace Web
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            string connStr = appSettings.GetConnectionString("DefaultConnection");
+            string connStr = appSettings.GetValue<string>("DefaultConnection"); //appSettings.GetConnectionString("DefaultConnection");
             string tableName = "Logs";
 
 

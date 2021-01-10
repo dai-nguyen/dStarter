@@ -23,7 +23,7 @@ namespace Infrastructure.Stores
 
     public class UserStore : IUserStore
     {
-        protected readonly ILogger Logger;
+        protected readonly ILogger<UserStore> Logger;
         protected readonly UserManager<AppUser> UserManager;
         protected IMapper Mapper;
         protected IUserSession UserSession;
@@ -89,6 +89,9 @@ namespace Infrastructure.Stores
                 entity.DateUpdated = date;
                 entity.CreatedBy = username;
                 entity.UpdatedBy = username;
+
+                Logger.LogInformation("Adding Dto {@0} Entity {@1} {UserName",
+                    dto, entity, UserSession.UserName);
 
                 var created = await UserManager.CreateAsync(entity, dto.Password);
 
@@ -258,6 +261,9 @@ namespace Infrastructure.Stores
                 entity.DateUpdated = date;
                 entity.UpdatedBy = username;
 
+                Logger.LogInformation("Updating Dto {@0} Entity {@1} {UserName}",
+                    dto, entity, UserSession.UserName);
+
                 var updated = await UserManager.UpdateAsync(entity);
 
                 Logger.LogInformation($"Update user {dto.Email} - {updated.Succeeded}");
@@ -312,6 +318,9 @@ namespace Infrastructure.Stores
                 var claims = await UserManager.GetClaimsAsync(user);
                 if (claims != null && claims.Any())
                     await UserManager.RemoveClaimsAsync(user, claims);
+
+                Logger.LogInformation("Removing {@0} {UserName}",
+                    user, UserSession.UserName);
 
                 // delete user
                 var result = await UserManager.DeleteAsync(user);
