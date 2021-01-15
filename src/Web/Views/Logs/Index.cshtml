@@ -63,6 +63,13 @@
                                        @@input="dateMenu = false">
                         </v-date-picker>
                     </v-menu>
+                    <v-spacer></v-spacer>
+                    <v-btn small
+                           color="primary"
+                           dark
+                           v-on:click="getData()">
+                        Search
+                    </v-btn>
 
                 </v-toolbar>
             </template>
@@ -139,7 +146,14 @@
         },
         methods: {
 
-            getData () {
+            getData() {
+
+                if (this.options.logLevels.length == 0
+                    || this.options.userNames.length == 0) {
+                    this.loading = false;
+                    return;
+                }
+
                 this.loading = true;
                 axios
                     .post('@Url.Action("LoadData", "Logs")', this.options)
@@ -177,7 +191,7 @@
                     .get('@Url.Action("GetProfile", "Profile")')
                     .then(response => {
                         this.userProfile = response.data.result;
-                        console.log('userProfile', this.userProfile);
+                        //console.log('userProfile', this.userProfile);
                         this.options.userNames.push(this.userProfile.userName);
                     });
             },
