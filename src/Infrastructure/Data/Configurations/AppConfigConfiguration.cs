@@ -19,7 +19,7 @@ namespace Infrastructure.Data.Configurations
             builder.Property(_ => _.CustomAttributes)
                 .HasColumnType("jsonb");
 
-            builder.Property(_ => _.Name).HasMaxLength(100).IsRequired();
+            builder.Property(_ => _.Description).HasMaxLength(255);
             builder.Property(_ => _.Key).HasMaxLength(100).IsRequired();
             builder.HasIndex(_ => _.Key).IsUnique(true);
             builder.Property(_ => _.Value);

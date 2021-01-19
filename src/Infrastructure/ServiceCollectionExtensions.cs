@@ -19,7 +19,7 @@ namespace Infrastructure
             IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(builder => GetDbContextOption(builder, configuration));
-            services.AddScoped<IAppDbContext>(_ => _.GetRequiredService<AppDbContext>() as IAppDbContext);
+            //services.AddScoped<IAppDbContext>(_ => _.GetRequiredService<AppDbContext>() as IAppDbContext);
             
             services.AddAutoMapper(
                typeof(ServiceCollectionExtensions));

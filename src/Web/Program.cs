@@ -53,12 +53,12 @@ namespace Web
                 //    rollOnFileSizeLimit: true,
                 //    shared: true,
                 //    flushToDiskInterval: TimeSpan.FromSeconds(1))
-                .WriteTo.PostgreSql(
+                .WriteTo.PostgreSQL(
                     connStr, 
                     tableName, 
-                    columnWriters, 
+                    columnWriters
                     //needAutoCreateTable: true,
-                    useCopy: true
+                    //useCopy: true
                     )
                 .Enrich.WithMachineName()
                 .CreateLogger();

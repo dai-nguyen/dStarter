@@ -82,7 +82,7 @@
             headers: [
                 { text: 'Key', value: 'key' },
                 { text: 'Value', value: 'value' },
-                { text: 'Description', value: 'name' },
+                { text: 'Description', value: 'description' },
                 { text: 'Action', value: 'action', sortable: false }
             ],
             valid: false,
@@ -91,25 +91,23 @@
             editedItem: {
                 key: '',
                 value: '',
-                name: '',
+                description: '',
                 customAttributes: [],
             },
             defaultItem: {
                 key: '',
                 value: '',
-                name: '',
+                description: '',
                 customAttributes: [],
             },
-            nameRules: [
-                v => !!v || 'Name is required',
-                v => v.length <= 50 || 'Name must be less than 51 characters'
-            ],
-            editedAttr: null,
-
+            keyRules: [
+                v => !!v || 'Key is required',
+                v => v.length <= 100 || 'Key must be less than 101 characters'
+            ]
         },
         computed: {
             formTitle() {
-                return this.editedIndex === -1 ? 'New Role' : 'Edit Role';
+                return this.editedIndex === -1 ? 'New App Config' : 'Edit App Config';
             }
         },
         watch: {
@@ -131,7 +129,7 @@
             getData () {
                 this.loading = true;
                 axios
-                    .post('@Url.Action("LoadData", "Roles")', this.options)
+                    .post('@Url.Action("LoadData", "AppConfigs")', this.options)
                     .then(response => {
                         this.items = response.data.result.data;
                         this.totalItems = response.data.result.total;
@@ -146,7 +144,7 @@
                 //this.dialog = true;
 
                 axios
-                    .get('@Url.Action("GetData", "Roles")/' + item.id)
+                    .get('@Url.Action("GetData", "AppConfigs")/' + item.id)
                     .then(response => {
                         //console.log('editedItem', response.data);
 
@@ -159,12 +157,12 @@
 
             deleteItem (item) {
                 //const index = this.items.indexOf(item);
-                if (confirm('Are you sure you want to delete this role?')) {
+                if (confirm('Are you sure you want to delete this App Config?')) {
                     var vm = this;
 
-                    axios.delete('@Url.Action("Delete", "Roles")/' + item.id)
+                    axios.delete('@Url.Action("Delete", "AppConfigs")/' + item.id)
                         .then(function (response) {
-                            console.log(response);
+                            //console.log(response);
 
                             if (response.data.result) {
                                 vm.alertColor = "success";
@@ -196,7 +194,7 @@
                 e.preventDefault();
                 var vm = this;
 
-                axios.post('@Url.Action("Upsert", "Roles")', this.editedItem)
+                axios.post('@Url.Action("Upsert", "AppConfigs")', this.editedItem)
                     .then(function (response) {
                         vm.editedIndex = -1;
 

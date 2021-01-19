@@ -32,7 +32,7 @@ namespace Infrastructure.Mappers
                 option.ToBaseFilter(),
                 new Dictionary<string, System.Linq.Expressions.Expression<Func<AppConfig, object>>>()
                 {
-                    ["name"] = _ => _.Name,
+                    ["name"] = _ => _.Description,
                     ["key"] = _ => _.Key,
                     ["value"] = _ => _.Value
                 });
