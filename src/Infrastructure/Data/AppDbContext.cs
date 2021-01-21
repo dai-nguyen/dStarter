@@ -5,7 +5,10 @@ using Infrastructure.Modules.CRM.Configurations;
 using Infrastructure.Modules.CRM.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -89,5 +92,26 @@ namespace Infrastructure.Data
                 .UseLoggerFactory(_loggerFactory);
     }
 
-    
+    public class AppDbContextDesignFactory : IDesignTimeDbContextFactory<AppDbContext>
+    {
+        public AppDbContext CreateDbContext(string[] args)
+        {
+            var configuration = new ConfigurationBuilder()
+               .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
+               .AddJsonFile("appsettings.json")
+               //.AddEnvironmentVariables()
+               .Build();
+
+            var migrationsAssembly = typeof(AppDbContext).Assembly.GetName();
+
+            string connStr = configuration.GetSection("DefaultConnection").Value;
+
+            var builder = new DbContextOptionsBuilder<AppDbContext>();
+
+            builder.UseNpgsql(connStr,
+                sql => sql.MigrationsAssembly(migrationsAssembly.Name).UseNodaTime());
+          
+            return new AppDbContext(builder.Options, null);
+        }
+    }
 }
