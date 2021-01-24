@@ -52,28 +52,8 @@ namespace Infrastructure
 
             string connStr = configuration.GetSection("DefaultConnection").Value;
 
-            builder.UseNpgsql(connStr, //.GetConnectionString("DefaultConnection"),
+            builder.UseNpgsql(connStr,
                 sql => sql.MigrationsAssembly(migrationsAssembly.Name).UseNodaTime());
-                //.UseSnakeCaseNamingConvention();
-
-            //var useSqlServer = configuration.GetValue<bool>("Infrastructure:UseSqlServer");
-            //var dbConnString = useSqlServer
-            //    ? configuration.GetConnectionString("DefaultConnection")
-            //    : $"Filename={configuration.GetConnectionString("SqliteConnection")}";
-
-            //if (useSqlServer)
-            //{
-            //    builder.UseSqlServer(dbConnString, sql => sql.MigrationsAssembly(migrationsAssembly.Name));
-            //}
-            //else if (configuration.GetValue<bool>("Infrastructure:UsePostgresServer"))
-            //{
-            //    builder.UseNpgsql(configuration.GetConnectionString("PostgresConnection"), sql => sql.MigrationsAssembly(migrationsAssembly.Name));
-            //}
-            //else
-            //{
-            //    builder.UseSqlite(dbConnString, sql => sql.MigrationsAssembly(migrationsAssembly.Name));
-            //}
-
         }
     }
 }

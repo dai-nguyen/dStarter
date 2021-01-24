@@ -5,40 +5,43 @@ using Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Mappers
 {
-    public class AppConfigMapperProfile : Profile
+    public class WikiMapperProfile : Profile
     {
-        public AppConfigMapperProfile()
+        public WikiMapperProfile()
         {
-            CreateMap<AppConfig, AppConfigDto>()
+            CreateMap<Wiki, WikiDto>()
                 .ReverseMap();
         }
-        
+
     }
 
-    public static class AppConfigMapper
+    public static class WikiMapper
     {
-        public static AppConfigSpecification ToAppConfigSpecification(this AppConfigTableOptionDto option)
+        public static WikiSpecification ToAppConfigSpecification(this WikiTableOptionDto option)
         {
             if (option == null)
-                throw new ArgumentNullException("AppConfigTableOptionDto is required.");
+                throw new ArgumentNullException("WikiTableOptionDto is required.");
 
-            return new AppConfigSpecification(
-                option.Key,
+            return new WikiSpecification(
+                option.Search,
+                option.Tag,
                 option.ToBaseFilter(),
-                new Dictionary<string, System.Linq.Expressions.Expression<Func<AppConfig, object>>>()
+                new Dictionary<string, System.Linq.Expressions.Expression<Func<Wiki, object>>>()
                 {
-                    ["name"] = _ => _.Description,
-                    ["key"] = _ => _.Key,
-                    ["value"] = _ => _.Value
+                    ["id"] = _ => _.Id,
+                    ["title"] = _ => _.Title,
+                    ["body"] = _ => _.Body
                 });
         }
 
-        public static BaseFilterDto ToBaseFilter(this AppConfigTableOptionDto option)
+        public static BaseFilterDto ToBaseFilter(this WikiTableOptionDto option)
         {
-            var sortBy = "key";
+            var sortBy = "title";
             var sortDir = "asc";
             var pageNumber = option.Page;
             var pageSize = option.ItemsPerPage;

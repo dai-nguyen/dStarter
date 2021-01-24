@@ -21,6 +21,7 @@ namespace Infrastructure.Data
 
         public DbSet<LogMsg> Logs { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
+        public DbSet<Wiki> Wikis { get; set; }
 
         // CRM module
         public DbSet<Customer> Customers { get; set; }
@@ -65,6 +66,7 @@ namespace Infrastructure.Data
 
             builder.ApplyConfiguration(new LogMsgConfiguration());
             builder.ApplyConfiguration(new AppConfigConfiguration());
+            builder.ApplyConfiguration(new WikiConfiguration());
 
             // CRM module
             builder.ApplyConfiguration(new CustomerConfiguration());
