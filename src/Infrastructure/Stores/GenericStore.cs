@@ -53,19 +53,11 @@ namespace Infrastructure.Stores
                     return action;
                 }
 
-                var date = DateTime.Now;
-                var username = UserSession.UserName;
-
-                entity.DateCreated = date;
-                entity.DateUpdated = date;
-                entity.CreatedBy = username;
-                entity.UpdatedBy = username;
-
                 Logger.LogInformation("Adding Dto {@0} Entity {@1} {UserName}",
                     dto, entity, UserSession.UserName);
 
                 await DbContext.Set<TEntity>().AddAsync(entity);
-                await DbContext.SaveChangesAsync();
+                int count = await DbContext.SaveChangesAsync();
 
                 action.Result = Mapper.Map<TDto>(entity);
             }
@@ -94,17 +86,6 @@ namespace Infrastructure.Stores
                     Logger.LogError(err);
                     action.Errors.Add(err);
                     return action;
-                }
-
-                var date = DateTime.Now;
-                var username = UserSession.UserName;
-
-                foreach (var entity in entities)
-                {
-                    entity.DateCreated = date;
-                    entity.DateUpdated = date;
-                    entity.CreatedBy = username;
-                    entity.UpdatedBy = username;
                 }
 
                 Logger.LogInformation("Adding DTOs {@0} Entities {@1} {UserName}",
@@ -226,12 +207,6 @@ namespace Infrastructure.Stores
                     return action;
                 }
 
-                var date = DateTime.Now;
-                var username = UserSession.UserName;
-
-                entity.DateUpdated = date;
-                entity.UpdatedBy = username;
-
                 Logger.LogInformation("Updating Dto {@0} Entity {@1} {UserName}",
                     dto, entity, UserSession.UserName);
 
@@ -280,15 +255,6 @@ namespace Infrastructure.Stores
                     Logger.LogError(err);
                     action.Errors.Add(err);
                     return action;
-                }
-
-                var date = DateTime.Now;
-                var username = UserSession.UserName;
-
-                foreach (var entity in entities)
-                {
-                    entity.DateUpdated = date;
-                    entity.UpdatedBy = username;
                 }
 
                 Logger.LogInformation("Updating DTOs {@0} Entities {@1} {UserName}",

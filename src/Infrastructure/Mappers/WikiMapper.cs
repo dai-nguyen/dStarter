@@ -22,14 +22,14 @@ namespace Infrastructure.Mappers
 
     public static class WikiMapper
     {
-        public static WikiSpecification ToAppConfigSpecification(this WikiTableOptionDto option)
+        public static WikiSpecification ToWikiSpecification(this WikiTableOptionDto option)
         {
             if (option == null)
                 throw new ArgumentNullException("WikiTableOptionDto is required.");
 
             return new WikiSpecification(
-                option.Search,
-                option.Tag,
+                option.Search ?? "",
+                option.Tag ?? "",
                 option.ToBaseFilter(),
                 new Dictionary<string, System.Linq.Expressions.Expression<Func<Wiki, object>>>()
                 {

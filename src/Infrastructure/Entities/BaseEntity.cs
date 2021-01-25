@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Infrastructure.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Infrastructure.Entities
 {
-    public class BaseEntity
+    public class BaseEntity : IEntity
     {
         public virtual int Id { get; set; }
         public virtual DateTime DateCreated { get; set; } = DateTime.Now;

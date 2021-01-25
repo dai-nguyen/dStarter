@@ -20,7 +20,7 @@ namespace Infrastructure.Specifications
                 (_ => 
                     (string.IsNullOrEmpty(search) || EF.Functions.ToTsVector("english", 
                         _.Title + " " + _.Body).Matches(search))
-                    && (!string.IsNullOrEmpty(tag) || _.Tags.Contains(tag))
+                    && (string.IsNullOrEmpty(tag) || _.Tags.Contains(tag))
                 ),
                 baseFilter,
                 columnMaps ?? new Dictionary<string, Expression<Func<Wiki, object>>>()

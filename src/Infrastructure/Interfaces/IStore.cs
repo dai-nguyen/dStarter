@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Interfaces
 {
-    public interface IStore<TEntity, TDto>
+    public interface IStore<TEntity, TDto> where TEntity : IEntity
     {
         Task<ActionResultDto<TDto>> AddAsync(TDto dto);
         Task<ActionResultDto<TDto[]>> AddRangeAsync(TDto[] dtos);

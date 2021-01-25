@@ -33,19 +33,20 @@
                         </li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AppConfigs" asp-action="Index">AppConfigs</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Logs" asp-action="Index">Logs</a>
-                            </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="system" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">System</a>
+                            <div class="dropdown-menu" aria-labelledby="system">
+                                <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="AppConfigs" asp-action="Index">AppConfigs</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Logs" asp-action="Index">Logs</a>
+                            </div>
+                        </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Wikis" asp-action="Index">Wiki</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>

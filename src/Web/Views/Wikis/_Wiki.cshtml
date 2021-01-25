@@ -1,0 +1,40 @@
+﻿<v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <template v-slot:activator="{ on }">
+        <v-btn color="primary" dar class="mb-2" v-on="on">Add</v-btn>
+    </template>
+    <v-card>
+        <v-toolbar dark color="primary">
+            <v-btn icon dark v-on:click="close">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+                <v-btn dark text
+                        v-on:click="save"
+                        :disabled="!valid">Save</v-btn>
+            </v-toolbar-items>
+        </v-toolbar>
+
+        <v-container>
+            <v-form v-model="valid" ref="form" lazy-validation>
+                <v-text-field v-model="editedItem.title"
+                              :rules="titleRules"
+                              :counter="255"
+                              label="Title"
+                              required>
+                </v-text-field>
+                <v-textarea v-model="editedItem.body"
+                            :counter="10000"
+                            label="Body"
+                            rows="15">
+                </v-textarea>
+                <v-combobox multiple
+                            small-chips
+                            label="Tags"
+                            v-model="editedItem.tags"></v-combobox>
+            </v-form>
+        </v-container>
+
+    </v-card>
+</v-dialog>

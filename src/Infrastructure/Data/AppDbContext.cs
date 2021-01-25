@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Data.Configurations;
 using Infrastructure.Entities;
+using Infrastructure.Extensions;
 using Infrastructure.Interfaces;
 using Infrastructure.Modules.CRM.Configurations;
 using Infrastructure.Modules.CRM.Entities;
@@ -17,7 +18,7 @@ namespace Infrastructure.Data
     public class AppDbContext : IdentityDbContext<AppUser, AppRole, string>, IAppDbContext
     {
         private readonly ILoggerFactory _loggerFactory;
-        //private readonly IUserSession _userSession;
+        private readonly IUserSession _userSession;
 
         public DbSet<LogMsg> Logs { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
@@ -32,13 +33,13 @@ namespace Infrastructure.Data
 
         public AppDbContext(
             DbContextOptions<AppDbContext> options,
-            ILoggerFactory loggerFactory
-            //IUserSession userSession
+            ILoggerFactory loggerFactory,
+            IUserSession userSession
             )
             : base(options)
         {
             _loggerFactory = loggerFactory;
-            //_userSession = userSession;
+            _userSession = userSession;
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -79,13 +80,13 @@ namespace Infrastructure.Data
 
         public override int SaveChanges()
         {
-            //ChangeTracker.SetShadowProperties(_userSession);
+            ChangeTracker.SetShadowProperties(_userSession);
             return base.SaveChanges();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            //ChangeTracker.SetShadowProperties(_userSession);
+            ChangeTracker.SetShadowProperties(_userSession);
             return await base.SaveChangesAsync(true, cancellationToken);
         }
 
@@ -113,7 +114,7 @@ namespace Infrastructure.Data
             builder.UseNpgsql(connStr,
                 sql => sql.MigrationsAssembly(migrationsAssembly.Name).UseNodaTime());
           
-            return new AppDbContext(builder.Options, null);
+            return new AppDbContext(builder.Options, null, null);
         }
     }
 }

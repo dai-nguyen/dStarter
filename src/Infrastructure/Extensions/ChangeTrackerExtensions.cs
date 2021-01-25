@@ -15,7 +15,7 @@ namespace Infrastructure.Extensions
             var dbContext = (AppDbContext)changeTracker.Context;
 
             string userId = "?";
-            DateTime timestamp = DateTime.Now;
+            DateTime timestamp = DateTime.UtcNow;
 
             if (!string.IsNullOrEmpty(userSession.UserId))
                 userId = userSession.UserId;
