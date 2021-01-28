@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210121061353_update_appconfig")]
-    partial class update_appconfig
+    [Migration("20210127055646_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -258,6 +258,63 @@ namespace Infrastructure.Migrations
                         .HasAnnotation("Npgsql:TsVectorConfig", "english");
 
                     b.ToTable("Logs");
+                });
+
+            modelBuilder.Entity("Infrastructure.Entities.Wiki", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseHiLo("EntityFrameworkHiLoSequence");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasDefaultValue("?");
+
+                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
+                        .HasColumnType("jsonb");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ExternalId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string[]>("Tags")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("UpdatedBy")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasDefaultValue("?");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExternalId");
+
+                    b.HasIndex("Tags");
+
+                    b.HasIndex("Title", "Body")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
+
+                    b.ToTable("Wikis");
                 });
 
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Contact", b =>

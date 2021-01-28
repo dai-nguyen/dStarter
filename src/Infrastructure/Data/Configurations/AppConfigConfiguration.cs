@@ -23,6 +23,7 @@ namespace Infrastructure.Data.Configurations
             builder.Property(_ => _.Key).HasMaxLength(100).IsRequired();
             builder.HasIndex(_ => _.Key).IsUnique(true);
             builder.Property(_ => _.Value);
+            builder.Property(_ => _.Sensitive).IsRequired();
         }
     }
 }

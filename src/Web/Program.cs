@@ -21,48 +21,6 @@ namespace Web
     {
         public static void Main(string[] args)
         {
-            var appSettings = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            string connStr = appSettings.GetValue<string>("DefaultConnection"); //appSettings.GetConnectionString("DefaultConnection");
-            string tableName = "Logs";
-
-
-            var columnWriters = new Dictionary<string, ColumnWriterBase>
-            {
-                {"message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
-                {"message_template", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
-                {"level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
-                {"raise_date", new TimestampColumnWriter(NpgsqlDbType.Timestamp) },
-                {"exception", new ExceptionColumnWriter(NpgsqlDbType.Text) },
-                {"properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
-                {"props_test", new PropertiesColumnWriter(NpgsqlDbType.Jsonb) },
-                {"machine_name", new SinglePropertyColumnWriter("MachineName", PropertyWriteMethod.ToString, NpgsqlDbType.Text, "l") },
-                {"user_name", new SinglePropertyColumnWriter("UserName", PropertyWriteMethod.ToString, NpgsqlDbType.Text) }
-            };
-
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                //.WriteTo.File(
-                //    Path.Combine(Directory.GetCurrentDirectory(), @"Logs\log.txt"),
-                //    fileSizeLimitBytes: 1_000_000,
-                //    rollOnFileSizeLimit: true,
-                //    shared: true,
-                //    flushToDiskInterval: TimeSpan.FromSeconds(1))
-                .WriteTo.PostgreSQL(
-                    connStr, 
-                    tableName, 
-                    columnWriters
-                    //needAutoCreateTable: true,
-                    //useCopy: true
-                    )
-                .Enrich.WithMachineName()
-                .CreateLogger();
-
             try
             {
                 Log.Information("Starting web host");
@@ -73,6 +31,45 @@ namespace Web
                     var services = scope.ServiceProvider;
                     try
                     {
+                        var configuration = services.GetRequiredService<IConfiguration>();
+                        string connStr = configuration.GetSection("DefaultConnection").Value;
+                        string tableName = "Logs";
+
+
+                        var columnWriters = new Dictionary<string, ColumnWriterBase>
+                        {
+                            {"message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
+                            {"message_template", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
+                            {"level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
+                            {"raise_date", new TimestampColumnWriter(NpgsqlDbType.Timestamp) },
+                            {"exception", new ExceptionColumnWriter(NpgsqlDbType.Text) },
+                            {"properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
+                            {"props_test", new PropertiesColumnWriter(NpgsqlDbType.Jsonb) },
+                            {"machine_name", new SinglePropertyColumnWriter("MachineName", PropertyWriteMethod.ToString, NpgsqlDbType.Text, "l") },
+                            {"user_name", new SinglePropertyColumnWriter("UserName", PropertyWriteMethod.ToString, NpgsqlDbType.Text) }
+                        };
+
+                        Log.Logger = new LoggerConfiguration()
+                            .MinimumLevel.Information()
+                            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                            .Enrich.FromLogContext()
+                            //.WriteTo.File(
+                            //    Path.Combine(Directory.GetCurrentDirectory(), @"Logs\log.txt"),
+                            //    fileSizeLimitBytes: 1_000_000,
+                            //    rollOnFileSizeLimit: true,
+                            //    shared: true,
+                            //    flushToDiskInterval: TimeSpan.FromSeconds(1))
+                            .WriteTo.PostgreSQL(
+                                connStr,
+                                tableName,
+                                columnWriters
+                                //needAutoCreateTable: true
+                                //useCopy: true
+                                )
+                            .Enrich.WithMachineName()
+                            .CreateLogger();
+
+
                         var dbContext = services.GetRequiredService<AppDbContext>();
                         dbContext.Database.Migrate();
 

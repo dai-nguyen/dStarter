@@ -13,7 +13,14 @@ namespace Infrastructure.Mappers
         public AppConfigMapperProfile()
         {
             CreateMap<AppConfig, AppConfigDto>()
-                .ReverseMap();
+                .ForMember(dest => dest.Value, 
+                    opt => opt.MapFrom(src => src.Sensitive ? 
+                        Helpers.Helper.DecryptString(src.Value, "Vrj5IBRznQOoNWmvmhsv1Q@#") : src.Value));
+
+            CreateMap<AppConfigDto, AppConfig>()
+                .ForMember(dest => dest.Value, 
+                    opt => opt.MapFrom(src => src.Sensitive ? 
+                        Helpers.Helper.EncryptString(src.Value, "Vrj5IBRznQOoNWmvmhsv1Q@#") : src.Value));
         }
         
     }
