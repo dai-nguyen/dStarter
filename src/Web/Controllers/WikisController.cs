@@ -41,7 +41,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResultDto<WikiDto>> GetData(int id)
+        public async Task<ActionResultDto<WikiDto>> GetData(string id)
         {
             return await _store.GetAsync(id);
         }
@@ -50,7 +50,7 @@ namespace Web.Controllers
         public async Task<ActionResultDto<WikiDto>> Upsert(
             [FromBody] WikiDto dto)
         {
-            if (dto.Id < 1)
+            if (string.IsNullOrEmpty(dto.Id))
             {
                 // create
                 return await _store.AddAsync(dto);
@@ -63,7 +63,7 @@ namespace Web.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResultDto<bool>> Delete(int id)
+        public async Task<ActionResultDto<bool>> Delete(string id)
         {
             return await _store.DeleteAsync(id);
         }

@@ -39,7 +39,7 @@ namespace Web.Controllers.CRM
         }
 
         [HttpGet]
-        public async Task<ActionResultDto<ContactDto>> GetData(int id)
+        public async Task<ActionResultDto<ContactDto>> GetData(string id)
         {
             return await _contactStore.GetAsync(id);
         }
@@ -48,7 +48,7 @@ namespace Web.Controllers.CRM
         public async Task<ActionResultDto<ContactDto>> Upsert(
             [FromBody] ContactDto dto)
         {
-            if (dto.Id <= 0)
+            if (string.IsNullOrEmpty(dto.Id))
             {
                 // create
                 return await _contactStore.AddAsync(dto);
@@ -61,7 +61,7 @@ namespace Web.Controllers.CRM
         }
 
         [HttpDelete]
-        public async Task<ActionResultDto<bool>> Delete(int id)
+        public async Task<ActionResultDto<bool>> Delete(string id)
         {
             return await _contactStore.DeleteAsync(id);
         }

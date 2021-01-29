@@ -11,10 +11,10 @@ namespace Infrastructure.Modules.CRM.Entities
         public bool IsBilled { get; set; }
         public bool IsPaid { get; set; }
 
-        public int? ContactId { get; set; }
+        public string ContactId { get; set; }
         public virtual Contact Contact { get; set; }
 
-        public int? CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
         public virtual IEnumerable<LaborHour> LaborHours { get; set; }

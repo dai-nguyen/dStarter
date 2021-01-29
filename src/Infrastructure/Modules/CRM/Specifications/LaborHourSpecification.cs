@@ -10,11 +10,11 @@ namespace Infrastructure.Modules.CRM.Specifications
     public class LaborHourSpecification : BaseSpecification<LaborHour>
     {
         public LaborHourSpecification(
-            int? ticketId = null, 
+            string ticketId = null, 
             BaseFilterDto baseFilter = null, 
             Dictionary<string, Expression<Func<LaborHour, object>>> columnMaps = null) 
             : base(
-                  _ => (!ticketId.HasValue || _.TicketId == ticketId), 
+                  _ => (string.IsNullOrEmpty(ticketId) || _.TicketId == ticketId), 
                   baseFilter, 
                   columnMaps)
         {

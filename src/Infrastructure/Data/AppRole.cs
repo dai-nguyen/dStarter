@@ -13,6 +13,6 @@ namespace Infrastructure.Data
         public virtual string UpdatedBy { get; set; } = "?";
         public virtual string ExternalId { get; set; }
 
-        public ICollection<CustomAttribute> CustomAttributes { get; set; }
+        public IEnumerable<CustomAttribute> CustomAttributes { get; set; }
     }
 }

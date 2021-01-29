@@ -16,6 +16,6 @@ namespace Infrastructure.Data
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
 
-        public ICollection<CustomAttribute> CustomAttributes { get; set; }
+        public IEnumerable<CustomAttribute> CustomAttributes { get; set; }
     }
 }

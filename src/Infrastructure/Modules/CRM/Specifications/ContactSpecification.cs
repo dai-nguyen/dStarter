@@ -15,7 +15,7 @@ namespace Infrastructure.Modules.CRM.Specifications
             string firstName = "",
             string lastName = "",
             string email = "",
-            int? customerId = null,
+            string customerId = null,
             BaseFilterDto baseFilter = null, 
             Dictionary<string, Expression<Func<Contact, object>>> columnMaps = null) 
             : base(
@@ -24,7 +24,7 @@ namespace Infrastructure.Modules.CRM.Specifications
                   && (string.IsNullOrEmpty(firstName) || _.FirstName.StartsWith(firstName))
                   && (string.IsNullOrEmpty(lastName) || _.LastName.StartsWith(lastName))
                   && (string.IsNullOrEmpty(email) || _.Email.StartsWith(email))
-                  && (!customerId.HasValue || _.CustomerId == customerId.Value), 
+                  && (string.IsNullOrEmpty(customerId) || _.CustomerId == customerId), 
                   baseFilter, 
                   columnMaps)
         {

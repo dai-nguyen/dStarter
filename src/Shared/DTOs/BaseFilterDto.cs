@@ -5,7 +5,7 @@ namespace Shared.DTOs
 {
     public class BaseFilterDto
     {
-        public int[] IDs { get; set; } = null;
+        public string[] IDs { get; set; } = null;
         public DateTime? DateCreated { get; set; } = null;
         public DateTime? DateUpdated { get; set; } = null;
         public string CreatedBy { get; set; } = "";
@@ -22,7 +22,7 @@ namespace Shared.DTOs
         { }
 
         public BaseFilterDto(
-            int[] ids,
+            string[] ids,
             string sortBy,
             string sortDir,
             int pageNumber,

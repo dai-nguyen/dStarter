@@ -10,25 +10,21 @@ namespace Infrastructure.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateSequence(
-                name: "EntityFrameworkHiLoSequence",
-                incrementBy: 10);
-
             migrationBuilder.CreateTable(
                 name: "AppConfigs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
+                    Id = table.Column<string>(type: "character varying(37)", maxLength: 37, nullable: false),
                     Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     Key = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Value = table.Column<string>(type: "text", nullable: true),
+                    Sensitive = table.Column<bool>(type: "boolean", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     UpdatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     ExternalId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    CustomAttributes = table.Column<ICollection<CustomAttribute>>(type: "jsonb", nullable: true)
+                    CustomAttributes = table.Column<IEnumerable<CustomAttribute>>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -45,7 +41,7 @@ namespace Infrastructure.Migrations
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedBy = table.Column<string>(type: "text", nullable: true),
                     ExternalId = table.Column<string>(type: "text", nullable: true),
-                    CustomAttributes = table.Column<ICollection<CustomAttribute>>(type: "jsonb", nullable: true),
+                    CustomAttributes = table.Column<IEnumerable<CustomAttribute>>(type: "jsonb", nullable: true),
                     Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
@@ -67,7 +63,7 @@ namespace Infrastructure.Migrations
                     ExternalId = table.Column<string>(type: "text", nullable: true),
                     FirstName = table.Column<string>(type: "text", nullable: true),
                     LastName = table.Column<string>(type: "text", nullable: true),
-                    CustomAttributes = table.Column<ICollection<CustomAttribute>>(type: "jsonb", nullable: true),
+                    CustomAttributes = table.Column<IEnumerable<CustomAttribute>>(type: "jsonb", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -92,8 +88,7 @@ namespace Infrastructure.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Address1 = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Address2 = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
@@ -107,7 +102,7 @@ namespace Infrastructure.Migrations
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     UpdatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     ExternalId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    CustomAttributes = table.Column<ICollection<CustomAttribute>>(type: "jsonb", nullable: true)
+                    CustomAttributes = table.Column<IEnumerable<CustomAttribute>>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -136,8 +131,7 @@ namespace Infrastructure.Migrations
                 name: "Wikis",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
+                    Id = table.Column<string>(type: "character varying(37)", maxLength: 37, nullable: false),
                     Title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Body = table.Column<string>(type: "text", nullable: false),
                     Tags = table.Column<string[]>(type: "text[]", nullable: false),
@@ -146,7 +140,7 @@ namespace Infrastructure.Migrations
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     UpdatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     ExternalId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    CustomAttributes = table.Column<ICollection<CustomAttribute>>(type: "jsonb", nullable: true)
+                    CustomAttributes = table.Column<IEnumerable<CustomAttribute>>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -263,20 +257,19 @@ namespace Infrastructure.Migrations
                 name: "Contacts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     FirstName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Phone = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    CustomerId = table.Column<string>(type: "text", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     UpdatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     ExternalId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    CustomAttributes = table.Column<ICollection<CustomAttribute>>(type: "jsonb", nullable: true)
+                    CustomAttributes = table.Column<IEnumerable<CustomAttribute>>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -293,21 +286,20 @@ namespace Infrastructure.Migrations
                 name: "Tickets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     IsBilled = table.Column<bool>(type: "boolean", nullable: false),
                     IsPaid = table.Column<bool>(type: "boolean", nullable: false),
-                    ContactId = table.Column<int>(type: "integer", nullable: true),
-                    CustomerId = table.Column<int>(type: "integer", nullable: true),
+                    ContactId = table.Column<string>(type: "text", nullable: true),
+                    CustomerId = table.Column<string>(type: "text", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     UpdatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     ExternalId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    CustomAttributes = table.Column<ICollection<CustomAttribute>>(type: "jsonb", nullable: true)
+                    CustomAttributes = table.Column<IEnumerable<CustomAttribute>>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -330,18 +322,17 @@ namespace Infrastructure.Migrations
                 name: "LaborHours",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Hour = table.Column<int>(type: "integer", nullable: false),
                     Minute = table.Column<int>(type: "integer", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    TicketId = table.Column<int>(type: "integer", nullable: false),
+                    TicketId = table.Column<string>(type: "text", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     UpdatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
                     ExternalId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    CustomAttributes = table.Column<ICollection<CustomAttribute>>(type: "jsonb", nullable: true)
+                    CustomAttributes = table.Column<IEnumerable<CustomAttribute>>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -541,9 +532,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customers");
-
-            migrationBuilder.DropSequence(
-                name: "EntityFrameworkHiLoSequence");
         }
     }
 }

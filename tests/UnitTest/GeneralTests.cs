@@ -30,9 +30,9 @@ namespace UnitTest
         {
             var key = Convert.ToBase64String(GetRandomData(128));
 
-            key = key.Replace("==", "@#");
+            //key = key.Replace("==", "@#");
 
-            var encrypted = Helper.EncryptString("hello", key);
+            var encrypted = Helper.EncryptString("this is a sensitive value", key);
             var decrypt = Helper.DecryptString(encrypted, key);
 
             Assert.IsTrue(decrypt == "hello");

@@ -9,7 +9,7 @@ namespace Infrastructure.Modules.CRM.Configurations
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder.ToTable("Customers");
-            builder.Property(_ => _.Id).UseHiLo();
+            builder.HasKey(_ => _.Id);
             builder.Property(_ => _.DateCreated);
             builder.Property(_ => _.DateUpdated);
             builder.Property(_ => _.CreatedBy).HasMaxLength(100).HasDefaultValue("?");

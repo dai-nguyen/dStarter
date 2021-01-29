@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210127055646_initial")]
+    [Migration("20210129051453_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,9 +22,6 @@ namespace Infrastructure.Migrations
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.2");
-
-            modelBuilder.HasSequence("EntityFrameworkHiLoSequence")
-                .IncrementsBy(10);
 
             modelBuilder.Entity("Infrastructure.Data.AppRole", b =>
                 {
@@ -38,7 +35,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
+                    b.Property<IEnumerable<CustomAttribute>>("CustomAttributes")
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("DateCreated")
@@ -88,7 +85,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
+                    b.Property<IEnumerable<CustomAttribute>>("CustomAttributes")
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("DateCreated")
@@ -166,10 +163,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Entities.AppConfig", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseHiLo("EntityFrameworkHiLoSequence");
+                    b.Property<string>("Id")
+                        .HasMaxLength(37)
+                        .HasColumnType("character varying(37)");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
@@ -177,7 +173,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasDefaultValue("?");
 
-                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
+                    b.Property<IEnumerable<CustomAttribute>>("CustomAttributes")
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("DateCreated")
@@ -198,6 +194,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("Sensitive")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UpdatedBy")
                         .ValueGeneratedOnAdd()
@@ -262,10 +261,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Entities.Wiki", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseHiLo("EntityFrameworkHiLoSequence");
+                    b.Property<string>("Id")
+                        .HasMaxLength(37)
+                        .HasColumnType("character varying(37)");
 
                     b.Property<string>("Body")
                         .IsRequired()
@@ -277,7 +275,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasDefaultValue("?");
 
-                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
+                    b.Property<IEnumerable<CustomAttribute>>("CustomAttributes")
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("DateCreated")
@@ -319,10 +317,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Contact", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseHiLo("EntityFrameworkHiLoSequence");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
@@ -330,11 +326,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasDefaultValue("?");
 
-                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
+                    b.Property<IEnumerable<CustomAttribute>>("CustomAttributes")
                         .HasColumnType("jsonb");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp without time zone");
@@ -387,10 +383,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Customer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseHiLo("EntityFrameworkHiLoSequence");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("Address1")
                         .HasMaxLength(100)
@@ -414,7 +408,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasDefaultValue("?");
 
-                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
+                    b.Property<IEnumerable<CustomAttribute>>("CustomAttributes")
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("DateCreated")
@@ -462,10 +456,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.LaborHour", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseHiLo("EntityFrameworkHiLoSequence");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
@@ -473,7 +465,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasDefaultValue("?");
 
-                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
+                    b.Property<IEnumerable<CustomAttribute>>("CustomAttributes")
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("DateCreated")
@@ -496,8 +488,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Minute")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TicketId")
-                        .HasColumnType("integer");
+                    b.Property<string>("TicketId")
+                        .HasColumnType("text");
 
                     b.Property<string>("UpdatedBy")
                         .ValueGeneratedOnAdd()
@@ -516,13 +508,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Ticket", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                    b.Property<int?>("ContactId")
-                        .HasColumnType("integer");
+                    b.Property<string>("ContactId")
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
@@ -530,11 +520,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasDefaultValue("?");
 
-                    b.Property<ICollection<CustomAttribute>>("CustomAttributes")
+                    b.Property<IEnumerable<CustomAttribute>>("CustomAttributes")
                         .HasColumnType("jsonb");
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("integer");
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp without time zone");
@@ -690,8 +680,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Infrastructure.Modules.CRM.Entities.Customer", "Customer")
                         .WithMany("Contacts")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Customer");
                 });
@@ -701,8 +690,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Infrastructure.Modules.CRM.Entities.Ticket", "Ticket")
                         .WithMany("LaborHours")
                         .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Ticket");
                 });

@@ -53,6 +53,9 @@ namespace Infrastructure.Stores
                     return action;
                 }
 
+                if (string.IsNullOrEmpty(entity.Id))
+                    entity.Id = Guid.NewGuid().ToString();
+
                 Logger.LogInformation("Adding Dto {@0} Entity {@1} {UserName}",
                     dto, entity, UserSession.UserName);
 
@@ -88,6 +91,12 @@ namespace Infrastructure.Stores
                     return action;
                 }
 
+                foreach (var entity in entities)
+                {
+                    if (string.IsNullOrEmpty(entity.Id))
+                        entity.Id = Guid.NewGuid().ToString();
+                }
+
                 Logger.LogInformation("Adding DTOs {@0} Entities {@1} {UserName}",
                     dtos, entities, UserSession.UserName);
 
@@ -103,7 +112,7 @@ namespace Infrastructure.Stores
             return action;
         }
 
-        public virtual async Task<ActionResultDto<bool>> DeleteAsync(int id)
+        public virtual async Task<ActionResultDto<bool>> DeleteAsync(string id)
         {
             var action = new ActionResultDto<bool>() { Result = false };
 
@@ -159,7 +168,7 @@ namespace Infrastructure.Stores
             return action;
         }
 
-        public virtual async Task<ActionResultDto<TDto>> GetAsync(int id)
+        public virtual async Task<ActionResultDto<TDto>> GetAsync(string id)
         {
             var action = new ActionResultDto<TDto>();
             try
