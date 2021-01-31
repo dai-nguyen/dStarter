@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Update;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -46,67 +44,62 @@ namespace Infrastructure.Helpers
                 .ToArray();
         }
 
-        public static string EncryptString(string text, string keyString)
+        // https://damienbod.com/2020/08/19/symmetric-and-asymmetric-encryption-in-net-core/
+        public static (string Key, string IVBase64) InitSymmetricEncryptionKeyIV()
         {
-            var key = Encoding.UTF8.GetBytes(keyString);
-
-            using (var aesAlg = Aes.Create())
-            {
-                using (var encryptor = aesAlg.CreateEncryptor(key, aesAlg.IV))
-                {
-                    using (var msEncrypt = new MemoryStream())
-                    {
-                        using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                        using (var swEncrypt = new StreamWriter(csEncrypt))
-                        {
-                            swEncrypt.Write(text);
-                        }
-
-                        var iv = aesAlg.IV;
-
-                        var decryptedContent = msEncrypt.ToArray();
-
-                        var result = new byte[iv.Length + decryptedContent.Length];
-
-                        Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
-                        Buffer.BlockCopy(decryptedContent, 0, result, iv.Length, decryptedContent.Length);
-
-                        return Convert.ToBase64String(result);
-                    }
-                }
-            }
+            var key = GetEncodedRandomString(32); // 256
+            Aes cipher = CreateCipher(key);
+            var IVBase64 = Convert.ToBase64String(cipher.IV);
+            return (key, IVBase64);
         }
 
-        public static string DecryptString(string cipherText, string keyString)
+        private static string GetEncodedRandomString(int length)
         {
-            var fullCipher = Convert.FromBase64String(cipherText);
+            var base64 = Convert.ToBase64String(GenerateRandomBytes(length));
+            return base64;
+        }
 
-            var iv = new byte[16];
-            var cipher = new byte[16];
+        private static Aes CreateCipher(string keyBase64)
+        {
+            // Default values: Keysize 256, Padding PKC27
+            Aes cipher = Aes.Create();
+            cipher.Mode = CipherMode.CBC;  // Ensure the integrity of the ciphertext if using CBC
 
-            Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
-            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, iv.Length);
-            var key = Encoding.UTF8.GetBytes(keyString);
+            cipher.Padding = PaddingMode.ISO10126;
+            cipher.Key = Convert.FromBase64String(keyBase64);
 
-            using (var aesAlg = Aes.Create())
-            {
-                using (var decryptor = aesAlg.CreateDecryptor(key, iv))
-                {
-                    string result;
-                    using (var msDecrypt = new MemoryStream(cipher))
-                    {
-                        using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                        {
-                            using (var srDecrypt = new StreamReader(csDecrypt))
-                            {
-                                result = srDecrypt.ReadToEnd();
-                            }
-                        }
-                    }
+            return cipher;
+        }
 
-                    return result;
-                }
-            }
+        private static byte[] GenerateRandomBytes(int length)
+        {
+            var byteArray = new byte[length];
+            RandomNumberGenerator.Fill(byteArray);
+            return byteArray;
+        }
+
+        public static string Encrypt(string text, string IV, string key)
+        {
+            Aes cipher = CreateCipher(key);
+            cipher.IV = Convert.FromBase64String(IV);
+
+            ICryptoTransform cryptTransform = cipher.CreateEncryptor();
+            byte[] plaintext = Encoding.UTF8.GetBytes(text);
+            byte[] cipherText = cryptTransform.TransformFinalBlock(plaintext, 0, plaintext.Length);
+
+            return Convert.ToBase64String(cipherText);
+        }
+
+        public static string Decrypt(string encryptedText, string IV, string key)
+        {
+            Aes cipher = CreateCipher(key);
+            cipher.IV = Convert.FromBase64String(IV);
+
+            ICryptoTransform cryptTransform = cipher.CreateDecryptor();
+            byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
+            byte[] plainBytes = cryptTransform.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+
+            return Encoding.UTF8.GetString(plainBytes);
         }
     }
 }

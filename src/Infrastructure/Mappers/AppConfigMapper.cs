@@ -15,12 +15,18 @@ namespace Infrastructure.Mappers
             CreateMap<AppConfig, AppConfigDto>()
                 .ForMember(dest => dest.Value, 
                     opt => opt.MapFrom(src => src.Sensitive ? 
-                        Helpers.Helper.DecryptString(src.Value, "Vrj5IBRznQOoNWmvmhsv1Q@#") : src.Value));
+                        Helpers.Helper.Decrypt(
+                            src.Value, 
+                            "TYaWAn0C1UfkJOavS12CCA==", 
+                            "o4HF6uE5p0a5UILuwIE0GatjQ8rPfd08A0l+EXf3ONE=") : src.Value));
 
             CreateMap<AppConfigDto, AppConfig>()
                 .ForMember(dest => dest.Value, 
                     opt => opt.MapFrom(src => src.Sensitive ? 
-                        Helpers.Helper.EncryptString(src.Value, "Vrj5IBRznQOoNWmvmhsv1Q@#") : src.Value));
+                        Helpers.Helper.Encrypt(
+                            src.Value, 
+                            "TYaWAn0C1UfkJOavS12CCA==", 
+                            "o4HF6uE5p0a5UILuwIE0GatjQ8rPfd08A0l+EXf3ONE=") : src.Value));
         }
         
     }

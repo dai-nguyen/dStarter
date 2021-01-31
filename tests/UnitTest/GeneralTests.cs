@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,23 +28,20 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void TestEncryption()
+        public void TestEncryptDecrypt()
         {
-            var key = Convert.ToBase64String(GetRandomData(128));
+            var text = "this is just a test";
+            //var symmetricEncryptDecrypt = new SymmetricEncryptDecrypt();
+            var (Key, IVBase64) = Helper.InitSymmetricEncryptionKeyIV();
 
-            //key = key.Replace("==", "@#");
+            var encrypted = Helper.Encrypt(text, IVBase64, Key);
+            var decrypted = Helper.Decrypt(encrypted, IVBase64, Key);
 
-            var encrypted = Helper.EncryptString("this is a sensitive value", key);
-            var decrypt = Helper.DecryptString(encrypted, key);
 
-            Assert.IsTrue(decrypt == "hello");
+            Assert.IsTrue(text == decrypted);
         }
 
-        private byte[] GetRandomData(int bits)
-        {
-            var result = new byte[bits / 8];
-            RandomNumberGenerator.Create().GetBytes(result);
-            return result;
-        }
+        
+        
     }
 }
