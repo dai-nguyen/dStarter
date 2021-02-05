@@ -14,6 +14,8 @@ using Serilog.Sinks.PostgreSQL;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net;
 
 namespace Web
 {
@@ -99,9 +101,32 @@ namespace Web
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseSerilog()
+                .ConfigureServices((context, services) =>
+                {
+                    HostConfig.CertPath = context.Configuration["CertPath"];
+                    HostConfig.CertPassword = context.Configuration["CertPassword"];
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    //var host = Dns.GetHostEntry("");
+
+                    webBuilder.ConfigureKestrel(o =>
+                    {
+                        //o.Listen(host.AddressList.First(), 5000);
+
+                        o.ListenAnyIP(5000);
+                        o.ListenAnyIP(5001, listOpt =>
+                        {
+                            listOpt.UseHttps(HostConfig.CertPath, HostConfig.CertPassword);
+                        });
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
+
+        public static class HostConfig
+        {
+            public static string CertPath { get; set; }
+            public static string CertPassword { get; set; }
+        }
     }
 }
