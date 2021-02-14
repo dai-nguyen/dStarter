@@ -31,7 +31,7 @@ namespace Infrastructure
             services.AddScoped<IUserSession, UserSession>();
 
             // background services
-            services.AddHostedService<TimedHostedService>();
+            //services.AddHostedService<TimedHostedService>();
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 

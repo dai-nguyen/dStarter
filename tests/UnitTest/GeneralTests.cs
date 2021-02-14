@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using static Infrastructure.Helpers.Constants;
 
@@ -41,7 +42,24 @@ namespace UnitTest
             Assert.IsTrue(text == decrypted);
         }
 
-        
-        
+        [TestMethod]
+        public void ReadCertFile()
+        {
+            var bytes = File.ReadAllBytes("C:\\Web.pfx");
+            var str = Convert.ToBase64String(bytes);
+        }
+
+        [TestMethod]
+        public void LoadCertFile()
+        {
+            try
+            {
+                var cert = new X509Certificate2("C:\\Web.pfx", "LetMeSurf");
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }

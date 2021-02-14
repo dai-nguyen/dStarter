@@ -13,9 +13,7 @@ using Serilog.Events;
 using Serilog.Sinks.PostgreSQL;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Web
 {
@@ -105,6 +103,7 @@ namespace Web
                 {
                     HostConfig.CertPath = context.Configuration["CertPath"];
                     HostConfig.CertPassword = context.Configuration["CertPassword"];
+                    HostConfig.CertData = context.Configuration["CertData"];
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -117,7 +116,27 @@ namespace Web
                         o.ListenAnyIP(5000);
                         o.ListenAnyIP(5001, listOpt =>
                         {
-                            listOpt.UseHttps(HostConfig.CertPath, HostConfig.CertPassword);
+                            if (!string.IsNullOrEmpty(HostConfig.CertData))
+                            {
+                                try
+                                {
+                                    var bytes = Convert.FromBase64String(HostConfig.CertData); //Encoding.ASCII.GetBytes(HostConfig.CertData);
+                                    var cert = new X509Certificate2(bytes, HostConfig.CertPassword);
+                                    listOpt.UseHttps(cert);
+                                }
+                                catch (Exception)
+                                { }
+                            }
+                            else if (!string.IsNullOrEmpty(HostConfig.CertPath) 
+                                && !string.IsNullOrEmpty(HostConfig.CertPassword))
+                            {
+                                try
+                                {
+                                    listOpt.UseHttps(HostConfig.CertPath, HostConfig.CertPassword);
+                                }
+                                catch (Exception ex)
+                                { }
+                            }
                         });
                     });
                     webBuilder.UseStartup<Startup>();
@@ -127,6 +146,7 @@ namespace Web
         {
             public static string CertPath { get; set; }
             public static string CertPassword { get; set; }
+            public static string CertData { get; set; }
         }
     }
 }
