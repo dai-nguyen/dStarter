@@ -134,7 +134,7 @@ namespace Web
                                 {
                                     listOpt.UseHttps(HostConfig.CertPath, HostConfig.CertPassword);
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 { }
                             }
                         });
