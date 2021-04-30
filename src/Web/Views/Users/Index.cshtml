@@ -6,25 +6,15 @@
 
 <div id="appDiv">
     <v-app>
-        <v-snackbar v-model="showAlert"
-                    :top="true"
-                    :right="true"
-                    :color="alertColor"
-                    :timeout="alertTimeout">
-            {{ alertMsg }}
-            <v-btn dark
-                   text
-                   v-on:click="showAlert = false">
-                Close
-            </v-btn>
-        </v-snackbar>
+
+        <partial name="~/Views/Shared/_Alert.cshtml" />
 
         <v-data-table :headers="headers"
-                        :items="items"
-                        :options.sync="options"
-                        :server-items-length="totalItems"
-                        :loading="loading"
-                        class="elevation-1">
+                      :items="items"
+                      :options.sync="options"
+                      :server-items-length="totalItems"
+                      :loading="loading"
+                      class="elevation-1">
 
             <template v-slot:top>
                 <v-toolbar flat color="white">
@@ -32,11 +22,11 @@
                     @*<v-divider class="mx-4" insert vertical></v-divider>*@
                     <v-spacer></v-spacer>
                     <v-text-field v-model="search"
-                                    v-on:keyup.enter="searchEntered"
-                                    append-icon="mdi-magnify"
-                                    label="Search"
-                                    single-line
-                                    hide-details></v-text-field>
+                                  v-on:keyup.enter="searchEntered"
+                                  append-icon="mdi-magnify"
+                                  label="Search"
+                                  single-line
+                                  hide-details></v-text-field>
                     <v-spacer></v-spacer>
 
                     <partial name="~/Views/Users/_User.cshtml" />
@@ -52,7 +42,7 @@
                 <v-btn color="primary" v-on:click="getData()">Reset</v-btn>
             </template>
         </v-data-table>
-        
+
     </v-app>
 </div>
 

@@ -1,0 +1,12 @@
+﻿<v-snackbar v-model="showAlert"
+            :top="true"
+            :right="true"
+            :color="alertColor"
+            :timeout="alertTimeout">
+    {{ alertMsg }}
+    <v-btn dark
+           text
+           v-on:click="showAlert = false">
+        Close
+    </v-btn>
+</v-snackbar>

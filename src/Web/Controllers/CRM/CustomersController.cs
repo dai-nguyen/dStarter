@@ -30,6 +30,11 @@ namespace Web.Controllers.CRM
             return View();
         }
 
+        public IActionResult Upsert(string id)
+        {
+            return View("Upsert", id);
+        }
+
         [HttpPost]
         public async Task<ActionResultDto<PageDto<CustomerDto>>> LoadData(
             [FromBody] TableOptionDto model)

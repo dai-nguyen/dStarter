@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Upsert Customer";
+}
+
+<div id="appDiv">
+    <v-app>
+        <partial name="~/Views/Shared/_Alert.cshtml" />
+
+        <v-card>
+            <v-container>
+                <v-form v-model="valid" ref="form" lazy-validation>
+
+                    <v-text-field v-model="model.name"
+                                  :counter="100"
+                                  label="Name">
+                    </v-text-field>
+
+                    <v-text-field v-model="model.address1"
+                                  :counter="100"
+                                  label="Address 1">
+                    </v-text-field>
+
+                    <v-text-field v-model="model.address2"
+                                  :counter="100"
+                                  label="Address 2">
+                    </v-text-field>
+
+                    <v-text-field v-model="model.city"
+                                  :counter="100"
+                                  label="City">
+                    </v-text-field>
+
+                    <v-text-field v-model="model.state"
+                                  :counter="50"
+                                  label="State">
+                    </v-text-field>
+
+                    <v-text-field v-model="model.zip"
+                                  :counter="50"
+                                  label="Zip">
+                    </v-text-field>
+
+                    <v-text-field v-model="model.country"
+                                  :counter="50"
+                                  label="Country">
+                    </v-text-field>
+
+                    <v-text-field v-model="model.phone"
+                                  :counter="50"
+                                  label="Phone">
+                    </v-text-field>
+
+                    <v-btn color="primary"
+                           class="mr-4"
+                           v-on:click="save"
+                           :disabled="isBusy">Save</v-btn>
+
+                </v-form>
+            </v-container>
+        </v-card>
+
+    </v-app>
+</div>
+
+<script>
+    new Vue({
+        el: '#appDiv',
+        vuetify: new Vuetify(),
+        data: {
+            model: {},    
+            valid: false,
+            isBusy: false,
+            showAlert: false,
+            alertMsg: "",
+            alertColor: '',
+            alertTimeout: 6000            
+        },
+        computed: {
+
+        },
+        watch: {
+            options: {
+                handler() {
+                    this.getData();
+                }
+            },
+
+        },
+        created() {
+            var href = location.href;
+            var temp = href.split('/');
+            var last = temp[temp.length - 1];
+
+            if (last.toLowerCase() != 'upsert') {
+                this.load(last)
+            }
+        },
+        methods: {
+
+            load(id) {
+                axios
+                    .get('@Url.Action("GetData", "Customers")' + '?id=' + id)
+                    .then(response => {
+                        if (response.data) {
+                            console.log('load', response.data);
+                            this.model = response.data;
+                        }
+                    });
+            },
+
+
+        }
+    })
+</script>
+
