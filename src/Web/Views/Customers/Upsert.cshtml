@@ -67,13 +67,22 @@
         el: '#appDiv',
         vuetify: new Vuetify(),
         data: {
-            model: {},    
+            model: {
+                name: '',
+                address1: '',
+                address2: '',
+                city: '',
+                state: '',
+                zip: '',
+                country: '',
+                phone: ''
+            },
             valid: false,
             isBusy: false,
             showAlert: false,
             alertMsg: "",
             alertColor: '',
-            alertTimeout: 6000            
+            alertTimeout: 6000
         },
         computed: {
 
@@ -106,6 +115,42 @@
                             this.model = response.data;
                         }
                     });
+            },
+
+            save(e) {
+                this.isBusy = true;
+                e.preventDefault();
+                var vm = this;
+
+                axios.post('@Url.Action("UpsertData", "Customers")', this.model)
+                    .then(function (response) {
+                        
+                        if (response.data.result != null) {
+                            vm.alertColor = "success";
+                            vm.alertMsg = "Saved";
+                            vm.alertTimeout = 6000;
+                            vm.showAlert = true;
+                                                        
+                            // redirect to index page
+                            var url = location.href.replace('/Upsert', '/');
+                            window.location.href = url;
+                        }
+                        else {
+                            vm.alertColor = "purple";
+                            vm.alertMsg = "Error";
+                            vm.alertTimeout = 6000;
+                            vm.showAlert = true;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        vm.alertColor = "purple";
+                        vm.alertMsg = "Error";
+                        vm.alertTimeout = 6000;
+                        vm.showAlert = true;
+
+                    })
+                    .finally(() => this.isBusy = false)
             },
 
 
