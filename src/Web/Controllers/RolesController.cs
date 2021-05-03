@@ -42,7 +42,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<RoleDto>> Upsert(
+        public async Task<ActionResultDto<RoleDto>> UpsertData(
             [FromBody] RoleDto dto)
         {
             if (string.IsNullOrEmpty(dto.Id))

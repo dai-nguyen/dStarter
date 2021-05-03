@@ -47,7 +47,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<WikiDto>> Upsert(
+        public async Task<ActionResultDto<WikiDto>> UpsertData(
             [FromBody] WikiDto dto)
         {
             if (string.IsNullOrEmpty(dto.Id))

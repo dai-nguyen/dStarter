@@ -185,7 +185,7 @@
                 e.preventDefault();
                 var vm = this;
 
-                axios.post('@Url.Action("Upsert", "AppConfigs")', this.editedItem)
+                axios.post('@Url.Action("UpsertData", "AppConfigs")', this.editedItem)
                     .then(function (response) {
                         vm.editedIndex = -1;
 

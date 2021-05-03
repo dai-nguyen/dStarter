@@ -11,11 +11,13 @@
                 <v-form v-model="valid" ref="form" lazy-validation>
 
                     <v-text-field v-model="model.name"
+                                  :rules="nameRules"
                                   :counter="100"
                                   label="Name">
                     </v-text-field>
 
                     <v-text-field v-model="model.address1"
+                                  :rules="address1Rules"
                                   :counter="100"
                                   label="Address 1">
                     </v-text-field>
@@ -26,6 +28,7 @@
                     </v-text-field>
 
                     <v-text-field v-model="model.city"
+                                  :rules="cityRules"
                                   :counter="100"
                                   label="City">
                     </v-text-field>
@@ -36,6 +39,7 @@
                     </v-text-field>
 
                     <v-text-field v-model="model.zip"
+                                  :rule="zipRules"
                                   :counter="50"
                                   label="Zip">
                     </v-text-field>
@@ -46,6 +50,7 @@
                     </v-text-field>
 
                     <v-text-field v-model="model.phone"
+                                  :rules="phoneRules"
                                   :counter="50"
                                   label="Phone">
                     </v-text-field>
@@ -77,6 +82,26 @@
                 country: '',
                 phone: ''
             },
+            nameRules: [
+                v => !!v || 'Name is required',
+                v => v.length <= 100 || 'Name must be less than 101 characters'
+            ],
+            address1Rules: [
+                v => !!v || 'Address 1 is required',
+                v => v.length <= 100 || 'Address 1 must be less than 101 characters'
+            ],
+            cityRules: [
+                v => !!v || 'City is required',
+                v => v.length <= 100 || 'City must be less than 101 characters'
+            ],
+            zipRules: [
+                v => !!v || 'Zip is required',
+                v => v.length <= 50 || 'Zip must be less than 51 characters'
+            ],
+            phoneRules: [
+                v => !!v || 'Phone is required',
+                v => v.length <= 50 || 'Phone must be less than 51 characters'
+            ],
             valid: false,
             isBusy: false,
             showAlert: false,
@@ -112,7 +137,7 @@
                     .then(response => {
                         if (response.data) {
                             console.log('load', response.data);
-                            this.model = response.data;
+                            this.model = response.data.result;
                         }
                     });
             },
@@ -132,7 +157,7 @@
                             vm.showAlert = true;
                                                         
                             // redirect to index page
-                            var url = location.href.replace('/Upsert', '/');
+                            var url = location.href.replace('/Upsert', '');
                             window.location.href = url;
                         }
                         else {

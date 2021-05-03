@@ -50,7 +50,7 @@ namespace Web.Controllers.CRM
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<CustomerDto>> Upsert(
+        public async Task<ActionResultDto<CustomerDto>> UpsertData(
             [FromBody] CustomerDto dto)
         {
             if (string.IsNullOrEmpty(dto.Id))

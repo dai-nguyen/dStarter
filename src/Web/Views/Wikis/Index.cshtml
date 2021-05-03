@@ -180,7 +180,7 @@
                 e.preventDefault();
                 var vm = this;
 
-                axios.post('@Url.Action("Upsert", "Wikis")', this.editedItem)
+                axios.post('@Url.Action("UpsertData", "Wikis")', this.editedItem)
                     .then(function (response) {
                         vm.editedIndex = -1;
 

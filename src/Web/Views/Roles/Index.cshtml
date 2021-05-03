@@ -183,7 +183,7 @@
                 e.preventDefault();
                 var vm = this;
 
-                axios.post('@Url.Action("Upsert", "Roles")', this.editedItem)
+                axios.post('@Url.Action("UpsertData", "Roles")', this.editedItem)
                     .then(function (response) {
                         vm.editedIndex = -1;
 

@@ -44,7 +44,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<AppConfigDto>> Upsert(
+        public async Task<ActionResultDto<AppConfigDto>> UpsertData(
             [FromBody] AppConfigDto dto)
         {
             if (string.IsNullOrEmpty(dto.Id))
