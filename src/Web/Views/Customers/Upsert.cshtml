@@ -7,60 +7,83 @@
         <partial name="~/Views/Shared/_Alert.cshtml" />
 
         <v-card>
+
+            
+
+            
+
             <v-container>
-                <v-form v-model="valid" ref="form" lazy-validation>
 
-                    <v-text-field v-model="model.name"
-                                  :rules="nameRules"
-                                  :counter="100"
-                                  label="Name">
-                    </v-text-field>
+                <v-tabs>
+                    <v-tab>Customer</v-tab>
+                    <v-tab v-if="model.id.length > 0">Contacts</v-tab>
+                    <v-tab v-if="model.id.length > 0">Tickets</v-tab>
 
-                    <v-text-field v-model="model.address1"
-                                  :rules="address1Rules"
-                                  :counter="100"
-                                  label="Address 1">
-                    </v-text-field>
+                    <v-tab-item>
+                        <v-form v-model="valid" ref="form" lazy-validation>
 
-                    <v-text-field v-model="model.address2"
-                                  :counter="100"
-                                  label="Address 2">
-                    </v-text-field>
+                            <v-text-field v-model="model.name"
+                                          :rules="nameRules"
+                                          :counter="100"
+                                          label="Name">
+                            </v-text-field>
 
-                    <v-text-field v-model="model.city"
-                                  :rules="cityRules"
-                                  :counter="100"
-                                  label="City">
-                    </v-text-field>
+                            <v-text-field v-model="model.address1"
+                                          :rules="address1Rules"
+                                          :counter="100"
+                                          label="Address 1">
+                            </v-text-field>
 
-                    <v-text-field v-model="model.state"
-                                  :counter="50"
-                                  label="State">
-                    </v-text-field>
+                            <v-text-field v-model="model.address2"
+                                          :counter="100"
+                                          label="Address 2">
+                            </v-text-field>
 
-                    <v-text-field v-model="model.zip"
-                                  :rule="zipRules"
-                                  :counter="50"
-                                  label="Zip">
-                    </v-text-field>
+                            <v-text-field v-model="model.city"
+                                          :rules="cityRules"
+                                          :counter="100"
+                                          label="City">
+                            </v-text-field>
 
-                    <v-text-field v-model="model.country"
-                                  :counter="50"
-                                  label="Country">
-                    </v-text-field>
+                            <v-text-field v-model="model.state"
+                                          :counter="50"
+                                          label="State">
+                            </v-text-field>
 
-                    <v-text-field v-model="model.phone"
-                                  :rules="phoneRules"
-                                  :counter="50"
-                                  label="Phone">
-                    </v-text-field>
+                            <v-text-field v-model="model.zip"
+                                          :rule="zipRules"
+                                          :counter="50"
+                                          label="Zip">
+                            </v-text-field>
 
-                    <v-btn color="primary"
-                           class="mr-4"
-                           v-on:click="save"
-                           :disabled="isBusy">Save</v-btn>
+                            <v-text-field v-model="model.country"
+                                          :counter="50"
+                                          label="Country">
+                            </v-text-field>
 
-                </v-form>
+                            <v-text-field v-model="model.phone"
+                                          :rules="phoneRules"
+                                          :counter="50"
+                                          label="Phone">
+                            </v-text-field>
+
+                            <v-btn color="primary"
+                                   class="mr-4"
+                                   v-on:click="save"
+                                   :disabled="isBusy">Save</v-btn>
+
+                        </v-form>
+                    </v-tab-item>
+                    <v-tab-item v-if="model.id.length > 0">
+                        contacts
+                    </v-tab-item>
+                    <v-tab-item v-if="model.id.length > 0">
+                        tickets
+                    </v-tab-item>
+                </v-tabs>
+
+
+                
             </v-container>
         </v-card>
 
@@ -73,6 +96,7 @@
         vuetify: new Vuetify(),
         data: {
             model: {
+                id: '',
                 name: '',
                 address1: '',
                 address2: '',
@@ -107,7 +131,31 @@
             showAlert: false,
             alertMsg: "",
             alertColor: '',
-            alertTimeout: 6000
+            alertTimeout: 6000,
+
+            // contacts
+            items: [],
+            totalItems: 0,
+            loading: false,
+            options: {
+                page: 1,
+                itemPerPage: 10,
+                sortBy: ['firstName'],
+                sortDesc: [false],
+                groupBy: [],
+                groupDesc: [],
+                multiSort: false,
+                mustSort: false,
+                search: ''
+            },
+            headers: [
+                { text: 'First Name', value: 'firstName' },
+                { text: 'Last Name', value: 'lastName' },
+                { text: 'Title', value: 'title' },
+                { text: 'Email', value: 'email' },
+                { text: 'Phone', value: 'Phone' },
+                { text: 'Action', value: 'action', sortable: false }
+            ]
         },
         computed: {
 
