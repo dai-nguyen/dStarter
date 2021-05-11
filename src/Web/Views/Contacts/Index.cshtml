@@ -1,5 +1,11 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Contacts";
 }
+
+<div id="appDiv">
+    <v-app>
+
+        <contacts-component v-bind:customerid=""></contacts-component>
+
+    </v-app>
+</div>

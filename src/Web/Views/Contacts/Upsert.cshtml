@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Upsert Customer";
+    ViewData["Title"] = "Upsert Contact";
 }
 
 <div id="appDiv">
@@ -7,54 +7,38 @@
         <partial name="~/Views/Shared/_Alert.cshtml" />
 
         <v-card>
-
+            
             <v-container>
 
                 <v-tabs>
-                    <v-tab>Customer</v-tab>
-                    <v-tab v-if="model.id.length > 0">Contacts</v-tab>
+                    <v-tab>Contact</v-tab>                    
                     <v-tab v-if="model.id.length > 0">Tickets</v-tab>
 
                     <v-tab-item>
                         <v-form v-model="valid" ref="form" lazy-validation>
 
-                            <v-text-field v-model="model.name"
-                                          :rules="nameRules"
+                            <v-text-field v-model="model.title"
+                                          :rules="titleRules"
                                           :counter="100"
-                                          label="Name">
+                                          label="Title">
                             </v-text-field>
 
-                            <v-text-field v-model="model.address1"
-                                          :rules="address1Rules"
+                            <v-text-field v-model="model.firstName"
+                                          :rules="firstNameRules"
                                           :counter="100"
-                                          label="Address 1">
+                                          label="First Name">
                             </v-text-field>
 
-                            <v-text-field v-model="model.address2"
+                            <v-text-field v-model="model.lastName"
+                                          :rules="lastNameRules"
                                           :counter="100"
-                                          label="Address 2">
+                                          label="Last Name">
                             </v-text-field>
 
-                            <v-text-field v-model="model.city"
-                                          :rules="cityRules"
+                            <v-text-field v-model="model.email"
+                                          :rules="emailRules"
                                           :counter="100"
-                                          label="City">
-                            </v-text-field>
-
-                            <v-text-field v-model="model.state"
-                                          :counter="50"
-                                          label="State">
-                            </v-text-field>
-
-                            <v-text-field v-model="model.zip"
-                                          :rule="zipRules"
-                                          :counter="50"
-                                          label="Zip">
-                            </v-text-field>
-
-                            <v-text-field v-model="model.country"
-                                          :counter="50"
-                                          label="Country">
+                                          label="Email">
                             </v-text-field>
 
                             <v-text-field v-model="model.phone"
@@ -69,10 +53,7 @@
                                    :disabled="isBusy">Save</v-btn>
 
                         </v-form>
-                    </v-tab-item>
-                    <v-tab-item v-if="model.id.length > 0">
-                        contacts
-                    </v-tab-item>
+                    </v-tab-item>                    
                     <v-tab-item v-if="model.id.length > 0">
                         tickets
                     </v-tab-item>
@@ -102,21 +83,21 @@
                 country: '',
                 phone: ''
             },
-            nameRules: [
-                v => !!v || 'Name is required',
-                v => v.length <= 100 || 'Name must be less than 101 characters'
+            titleRules: [
+                v => !!v || 'Title is required',
+                v => v.length <= 100 || 'Title must be less than 101 characters'
             ],
-            address1Rules: [
-                v => !!v || 'Address 1 is required',
-                v => v.length <= 100 || 'Address 1 must be less than 101 characters'
+            firstNameRules: [
+                v => !!v || 'First Name is required',
+                v => v.length <= 100 || 'First Name must be less than 101 characters'
             ],
-            cityRules: [
-                v => !!v || 'City is required',
-                v => v.length <= 100 || 'City must be less than 101 characters'
+            lastNameRules: [
+                v => !!v || 'Last Name is required',
+                v => v.length <= 100 || 'Last Name must be less than 101 characters'
             ],
-            zipRules: [
-                v => !!v || 'Zip is required',
-                v => v.length <= 50 || 'Zip must be less than 51 characters'
+            emailRules: [
+                v => !!v || 'Email is required',
+                v => v.length <= 100 || 'Email must be less than 101 characters'
             ],
             phoneRules: [
                 v => !!v || 'Phone is required',
@@ -155,7 +136,7 @@
 
             load(id) {
                 axios
-                    .get('@Url.Action("GetData", "Customers")' + '?id=' + id)
+                    .get('@Url.Action("GetData", "Contacts")' + '?id=' + id)
                     .then(response => {
                         if (response.data) {
                             console.log('load', response.data);
@@ -169,7 +150,7 @@
                 e.preventDefault();
                 var vm = this;
 
-                axios.post('@Url.Action("UpsertData", "Customers")', this.model)
+                axios.post('@Url.Action("UpsertData", "Contacts")', this.model)
                     .then(function (response) {
                         
                         if (response.data.result != null) {
