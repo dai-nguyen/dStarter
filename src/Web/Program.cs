@@ -11,6 +11,7 @@ using NpgsqlTypes;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.PostgreSQL;
+using Serilog.Sinks.PostgreSQL.ColumnWriters;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;

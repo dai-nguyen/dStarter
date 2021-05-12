@@ -1,6 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Upsert Customer";
+
+    var id = Url.ActionContext.RouteData.Values["id"];
 }
+
+
+<partial name="~/Views/Contacts/_ContactsComponent.cshtml" />
 
 <div id="appDiv">
     <v-app>
@@ -71,7 +76,7 @@
                         </v-form>
                     </v-tab-item>
                     <v-tab-item v-if="model.id.length > 0">
-                        contacts
+                        <contacts-component v-bind:customerid="model.id"></contacts-component>
                     </v-tab-item>
                     <v-tab-item v-if="model.id.length > 0">
                         tickets
@@ -142,13 +147,11 @@
             },
 
         },
-        created() {
-            var href = location.href;
-            var temp = href.split('/');
-            var last = temp[temp.length - 1];
+        created() {                        
+            var id = '@id';
 
-            if (last.toLowerCase() != 'upsert') {
-                this.load(last)
+            if (id.length > 0) {
+                this.load(id);
             }
         },
         methods: {
