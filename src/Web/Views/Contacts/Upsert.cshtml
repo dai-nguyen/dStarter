@@ -1,5 +1,9 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Upsert Contact";
+
+    var id = ViewBag.id;
+    var customer_id = ViewBag.customer_id;
 }
 
 <div id="appDiv">
@@ -81,8 +85,10 @@
                 state: '',
                 zip: '',
                 country: '',
-                phone: ''
+                phone: '',
+                customerId: ''
             },
+            customer_id: '',
             titleRules: [
                 v => !!v || 'Title is required',
                 v => v.length <= 100 || 'Title must be less than 101 characters'
@@ -110,7 +116,7 @@
             alertColor: '',
             alertTimeout: 6000,
 
-            
+
         },
         computed: {
 
@@ -124,12 +130,15 @@
 
         },
         created() {
-            var href = location.href;
-            var temp = href.split('/');
-            var last = temp[temp.length - 1];
+            var id = '@id';
+            var customer_id = '@customer_id';
 
-            if (last.toLowerCase() != 'upsert') {
-                this.load(last)
+            if (id.length > 0) {
+                this.load(id);
+            }
+
+            if (customer_id.length > 0) {
+                this.model.customerId = customer_id;
             }
         },
         methods: {
@@ -152,16 +161,16 @@
 
                 axios.post('@Url.Action("UpsertData", "Contacts")', this.model)
                     .then(function (response) {
-                        
+
                         if (response.data.result != null) {
                             vm.alertColor = "success";
                             vm.alertMsg = "Saved";
                             vm.alertTimeout = 6000;
                             vm.showAlert = true;
-                                                        
-                            // redirect to index page
-                            var url = location.href.replace('/Upsert', '');
-                            window.location.href = url;
+
+                            // reload contact upsert page
+                            var href = '@Url.Action("Upsert", "Contacts")' + "?id=" + response.data.result.id;
+                            window.location.href = href;
                         }
                         else {
                             vm.alertColor = "purple";

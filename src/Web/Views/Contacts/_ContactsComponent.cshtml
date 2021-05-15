@@ -76,6 +76,7 @@
 
             getData () {
                 this.loading = true;
+                console.log('option', this.options);
                 axios
                     .post('@Url.Action("LoadData", "Contacts")', this.options)
                     .then(response => {
@@ -95,15 +96,16 @@
             },
 
             view(item) {
-                //console.log('item', item);
+                
+                var id = item == null ? "" : item.id;
 
-                var id = '';
+                var href = '@Url.Action("Upsert", "Contacts")' + "?id=" + id;
 
-                if (item && item.id) {
-                    id = item.id;
+                if (id.length == 0) {
+                    href += '&customer_id=' + this.customerid;
                 }
 
-                location.href = '@Url.Action("Upsert", "Contacts")' + '/' + id;
+                location.href = href;
             }
         }
     })

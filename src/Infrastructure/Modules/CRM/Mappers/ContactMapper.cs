@@ -14,8 +14,9 @@ namespace Infrastructure.Modules.CRM.Mappers
     {
         public ContactProfile()
         {
-            CreateMap<Contact, ContactDto>()
-                .ReverseMap();
+            CreateMap<Contact, ContactDto>();
+            CreateMap<ContactDto, Contact>()
+                .ForMember(_ => _.Customer, opt => opt.Ignore());
         }
     }
 
@@ -31,7 +32,7 @@ namespace Infrastructure.Modules.CRM.Mappers
                 ["Email"] = _ => _.Email
             };
 
-        public static ContactSpecification ToContactSpecification(this TableOptionDto option)
+        public static ContactSpecification ToContactSpecification(this ContactTableOptionDto option)
         {
             if (option == null)
                 throw new ArgumentNullException("TableOption is required.");
@@ -39,7 +40,14 @@ namespace Infrastructure.Modules.CRM.Mappers
             var baseFilter = option.ToBaseFilterDtoSpecification();
 
             return new ContactSpecification(
-                option.Search ?? "", "", "", "", "", null, baseFilter, CustAttrDefColMaps);
+                option.Search ?? "",
+                option.Title, 
+                option.FirstName, 
+                option.LastName, 
+                option.Email, 
+                option.CustomerId, 
+                baseFilter, 
+                CustAttrDefColMaps);
 
 
         }

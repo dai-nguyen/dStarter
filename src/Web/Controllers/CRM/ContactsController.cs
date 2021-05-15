@@ -30,9 +30,17 @@ namespace Web.Controllers.CRM
             return View();
         }
 
+        public IActionResult Upsert(string id, string customer_id)
+        {
+            ViewBag.id = id ?? "";
+            ViewBag.customer_id = customer_id ?? "";
+
+            return View("Upsert");
+        }
+
         [HttpPost]
         public async Task<ActionResultDto<PageDto<ContactDto>>> LoadData(
-            [FromBody] TableOptionDto model)
+            [FromBody] ContactTableOptionDto model)
         {
             var spec = model.ToContactSpecification();
             return await _contactStore.FindAsync(spec);
@@ -45,7 +53,7 @@ namespace Web.Controllers.CRM
         }
 
         [HttpPost]
-        public async Task<ActionResultDto<ContactDto>> Upsert(
+        public async Task<ActionResultDto<ContactDto>> UpsertData(
             [FromBody] ContactDto dto)
         {
             if (string.IsNullOrEmpty(dto.Id))
@@ -61,7 +69,7 @@ namespace Web.Controllers.CRM
         }
 
         [HttpDelete]
-        public async Task<ActionResultDto<bool>> Delete(string id)
+        public async Task<ActionResultDto<bool>> DeleteData(string id)
         {
             return await _contactStore.DeleteAsync(id);
         }

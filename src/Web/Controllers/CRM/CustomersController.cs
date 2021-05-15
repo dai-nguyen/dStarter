@@ -66,7 +66,7 @@ namespace Web.Controllers.CRM
         }
 
         [HttpDelete]
-        public async Task<ActionResultDto<bool>> Delete(string id)
+        public async Task<ActionResultDto<bool>> DeleteData(string id)
         {
             return await _customerStore.DeleteAsync(id);
         }
