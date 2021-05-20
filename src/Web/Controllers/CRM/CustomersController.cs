@@ -37,7 +37,7 @@ namespace Web.Controllers.CRM
 
         [HttpPost]
         public async Task<ActionResultDto<PageDto<CustomerDto>>> LoadData(
-            [FromBody] TableOptionDto model)
+            [FromBody] CustomerTableOptionDto model)
         {
             var spec = model.ToCustomerSpecification();
             return await _customerStore.FindAsync(spec);

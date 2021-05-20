@@ -56,7 +56,7 @@ namespace UnitTest
             {
                 var cert = new X509Certificate2("C:\\Web.pfx", "LetMeSurf");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

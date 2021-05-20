@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Modules.CRM.Entities;
 using Infrastructure.Specifications;
+using Microsoft.EntityFrameworkCore;
 using Shared.DTOs;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace Infrastructure.Modules.CRM.Specifications
     public class TicketSpecification : BaseSpecification<Ticket>
     {
         public TicketSpecification(
+            string search = "",
             string title = "",
             string status = "",
             bool? isBilled = null,
@@ -19,7 +21,9 @@ namespace Infrastructure.Modules.CRM.Specifications
             BaseFilterDto baseFilter = null,
             Dictionary<string, Expression<Func<Ticket, object>>> columnMaps = null)
             : base(
-                  _ => (string.IsNullOrEmpty(title) || _.Title.StartsWith(title))
+                  _ => (string.IsNullOrEmpty(search) || EF.Functions.ToTsVector("english",
+                      _.Title + " " + _.Description).Matches(search))
+                  && (string.IsNullOrEmpty(title) || _.Title.StartsWith(title))
                   && (string.IsNullOrEmpty(status) || _.Status == status)
                   && (!isBilled.HasValue || _.IsBilled == isBilled.Value)
                   && (!isPaid.HasValue || _.IsPaid == isPaid.Value)

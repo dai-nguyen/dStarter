@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Modules.CRM.Entities;
 using Infrastructure.Specifications;
+using Microsoft.EntityFrameworkCore;
 using Shared.DTOs;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,8 @@ namespace Infrastructure.Modules.CRM.Specifications
             BaseFilterDto baseFilter = null, 
             Dictionary<string, Expression<Func<Contact, object>>> columnMaps = null) 
             : base(
-                  _ => (string.IsNullOrEmpty(search) || _.Title == search || _.FirstName == search || _.LastName == search || _.Email == search) 
+                  _ => (string.IsNullOrEmpty(search) || EF.Functions.ToTsVector("english",
+                      _.FirstName + " " + _.LastName + " " + _.Email).Matches(search)) 
                   && (string.IsNullOrEmpty(title) || _.Title.StartsWith(title))
                   && (string.IsNullOrEmpty(firstName) || _.FirstName.StartsWith(firstName))
                   && (string.IsNullOrEmpty(lastName) || _.LastName.StartsWith(lastName))

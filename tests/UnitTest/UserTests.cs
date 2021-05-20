@@ -28,7 +28,7 @@ namespace UnitTest
 
                 Assert.IsTrue(action.Result != null);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

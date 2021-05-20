@@ -31,7 +31,7 @@ namespace Infrastructure.Modules.CRM.Mappers
                 ["State"] = _ => _.State
             };
 
-        public static CustomerSpecification ToCustomerSpecification(this TableOptionDto option)
+        public static CustomerSpecification ToCustomerSpecification(this CustomerTableOptionDto option)
         {
             if (option == null)
                 throw new ArgumentNullException("TableOption is required.");
@@ -39,7 +39,10 @@ namespace Infrastructure.Modules.CRM.Mappers
             var baseFilter = option.ToBaseFilterDtoSpecification();
 
             return new CustomerSpecification(
-                option.Search ?? "", baseFilter, CustomerColMaps);
+                option.Search ?? "",
+                option.Name ?? "",
+                baseFilter, 
+                CustomerColMaps);
 
 
         }
