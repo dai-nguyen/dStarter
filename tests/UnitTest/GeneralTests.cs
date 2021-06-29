@@ -1,14 +1,9 @@
 ﻿using Infrastructure.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using static Infrastructure.Helpers.Constants;
 
 namespace UnitTest
 {
@@ -55,6 +50,19 @@ namespace UnitTest
             try
             {
                 var cert = new X509Certificate2("C:\\Web.pfx", "LetMeSurf");
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        [TestMethod]
+        public void GetTicketStatuses()
+        {
+            try
+            {
+                var values = Infrastructure.Modules.CRM.Constants.TicketStatuses();
             }
             catch (Exception)
             {

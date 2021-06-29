@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Interfaces;
 using Infrastructure.Modules.CRM.Entities;
-using Infrastructure.Modules.CRM.Enums;
 using Infrastructure.Modules.CRM.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,7 +60,8 @@ namespace Web.Controllers.CRM
         [HttpGet]
         public string[] GetStatusData()
         {
-            return Enum.GetNames(typeof(TicketStatus));
+            //return Enum.GetNames(typeof(TicketStatus));
+            return Infrastructure.Modules.CRM.Constants.TicketStatuses();
         }
 
         [HttpPost]
