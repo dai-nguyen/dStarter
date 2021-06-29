@@ -1,11 +1,13 @@
 ﻿using Infrastructure.Interfaces;
 using Infrastructure.Modules.CRM.Entities;
+using Infrastructure.Modules.CRM.Enums;
 using Infrastructure.Modules.CRM.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using Shared.DTOs.CRM;
+using System;
 using System.Threading.Tasks;
 
 namespace Web.Controllers.CRM
@@ -30,9 +32,14 @@ namespace Web.Controllers.CRM
             return View();
         }
 
-        public IActionResult Upsert(string id)
+        public IActionResult Upsert(
+            string id, 
+            string customer_id, 
+            string contact_id)
         {
             ViewBag.id = id ?? "";
+            ViewBag.customer_id = customer_id ?? "";
+            ViewBag.contact_id = contact_id ?? "";
             
             return View("Upsert");
         }
@@ -49,6 +56,12 @@ namespace Web.Controllers.CRM
         public async Task<ActionResultDto<TicketDto>> GetData(string id)
         {
             return await _ticketStore.GetAsync(id);
+        }
+
+        [HttpGet]
+        public string[] GetStatusData()
+        {
+            return Enum.GetNames(typeof(TicketStatus));
         }
 
         [HttpPost]
@@ -72,5 +85,7 @@ namespace Web.Controllers.CRM
         {
             return await _ticketStore.DeleteAsync(id);
         }
+
+
     }
 }

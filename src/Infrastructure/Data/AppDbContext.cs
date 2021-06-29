@@ -75,6 +75,8 @@ namespace Infrastructure.Data
             builder.ApplyConfiguration(new TicketConfiguration());
             builder.ApplyConfiguration(new LaborHourConfiguration());
 
+            builder.HasPostgresEnum<Modules.CRM.Enums.TicketStatus>();
+
             base.OnModelCreating(builder);
         }
 

@@ -1,0 +1,183 @@
+﻿
+@{
+    ViewData["Title"] = "Upsert Ticket";
+
+    var id = ViewBag.id;
+    var customer_id = ViewBag.customer_id;
+    var contact_id = ViewBag.contact_id;
+}
+
+<div id="appDiv">
+    <v-app>
+        <partial name="~/Views/Shared/_Alert.cshtml" />
+
+        <v-card>
+            
+            <v-container>
+
+                <v-form v-model="valid" ref="form" lazy-validation>
+
+                    <v-text-field v-model="model.title"
+                                  :rules="titleRules"
+                                  :counter="100"
+                                  label="Title">
+                    </v-text-field>
+
+                    <v-text-field v-model="model.description"
+                                  :rules="descriptionRules"
+                                  :counter="255"
+                                  label="Description">
+                    </v-text-field>
+
+                    <v-text-field v-model="model.status"
+                                  :rules="statusRules"
+                                  :counter="100"
+                                  label="Status">
+                    </v-text-field>
+
+                    <v-checkbox v-model="model.isBilled"
+                                label="Billed"></v-checkbox>
+
+                    <v-checkbox v-model="model.isPaid"
+                                label="Paid"></v-checkbox>
+
+                    <v-btn color="primary"
+                           class="mr-4"
+                           v-on:click="save"
+                           :disabled="isBusy">Save</v-btn>
+
+                </v-form>
+                
+            </v-container>
+        </v-card>
+
+    </v-app>
+</div>
+
+<script>
+    new Vue({
+        el: '#appDiv',
+        vuetify: new Vuetify(),
+        data: {
+            model: {
+                id: '',
+                title: '',
+                description: '',
+                status: 'Open',
+                isBilled: false,
+                isPaid: false,
+                customerId: '',
+                contactId: ''
+            },
+            titleRules: [
+                v => !!v || 'Title is required',
+                v => v.length <= 100 || 'Title must be less than 101 characters'
+            ],
+            descriptionRules: [
+                v => !!v || 'Description is required',
+                v => v.length <= 10001 || 'First Name must be less than 10001 characters'
+            ],
+            statuses: [],
+            valid: false,
+            isBusy: false,
+            showAlert: false,
+            alertMsg: "",
+            alertColor: '',
+            alertTimeout: 6000,
+
+
+        },
+        computed: {
+
+        },
+        watch: {
+            options: {
+                handler() {
+                    this.getData();
+                }
+            },
+
+        },
+        created() {
+
+            this.getStatuses();
+
+            var id = '@id';
+            var customer_id = '@customer_id';
+            var contact_id = '@contact_id';
+
+            if (id.length > 0) {
+                this.load(id);
+            }
+            else {
+                if (customer_id.length > 0) {
+                    this.model.customerId = customer_id;
+                }
+
+                if (contact_id.length > 0) {
+                    this.model.contactId = contact_id;
+                }
+            }            
+        },
+        methods: {
+
+            load(id) {
+                axios
+                    .get('@Url.Action("GetData", "Tickets")' + '?id=' + id)
+                    .then(response => {
+                        if (response.data) {
+                            console.log('load', response.data);
+                            this.model = response.data.result;
+                        }
+                    });
+            },
+
+            save(e) {
+                this.isBusy = true;
+                e.preventDefault();
+                var vm = this;
+
+                axios.post('@Url.Action("UpsertData", "Contacts")', this.model)
+                    .then(function (response) {
+
+                        if (response.data.result != null) {
+                            vm.alertColor = "success";
+                            vm.alertMsg = "Saved";
+                            vm.alertTimeout = 6000;
+                            vm.showAlert = true;
+
+                            // reload contact upsert page
+                            var href = '@Url.Action("Upsert", "Tickets")' + "?id=" + response.data.result.id;
+                            window.location.href = href;
+                        }
+                        else {
+                            vm.alertColor = "purple";
+                            vm.alertMsg = "Error";
+                            vm.alertTimeout = 6000;
+                            vm.showAlert = true;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        vm.alertColor = "purple";
+                        vm.alertMsg = "Error";
+                        vm.alertTimeout = 6000;
+                        vm.showAlert = true;
+
+                    })
+                    .finally(() => this.isBusy = false)
+            },
+
+            getStatuses() {
+                axios
+                    .get('@Url.Action("GetStatusData", "Tickets")')
+                    .then(response => {
+                        if (response.data) {                            
+                            this.statuses = response.data;
+                        }
+                    });
+            },
+        }
+    })
+</script>
+

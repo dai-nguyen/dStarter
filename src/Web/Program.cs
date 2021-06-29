@@ -73,6 +73,12 @@ namespace Web
 
                         var dbContext = services.GetRequiredService<AppDbContext>();
                         dbContext.Database.Migrate();
+                        // https://www.npgsql.org/efcore/mapping/enum.html?tabs=tabid-1
+                        using (var conn = (Npgsql.NpgsqlConnection)dbContext.Database.GetDbConnection())
+                        {
+                            conn.Open();
+                            conn.ReloadTypes();
+                        }
 
                         var logFactory = services.GetRequiredService<ILoggerFactory>();
                         var userManager = services.GetRequiredService<UserManager<AppUser>>();

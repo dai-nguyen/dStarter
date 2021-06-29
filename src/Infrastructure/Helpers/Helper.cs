@@ -21,7 +21,7 @@ namespace Infrastructure.Helpers
             a[0] = char.ToUpper(a[0]);
             return new string(a);
         }
-
+        
         public static string[] GetParentNames()
         {
             var type = typeof(Constants.ParentNames);
