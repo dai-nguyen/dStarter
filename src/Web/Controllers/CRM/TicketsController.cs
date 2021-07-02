@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using Shared.DTOs.CRM;
-using System;
 using System.Threading.Tasks;
 
 namespace Web.Controllers.CRM
