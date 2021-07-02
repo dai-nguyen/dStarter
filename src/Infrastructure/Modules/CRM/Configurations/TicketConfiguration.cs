@@ -21,9 +21,7 @@ namespace Infrastructure.Modules.CRM.Configurations
 
             builder.Property(_ => _.Title).HasMaxLength(100).IsRequired();
             builder.Property(_ => _.Description);
-            builder.Property(_ => _.Status)
-                .HasMaxLength(100)
-                .HasConversion<string>();
+            builder.Property(_ => _.Status).HasMaxLength(100).IsRequired();                
             builder.Property(_ => _.IsBilled);
             builder.Property(_ => _.IsPaid);
 
