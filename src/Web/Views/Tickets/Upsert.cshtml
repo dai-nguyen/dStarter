@@ -29,11 +29,10 @@
                                   label="Description">
                     </v-text-field>
 
-                    <v-text-field v-model="model.status"
-                                  :rules="statusRules"
-                                  :counter="100"
-                                  label="Status">
-                    </v-text-field>
+                    <v-select :items="statuses"
+                              v-model="model.status"
+                              label="Status">
+                    </v-select>
 
                     <v-checkbox v-model="model.isBilled"
                                 label="Billed"></v-checkbox>
@@ -137,7 +136,7 @@
                 e.preventDefault();
                 var vm = this;
 
-                axios.post('@Url.Action("UpsertData", "Contacts")', this.model)
+                axios.post('@Url.Action("UpsertData", "Tickets")', this.model)
                     .then(function (response) {
 
                         if (response.data.result != null) {
