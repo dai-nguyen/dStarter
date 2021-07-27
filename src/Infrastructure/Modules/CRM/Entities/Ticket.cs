@@ -17,6 +17,6 @@ namespace Infrastructure.Modules.CRM.Entities
         public string CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
-        public virtual IEnumerable<LaborHour> LaborHours { get; set; }
+        public virtual IEnumerable<Labor> LaborHours { get; set; }
     }
 }

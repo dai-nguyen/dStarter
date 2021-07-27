@@ -7,12 +7,12 @@ using System.Linq.Expressions;
 
 namespace Infrastructure.Modules.CRM.Specifications
 {
-    public class LaborHourSpecification : BaseSpecification<LaborHour>
+    public class LaborHourSpecification : BaseSpecification<Labor>
     {
         public LaborHourSpecification(
             string ticketId = null, 
             BaseFilterDto baseFilter = null, 
-            Dictionary<string, Expression<Func<LaborHour, object>>> columnMaps = null) 
+            Dictionary<string, Expression<Func<Labor, object>>> columnMaps = null) 
             : base(
                   _ => (string.IsNullOrEmpty(ticketId) || _.TicketId == ticketId), 
                   baseFilter, 

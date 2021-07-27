@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Modules.CRM.Entities
 {
-    public class LaborHour : BaseEntity
+    public class Labor : BaseEntity
     {
         public int Hour { get; set; }
         public int Minute { get; set; }

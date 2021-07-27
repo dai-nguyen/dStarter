@@ -28,7 +28,7 @@ namespace Infrastructure.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<LaborHour> LaborHours { get; set; }
+        public DbSet<Labor> LaborHours { get; set; }
 
 
         public AppDbContext(
@@ -73,7 +73,7 @@ namespace Infrastructure.Data
             builder.ApplyConfiguration(new CustomerConfiguration());
             builder.ApplyConfiguration(new ContactConfiguration());
             builder.ApplyConfiguration(new TicketConfiguration());
-            builder.ApplyConfiguration(new LaborHourConfiguration());
+            builder.ApplyConfiguration(new LaborConfiguration());
 
             //builder.HasPostgresEnum<Modules.CRM.Enums.TicketStatus>();
 

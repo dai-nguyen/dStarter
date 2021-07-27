@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Modules.CRM.Configurations
 {
-    public class LaborHourConfiguration : IEntityTypeConfiguration<LaborHour>
+    public class LaborConfiguration : IEntityTypeConfiguration<Labor>
     {
-        public void Configure(EntityTypeBuilder<LaborHour> builder)
+        public void Configure(EntityTypeBuilder<Labor> builder)
         {
-            builder.ToTable("LaborHours");
+            builder.ToTable("Labors");
             builder.HasKey(_ => _.Id);
             builder.Property(_ => _.DateCreated);
             builder.Property(_ => _.DateUpdated);
