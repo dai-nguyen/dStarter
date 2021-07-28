@@ -22,7 +22,7 @@ namespace Infrastructure.Modules.CRM.Mappers
 
     public static class ContactMapper
     {
-        public static Dictionary<string, Expression<Func<Contact, object>>> CustAttrDefColMaps =
+        public static Dictionary<string, Expression<Func<Contact, object>>> ColMaps =
             new Dictionary<string, Expression<Func<Contact, object>>>()
             {
                 ["Id"] = _ => _.Id,
@@ -47,7 +47,7 @@ namespace Infrastructure.Modules.CRM.Mappers
                 option.Email, 
                 option.CustomerId, 
                 baseFilter, 
-                CustAttrDefColMaps);
+                ColMaps);
 
 
         }

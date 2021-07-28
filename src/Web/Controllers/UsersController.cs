@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using System.Threading.Tasks;
-using Web.Models;
 
 namespace Web.Controllers
 {
