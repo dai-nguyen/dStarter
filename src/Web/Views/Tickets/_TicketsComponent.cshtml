@@ -10,6 +10,9 @@
             <v-toolbar flat color="white">
                 <v-toolbar-title>Tickets</v-toolbar-title>
                 @*<v-divider class="mx-4" insert vertical></v-divider>*@
+
+                <!-- status drop down list with multi-select -->
+
                 <v-spacer></v-spacer>
                 <v-text-field v-model="search"
                               v-on:keyup.enter="searchEntered"
@@ -52,6 +55,7 @@
                     multiSort: false,
                     mustSort: false,
                     customerId: this.customerid,
+                    contactId: this.contactid,
                     search: ''
                 },
                 search: '',

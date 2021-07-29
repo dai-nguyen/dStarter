@@ -6,6 +6,7 @@
 
 
 <partial name="~/Views/Contacts/_ContactsComponent.cshtml" />
+<partial name="~/Views/Tickets/_TicketsComponent.cshtml" />
 
 <div id="appDiv">
     <v-app>
@@ -79,7 +80,7 @@
                         <contacts-component v-bind:customerid="model.id"></contacts-component>
                     </v-tab-item>
                     <v-tab-item v-if="model.id.length > 0">
-                        tickets
+                        <tickets-component v-bind:customerid="model.id"></tickets-component>
                     </v-tab-item>
                 </v-tabs>
 
