@@ -59,7 +59,7 @@
                         </v-form>
                     </v-tab-item>                    
                     <v-tab-item v-if="model.id.length > 0">
-                        tickets
+                        <tickets-component v-bind:contactid="model.id"></tickets-component>
                     </v-tab-item>
                 </v-tabs>
 

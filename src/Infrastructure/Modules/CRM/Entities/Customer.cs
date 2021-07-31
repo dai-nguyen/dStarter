@@ -14,7 +14,6 @@ namespace Infrastructure.Modules.CRM.Entities
         public string Country { get; set; }
         public string Phone { get; set; }
 
-        public virtual IEnumerable<Contact> Contacts { get; set; }
-        public virtual IEnumerable<Ticket> Tickets { get; set; }
+        public virtual IEnumerable<Contact> Contacts { get; set; }        
     }
 }

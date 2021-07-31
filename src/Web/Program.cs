@@ -36,7 +36,6 @@ namespace Web
                         string connStr = configuration.GetSection("DefaultConnection").Value;
                         string tableName = "Logs";
 
-
                         var columnWriters = new Dictionary<string, ColumnWriterBase>
                         {
                             {"message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
@@ -63,8 +62,8 @@ namespace Web
                             .WriteTo.PostgreSQL(
                                 connStr,
                                 tableName,
-                                columnWriters
-                                //needAutoCreateTable: true
+                                columnWriters,
+                                needAutoCreateTable: true
                                 //useCopy: true
                                 )
                             .Enrich.WithMachineName()
@@ -74,11 +73,11 @@ namespace Web
                         var dbContext = services.GetRequiredService<AppDbContext>();
                         dbContext.Database.Migrate();
                         // https://www.npgsql.org/efcore/mapping/enum.html?tabs=tabid-1
-                        using (var conn = (Npgsql.NpgsqlConnection)dbContext.Database.GetDbConnection())
-                        {
-                            conn.Open();
-                            conn.ReloadTypes();
-                        }
+                        //using (var conn = (Npgsql.NpgsqlConnection)dbContext.Database.GetDbConnection())
+                        //{
+                        //    conn.Open();
+                        //    conn.ReloadTypes();
+                        //}
 
                         var logFactory = services.GetRequiredService<ILoggerFactory>();
                         var userManager = services.GetRequiredService<UserManager<AppUser>>();

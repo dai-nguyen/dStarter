@@ -25,13 +25,10 @@ namespace Infrastructure.Modules.CRM.Configurations
             builder.Property(_ => _.IsBilled);
             builder.Property(_ => _.IsPaid);
 
-            builder.HasOne(_ => _.Customer)
+            builder.HasOne(_ => _.Contact)
                 .WithMany(_ => _.Tickets)
-                .HasForeignKey(_ => _.CustomerId)
+                .HasForeignKey(_ => _.ContactId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Property(_ => _.ContactId);
-            builder.HasIndex(_ => _.ContactId);
 
         }
     }

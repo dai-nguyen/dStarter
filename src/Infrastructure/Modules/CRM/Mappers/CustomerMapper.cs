@@ -2,7 +2,6 @@
 using Infrastructure.Mappers;
 using Infrastructure.Modules.CRM.Entities;
 using Infrastructure.Modules.CRM.Specifications;
-using Shared.DTOs;
 using Shared.DTOs.CRM;
 using System;
 using System.Collections.Generic;

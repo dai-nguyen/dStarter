@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Entities;
+using System.Collections.Generic;
 
 namespace Infrastructure.Modules.CRM.Entities
 {
@@ -12,5 +13,7 @@ namespace Infrastructure.Modules.CRM.Entities
 
         public string CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
+
+        public virtual IEnumerable<Ticket> Tickets { get; set; }
     }
 }

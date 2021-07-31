@@ -15,7 +15,6 @@ namespace Infrastructure.Modules.CRM.Mappers
         {
             CreateMap<Ticket, TicketDto>();                
             CreateMap<TicketDto, Ticket>()                
-                .ForMember(_ => _.Customer, opt => opt.Ignore())
                 .ForMember(_ => _.Contact, opt => opt.Ignore());
         }
     }
@@ -40,18 +39,21 @@ namespace Infrastructure.Modules.CRM.Mappers
 
             var baseFilter = option.ToBaseFilterDtoSpecification();
 
-            return new TicketSpecification(
+            var spec = new TicketSpecification(
                 option.Search ?? "",
                 option.Title, 
                 option.Status, 
                 option.IsBilled, 
-                option.IsPaid, 
-                option.ContactId,
-                option.CustomerId, 
+                option.IsPaid,
+                option.CustomerId,
+                option.ContactId,                
                 baseFilter, 
                 CustAttrDefColMaps);
 
+            //if (!string.IsNullOrEmpty(option.CustomerId))
+            //    spec.Includes.Add(_ => _.Contact);
 
+            return spec;
         }
     }
 }

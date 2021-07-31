@@ -16,8 +16,8 @@ namespace Infrastructure.Modules.CRM.Specifications
             string status = "",
             bool? isBilled = null,
             bool? isPaid = null,
-            string contactId = null,
             string customerId = null,
+            string contactId = null,            
             BaseFilterDto baseFilter = null,
             Dictionary<string, Expression<Func<Ticket, object>>> columnMaps = null)
             : base(
@@ -27,11 +27,13 @@ namespace Infrastructure.Modules.CRM.Specifications
                   && (string.IsNullOrEmpty(status) || _.Status == status)
                   && (!isBilled.HasValue || _.IsBilled == isBilled.Value)
                   && (!isPaid.HasValue || _.IsPaid == isPaid.Value)
-                  && (string.IsNullOrEmpty(contactId) || _.ContactId == contactId)
-                  && (string.IsNullOrEmpty(customerId) || _.Contact.Customer.Id == customerId),
+                  && (string.IsNullOrEmpty(customerId) || _.Contact.CustomerId == customerId)
+                  && (string.IsNullOrEmpty(contactId) || _.ContactId == contactId),
                   baseFilter,
                   columnMaps)
         {
+            if (!string.IsNullOrEmpty(customerId))
+                Includes.Add(_ => _.Contact);
         }
     }
 }

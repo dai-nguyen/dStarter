@@ -17,6 +17,12 @@
 
                 <v-form v-model="valid" ref="form" lazy-validation>
 
+                    <v-select :items="contacts"
+                              v-model="model.contactId"
+                              label="Contact"
+                              v-if="model.customerId">
+                    </v-select>
+
                     <v-text-field v-model="model.title"
                                   :rules="titleRules"
                                   :counter="100"
@@ -106,6 +112,8 @@
             var id = '@id';
             var customer_id = '@customer_id';
             var contact_id = '@contact_id';
+
+            // todo: load contacts
 
             if (id.length > 0) {
                 this.load(id);

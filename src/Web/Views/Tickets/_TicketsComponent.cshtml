@@ -8,7 +8,7 @@
 
         <template v-slot:top>
             <v-toolbar flat color="white">
-                <v-toolbar-title>Tickets</v-toolbar-title>
+                <v-toolbar-title>{{title}}</v-toolbar-title>
                 @*<v-divider class="mx-4" insert vertical></v-divider>*@
 
                 <!-- status drop down list with multi-select -->
@@ -38,7 +38,7 @@
 
 <script>
     Vue.component('tickets-component', {
-        props: ['customerid', 'contactid'],
+        props: ['customerid', 'contactid', 'title'],
         template: '#tickets-tpl',
         data() {
             return {
@@ -62,8 +62,6 @@
                 headers: [
                     { text: 'Title', value: 'title' },
                     { text: 'Status', value: 'status' },
-                    { text: 'Billed', value: 'isBilled' },
-                    { text: 'Paid', value: 'isPaid' },                    
                     { text: 'Action', value: 'action', sortable: false }
                 ]
             }
@@ -99,10 +97,21 @@
             },
 
             view(item) {
-                
+
                 var id = item == null ? "" : item.id;
 
-                
+                var href = '@Url.Action("Upsert", "Tickets")' + "?id=" + id;
+
+                if (id.length == 0) {
+
+                    if (customerid.length > 0)
+                        href += '&customer_id=' + this.customerid;
+
+                    if (contactid.length > 0)
+                        href += '&contact_id=' + this.contactid;
+                }
+
+                location.href = href;
             }
         }
     })
