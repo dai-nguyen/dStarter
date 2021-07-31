@@ -60,7 +60,7 @@ namespace Infrastructure.Data
 
         static IEnumerable<AppRole> GetPreconfiguredRoles()
         {
-            return new List<AppRole>()
+            return new AppRole[]
             {
                 new AppRole()
                 {
