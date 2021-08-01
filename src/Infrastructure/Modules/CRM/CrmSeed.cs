@@ -26,21 +26,25 @@ namespace Infrastructure.Modules.CRM
                     {                        
                         customer.Id = Guid.NewGuid().ToString();
                         await dbContext.Customers.AddAsync(customer);
+                        //await dbContext.SaveChangesAsync();
 
                         foreach (var contact in GetPreconfiguredContact(customer.Id))
                         {
                             contact.Id = Guid.NewGuid().ToString();
                             await dbContext.Contacts.AddAsync(contact);
+                            //await dbContext.SaveChangesAsync();
 
                             foreach (var ticket in GetPrecongiuredTicket(contact.Id))
                             {
                                 ticket.Id = Guid.NewGuid().ToString();
                                 await dbContext.Tickets.AddAsync(ticket);
+                                //await dbContext.SaveChangesAsync();
 
                                 foreach (var labor in GetPreconfiguredLabor(ticket.Id))
                                 {
                                     labor.Id = Guid.NewGuid().ToString();
-                                    await dbContext.LaborHours.AddAsync(labor);
+                                    await dbContext.Labors.AddAsync(labor);
+                                    //await dbContext.SaveChangesAsync();
                                 }
                             }
                         }
@@ -69,7 +73,7 @@ namespace Infrastructure.Modules.CRM
         {
             var data = new List<Customer>();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 20; i++)
             {
                 data.Add(new Customer()
                 {
@@ -91,7 +95,7 @@ namespace Infrastructure.Modules.CRM
         {
             var data = new List<Contact>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
                 data.Add(new Contact()
                 {
@@ -111,7 +115,7 @@ namespace Infrastructure.Modules.CRM
         {
             var data = new List<Ticket>();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 5; i++)
             {
                 data.Add(new Ticket()
                 {

@@ -39,6 +39,7 @@ namespace Infrastructure.Modules.CRM.Mappers
 
             return new LaborSpecification(
                 option.Search ?? "",                
+                option.TicketId,
                 baseFilter, 
                 ColMaps);
 

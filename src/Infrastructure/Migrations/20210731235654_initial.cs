@@ -289,11 +289,10 @@ namespace Infrastructure.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Status = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Status = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     IsBilled = table.Column<bool>(type: "boolean", nullable: false),
                     IsPaid = table.Column<bool>(type: "boolean", nullable: false),
                     ContactId = table.Column<string>(type: "text", nullable: true),
-                    CustomerId = table.Column<string>(type: "text", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValue: "?"),
@@ -309,17 +308,11 @@ namespace Infrastructure.Migrations
                         column: x => x.ContactId,
                         principalTable: "Contacts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Tickets_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LaborHours",
+                name: "Labors",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
@@ -336,9 +329,9 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LaborHours", x => x.Id);
+                    table.PrimaryKey("PK_Labors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LaborHours_Tickets_TicketId",
+                        name: "FK_Labors_Tickets_TicketId",
                         column: x => x.TicketId,
                         principalTable: "Tickets",
                         principalColumn: "Id",
@@ -427,13 +420,13 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_LaborHours_ExternalId",
-                table: "LaborHours",
+                name: "IX_Labors_ExternalId",
+                table: "Labors",
                 column: "ExternalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LaborHours_TicketId",
-                table: "LaborHours",
+                name: "IX_Labors_TicketId",
+                table: "Labors",
                 column: "TicketId");
 
             migrationBuilder.CreateIndex(
@@ -461,11 +454,6 @@ namespace Infrastructure.Migrations
                 name: "IX_Tickets_ContactId",
                 table: "Tickets",
                 column: "ContactId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tickets_CustomerId",
-                table: "Tickets",
-                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_ExternalId",
@@ -510,7 +498,7 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "LaborHours");
+                name: "Labors");
 
             migrationBuilder.DropTable(
                 name: "Logs");

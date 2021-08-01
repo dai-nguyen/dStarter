@@ -32,8 +32,8 @@ namespace Infrastructure.Modules.CRM.Specifications
                   baseFilter,
                   columnMaps)
         {
-            if (!string.IsNullOrEmpty(customerId))
-                Includes.Add(_ => _.Contact);
+            //if (!string.IsNullOrEmpty(customerId))
+            //    Includes.Add(_ => _.Contact);
         }
     }
 }

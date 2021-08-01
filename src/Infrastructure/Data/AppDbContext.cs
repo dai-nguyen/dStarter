@@ -28,7 +28,7 @@ namespace Infrastructure.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<Labor> LaborHours { get; set; }
+        public DbSet<Labor> Labors { get; set; }
 
 
         public AppDbContext(

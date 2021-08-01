@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210430043948_initial")]
+    [Migration("20210731235654_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.3")
+                .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Infrastructure.Data.AppRole", b =>
@@ -454,7 +454,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.LaborHour", b =>
+            modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Labor", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -503,7 +503,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("LaborHours");
+                    b.ToTable("Labors");
                 });
 
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Ticket", b =>
@@ -522,9 +522,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<IEnumerable<CustomAttribute>>("CustomAttributes")
                         .HasColumnType("jsonb");
-
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp without time zone");
@@ -546,6 +543,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -563,8 +561,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContactId");
-
-                    b.HasIndex("CustomerId");
 
                     b.HasIndex("ExternalId");
 
@@ -685,10 +681,10 @@ namespace Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.LaborHour", b =>
+            modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Labor", b =>
                 {
                     b.HasOne("Infrastructure.Modules.CRM.Entities.Ticket", "Ticket")
-                        .WithMany("LaborHours")
+                        .WithMany("Labors")
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -698,17 +694,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Ticket", b =>
                 {
                     b.HasOne("Infrastructure.Modules.CRM.Entities.Contact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId");
-
-                    b.HasOne("Infrastructure.Modules.CRM.Entities.Customer", "Customer")
                         .WithMany("Tickets")
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("ContactId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Contact");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -762,16 +752,19 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Contact", b =>
+                {
+                    b.Navigation("Tickets");
+                });
+
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Customer", b =>
                 {
                     b.Navigation("Contacts");
-
-                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Infrastructure.Modules.CRM.Entities.Ticket", b =>
                 {
-                    b.Navigation("LaborHours");
+                    b.Navigation("Labors");
                 });
 #pragma warning restore 612, 618
         }

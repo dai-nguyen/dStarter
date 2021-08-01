@@ -11,12 +11,13 @@ namespace Infrastructure.Modules.CRM.Specifications
     public class LaborSpecification : BaseSpecification<Labor>
     {
         public LaborSpecification(
-            string search = "",            
+            string search = "",
+            string ticketId = null,
             BaseFilterDto baseFilter = null,
             Dictionary<string, Expression<Func<Labor, object>>> columnMaps = null)
             : base(
-                  _ => (string.IsNullOrEmpty(search) || EF.Functions.ToTsVector("english",
-                      _.Description).Matches(search)),                  
+                  _ => (string.IsNullOrEmpty(search) || EF.Functions.ToTsVector("english", _.Description).Matches(search))
+                  && (string.IsNullOrEmpty(ticketId) || _.TicketId == ticketId),                  
                   baseFilter,
                   columnMaps)
         {

@@ -14,6 +14,6 @@ namespace Infrastructure.Modules.CRM.Entities
         public string ContactId { get; set; }
         public virtual Contact Contact { get; set; }
 
-        public virtual IEnumerable<Labor> LaborHours { get; set; }
+        public virtual IEnumerable<Labor> Labors { get; set; }
     }
 }

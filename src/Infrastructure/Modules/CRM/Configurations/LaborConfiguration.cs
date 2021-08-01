@@ -24,9 +24,8 @@ namespace Infrastructure.Modules.CRM.Configurations
             builder.Property(_ => _.Description).IsRequired();
 
 
-
             builder.HasOne(_ => _.Ticket)
-                .WithMany(_ => _.LaborHours)
+                .WithMany(_ => _.Labors)
                 .HasForeignKey(_ => _.TicketId)
                 .OnDelete(DeleteBehavior.Cascade);
 

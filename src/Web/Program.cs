@@ -1,5 +1,6 @@
 using Infrastructure.Data;
 using Infrastructure.Helpers;
+using Infrastructure.Modules.CRM;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -83,6 +84,7 @@ namespace Web
                         var userManager = services.GetRequiredService<UserManager<AppUser>>();
                         var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
                         AsyncHelper.RunSync(() => AppDbContextSeed.SeedAsync(dbContext, userManager, roleManager, logFactory));
+                        AsyncHelper.RunSync(() => CrmSeed.SeedAsync(dbContext, logFactory));
                     }
                     catch (Exception ex)
                     {
