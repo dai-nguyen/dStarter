@@ -17,6 +17,8 @@ namespace Infrastructure.Mappers
             result.PageSize = option.ItemsPerPage;
             result.PageNumber = option.Page;
 
+            result.IsPagingEnabled = option.ItemsPerPage > 0;
+
             if (option.SortBy != null
                 && option.SortBy.Any()
                 && option.SortDesc != null

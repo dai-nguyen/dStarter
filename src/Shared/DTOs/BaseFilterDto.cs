@@ -19,7 +19,9 @@ namespace Shared.DTOs
         public bool IsPagingEnabled { get; set; } = false;
 
         public BaseFilterDto()
-        { }
+        {
+            IsPagingEnabled = PageSize > 0;
+        }
 
         public BaseFilterDto(
             string[] ids,

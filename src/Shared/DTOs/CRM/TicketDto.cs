@@ -9,5 +9,6 @@
         public bool IsPaid { get; set; }
 
         public string ContactId { get; set; }
+        public string CustomerId { get; set; }
     }
 }

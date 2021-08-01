@@ -2,7 +2,6 @@
 using Infrastructure.Mappers;
 using Infrastructure.Modules.CRM.Entities;
 using Infrastructure.Modules.CRM.Specifications;
-using Shared.DTOs;
 using Shared.DTOs.CRM;
 using System;
 using System.Collections.Generic;
@@ -38,7 +37,7 @@ namespace Infrastructure.Modules.CRM.Mappers
                 throw new ArgumentNullException("TableOption is required.");
 
             var baseFilter = option.ToBaseFilterDtoSpecification();
-
+            
             return new ContactSpecification(
                 option.Search ?? "",
                 option.Title, 

@@ -1,11 +1,13 @@
 ﻿using Infrastructure.Interfaces;
 using Infrastructure.Modules.CRM.Entities;
 using Infrastructure.Modules.CRM.Mappers;
+using Infrastructure.Modules.CRM.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using Shared.DTOs.CRM;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Web.Controllers.CRM
@@ -53,7 +55,19 @@ namespace Web.Controllers.CRM
         [HttpGet]
         public async Task<ActionResultDto<TicketDto>> GetData(string id)
         {
-            return await _ticketStore.GetAsync(id);
+            var spec = new TicketSpecification()
+            {
+                
+            };
+
+            var data = await _ticketStore.FindAsync(spec);
+
+            if (data.Result.Total == 1)
+                return new ActionResultDto<TicketDto>() { Result = data.Result.Data.First() };
+
+            return new ActionResultDto<TicketDto>();
+
+            //return await _ticketStore.GetAsync(id);
         }
 
         [HttpGet]

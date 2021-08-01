@@ -7,6 +7,8 @@
     var contact_id = ViewBag.contact_id;
 }
 
+<partial name="~/Views/Tickets/_LaborComponent.cshtml" />
+
 <div id="appDiv">
     <v-app>
         <partial name="~/Views/Shared/_Alert.cshtml" />
@@ -20,7 +22,7 @@
                     <v-select :items="contacts"
                               v-model="model.contactId"
                               label="Contact"
-                              v-if="model.customerId">
+                              >
                     </v-select>
 
                     <v-text-field v-model="model.title"
@@ -85,6 +87,7 @@
                 v => v.length <= 10001 || 'First Name must be less than 10001 characters'
             ],
             statuses: [],
+            contacts: [],
             valid: false,
             isBusy: false,
             showAlert: false,
@@ -113,8 +116,6 @@
             var customer_id = '@customer_id';
             var contact_id = '@contact_id';
 
-            // todo: load contacts
-
             if (id.length > 0) {
                 this.load(id);
             }
@@ -126,7 +127,9 @@
                 if (contact_id.length > 0) {
                     this.model.contactId = contact_id;
                 }
-            }            
+            }
+
+            
         },
         methods: {
 
@@ -137,6 +140,24 @@
                         if (response.data) {
                             console.log('load', response.data);
                             this.model = response.data.result;
+
+                            this.getContacts();
+                        }
+                    });
+            },
+
+            getContacts() {
+
+                var payload = {
+                    itemsPerPage: 0, // no paging
+                    customerId: this.model.customerId
+                };
+
+                axios
+                    .post('@Url.Action("LoadData", "Contacts")', payload)
+                    .then(response => {
+                        if (response.data) {
+                            this.contacts = response.data.result;
                         }
                     });
             },
@@ -181,7 +202,7 @@
                 axios
                     .get('@Url.Action("GetStatusData", "Tickets")')
                     .then(response => {
-                        if (response.data) {                            
+                        if (response.data) {
                             this.statuses = response.data;
                         }
                     });

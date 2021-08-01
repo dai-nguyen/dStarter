@@ -13,8 +13,9 @@ namespace Infrastructure.Modules.CRM.Mappers
     {
         public TicketProfile()
         {
-            CreateMap<Ticket, TicketDto>();                
-            CreateMap<TicketDto, Ticket>()                
+            CreateMap<Ticket, TicketDto>()
+                .ForMember(_ => _.CustomerId, opt => opt.MapFrom(_ => _.Contact.CustomerId));
+            CreateMap<TicketDto, Ticket>()
                 .ForMember(_ => _.Contact, opt => opt.Ignore());
         }
     }
