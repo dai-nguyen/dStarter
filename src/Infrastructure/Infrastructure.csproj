@@ -41,7 +41,9 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Modules\CRM\Enums\" />
+    <Folder Include="Modules\Bank\Configurations\" />
+    <Folder Include="Modules\Bank\Mappers\" />
+    <Folder Include="Modules\Bank\Specifications\" />
     <Folder Include="Modules\CRM\Interfaces\" />
     <Folder Include="Modules\CRM\Stores\" />
     <Folder Include="Modules\CRM\Services\" />
