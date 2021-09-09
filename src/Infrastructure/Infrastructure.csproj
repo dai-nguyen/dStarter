@@ -41,7 +41,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Modules\Bank\Configurations\" />
     <Folder Include="Modules\Bank\Mappers\" />
     <Folder Include="Modules\Bank\Specifications\" />
     <Folder Include="Modules\CRM\Interfaces\" />
