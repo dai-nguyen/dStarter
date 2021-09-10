@@ -22,7 +22,8 @@ namespace Infrastructure.Modules.Bank.Configurations
             builder.Property(_ => _.Name).HasMaxLength(100).IsRequired();
             builder.Property(_ => _.Amount).IsRequired();
             builder.Property(_ => _.IsRealized).IsRequired();
-            
+            builder.Property(_ => _.UserId).HasMaxLength(100).IsRequired();
+
             builder.HasOne(_ => _.BankAccount)
                 .WithMany(_ => _.Transactions)
                 .HasForeignKey(_ => _.BankAccountId)

@@ -20,7 +20,8 @@ namespace Infrastructure.Modules.Bank.Configurations
                 .HasColumnType("jsonb");
 
             builder.Property(_ => _.Name).HasMaxLength(100).IsRequired();
-            builder.Property(_ => _.Type).HasMaxLength(100).IsRequired();            
+            builder.Property(_ => _.Type).HasMaxLength(100).IsRequired();
+            builder.Property(_ => _.UserId).HasMaxLength(100).IsRequired();
         }
     }
 }
