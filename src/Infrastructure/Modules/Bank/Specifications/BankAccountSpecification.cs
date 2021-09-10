@@ -4,10 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared.DTOs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Modules.Bank.Specifications
 {
@@ -23,10 +20,12 @@ namespace Infrastructure.Modules.Bank.Specifications
             : base(
                   _ => (string.IsNullOrEmpty(search) || EF.Functions.ToTsVector("english",
                       _.Name + " " + _.Type).Matches(search))
-                  && (string.IsNullOrEmpty(name) || _.Name.StartsWith(name))
-                  )
+                  && (string.IsNullOrEmpty(userId) || _.UserId == userId)
+                  && (string.IsNullOrEmpty(name) || _.Name.StartsWith(name))                  
+                  && (string.IsNullOrEmpty(type) || _.Type.StartsWith(type)),
+                  baseFilter,
+                  columnMaps)
         {
-
         }
     }
 }
