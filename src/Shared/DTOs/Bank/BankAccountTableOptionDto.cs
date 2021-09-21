@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Modules.Bank.Mappers
+namespace Shared.DTOs.Bank
 {
-    public class BankAccountTransactionMapper
+    public class BankAccountTableOptionDto
     {
     }
 }
