@@ -47,8 +47,6 @@ namespace Infrastructure.Modules.CRM.Mappers
                 option.CustomerId, 
                 baseFilter, 
                 ColMaps);
-
-
         }
     }
 }

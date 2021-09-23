@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Infrastructure.Mappers;
 using Infrastructure.Modules.Bank.Entities;
 using Infrastructure.Modules.Bank.Specifications;
 using Shared.DTOs.Bank;
@@ -28,7 +29,18 @@ namespace Infrastructure.Modules.Bank.Mappers
 
         public static BankAccountSpecification ToBankAccountSpecification(this BankAccountTableOptionDto option)
         {
+            if (option == null)
+                throw new ArgumentNullException("TableOption is required.");
 
+            var baseFilter = option.ToBaseFilterDtoSpecification();
+
+            return new BankAccountSpecification(
+                option.Search,
+                option.UserId,
+                option.Name,
+                option.Type,
+                baseFilter,
+                ColMaps);
         }
     }
 }
