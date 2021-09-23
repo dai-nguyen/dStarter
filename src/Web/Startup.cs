@@ -1,6 +1,8 @@
 using Infrastructure;
 using Infrastructure.Authorization;
 using Infrastructure.Data;
+using Infrastructure.Modules.Bank;
+using Infrastructure.Modules.CRM;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +28,10 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.UseInfrastructure(Configuration);
+            
+            services.UseCRM();
+            
+            services.UseBank();
 
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
