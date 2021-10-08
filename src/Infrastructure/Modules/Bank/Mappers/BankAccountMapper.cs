@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Infrastructure.Interfaces;
 using Infrastructure.Mappers;
 using Infrastructure.Modules.Bank.Entities;
 using Infrastructure.Modules.Bank.Specifications;
@@ -27,7 +28,8 @@ namespace Infrastructure.Modules.Bank.Mappers
                 ["Type"] = _ => _.Type
             };
 
-        public static BankAccountSpecification ToBankAccountSpecification(this BankAccountTableOptionDto option)
+        public static BankAccountSpecification ToBankAccountSpecification(
+            this BankAccountTableOptionDto option)
         {
             if (option == null)
                 throw new ArgumentNullException("TableOption is required.");
