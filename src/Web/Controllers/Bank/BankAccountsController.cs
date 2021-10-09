@@ -30,7 +30,6 @@ namespace Web.Controllers.Bank
             
         }
 
-
         public IActionResult Index()
         {
             return View();
@@ -83,30 +82,11 @@ namespace Web.Controllers.Bank
         }
 
         [HttpPatch]
-        public async Task<IActionResult> PatchData(
+        public async Task<ActionResultDto<BankAccountDto>> PatchData(
             string id, 
             [FromBody] JsonPatchDocument<BankAccountDto> patchDoc)
         {
-            var action = await _bankAccountStore.GetAsync(id);
-
-            if (action.Result == null)
-            {
-                return NotFound();
-            }
-
-            var entity = action.Result;
-
-            patchDoc.ApplyTo(entity, ModelState);   
-            
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var updated = await _bankAccountStore.UpdateAsync(action.Result);
-
-            return new ObjectResult(updated.Result);
-
+            return await _bankAccountStore.PatchAsync(id, patchDoc);
         }
     }
 }

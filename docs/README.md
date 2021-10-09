@@ -9,3 +9,5 @@ Export-PfxCertificate -Cert $certpath -FilePath c:\Web.pfx -Password $pwd
 
 add-migration
 update-database
+
+https://github.com/openiddict/openiddict-core/tree/dev/samples/Mvc.Server

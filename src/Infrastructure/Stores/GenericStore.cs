@@ -3,6 +3,7 @@ using Infrastructure.Data;
 using Infrastructure.Entities;
 using Infrastructure.Extensions;
 using Infrastructure.Interfaces;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shared.DTOs;
@@ -12,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Stores
 {
-    public class GenericStore<TEntity, TDto> : IStore<TEntity, TDto> 
-        where TEntity : BaseEntity 
-        where TDto : BaseDto 
+    public class GenericStore<TEntity, TDto> : IStore<TEntity, TDto>
+        where TEntity : BaseEntity
+        where TDto : BaseDto
     {
         protected readonly ILogger Logger;
         protected readonly AppDbContext DbContext;
@@ -66,7 +67,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute AddAsync method {@0} {UserName}", 
+                Logger.LogError(ex, "Unable to execute AddAsync method {@0} {UserName}",
                     dto, UserSession.UserName);
             }
             return action;
@@ -106,7 +107,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute AddRangeAsync method {@0} {UserName}", 
+                Logger.LogError(ex, "Unable to execute AddRangeAsync method {@0} {UserName}",
                     dtos, UserSession.UserName);
             }
             return action;
@@ -137,7 +138,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute DeleteAsync {0}", 
+                Logger.LogError(ex, "Unable to execute DeleteAsync {0}",
                     id, UserSession.UserName);
             }
             return action;
@@ -162,7 +163,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute FindAsync method {@0} {UserName}", 
+                Logger.LogError(ex, "Unable to execute FindAsync method {@0} {UserName}",
                     spec, UserSession.UserName);
             }
             return action;
@@ -180,7 +181,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute GetAsync method {0} {UserName}", 
+                Logger.LogError(ex, "Unable to execute GetAsync method {0} {UserName}",
                     id, UserSession.UserName);
             }
             return action;
@@ -227,7 +228,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute UpdateAsync method {@0}", 
+                Logger.LogError(ex, "Unable to execute UpdateAsync method {@0}",
                     dto, UserSession.UserName);
             }
             return action;
@@ -298,11 +299,47 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute GetByExternalIdAsync {0} {UserName}", 
+                Logger.LogError(ex, "Unable to execute GetByExternalIdAsync {0} {UserName}",
                     externalId, UserSession.UserName);
             }
             return action;
         }
+
+        public virtual async Task<ActionResultDto<TDto>> PatchAsync(
+            string id,
+            JsonPatchDocument<TDto> patchDoc)
+        {
+            var action = new ActionResultDto<TDto>();
+
+            if (string.IsNullOrEmpty(id) || patchDoc == null)
+                return action;
+
+            try
+            {
+                var getAction = await this.GetAsync(id);
+
+                if (getAction.Result == null)
+                {
+                    var err = $"Unable to find entity with Id {id}";
+                    Logger.LogError(err);
+                    action.Errors.Add(err);
+                    return action;
+                }
+
+                var dto = getAction.Result;
+
+                patchDoc.ApplyTo(dto);
+
+                action = await this.UpdateAsync(dto);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Unable to execute PatchAsync method {@0} {UserName}",
+                    patchDoc, UserSession.UserName);
+            }
+            return action;
+        }
+
 
         private IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> spec)
         {
