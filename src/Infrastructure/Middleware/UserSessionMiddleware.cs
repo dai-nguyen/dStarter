@@ -17,7 +17,8 @@ namespace Infrastructure.Middleware
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext, 
+        public async Task InvokeAsync(
+            HttpContext httpContext, 
             ILogger<UserSessionMiddleware> logger, 
             IUserSession userSession)
         {

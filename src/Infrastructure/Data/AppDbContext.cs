@@ -2,6 +2,8 @@
 using Infrastructure.Entities;
 using Infrastructure.Extensions;
 using Infrastructure.Interfaces;
+using Infrastructure.Modules.Bank.Configurations;
+using Infrastructure.Modules.Bank.Entities;
 using Infrastructure.Modules.CRM.Configurations;
 using Infrastructure.Modules.CRM.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -30,6 +32,9 @@ namespace Infrastructure.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Labor> Labors { get; set; }
 
+        // Bank module
+        public DbSet<BankAccount> BankAccounts { get; set; }
+        public DbSet<BankAccountTransaction> BankAccountTransactions { get; set; }
 
         public AppDbContext(
             DbContextOptions<AppDbContext> options,
@@ -74,6 +79,10 @@ namespace Infrastructure.Data
             builder.ApplyConfiguration(new ContactConfiguration());
             builder.ApplyConfiguration(new TicketConfiguration());
             builder.ApplyConfiguration(new LaborConfiguration());
+
+            // Bank module
+            builder.ApplyConfiguration(new BankAccountConfiguration());
+            builder.ApplyConfiguration(new BankAccountTransactionConfiguration());
 
             //builder.HasPostgresEnum<Modules.CRM.Enums.TicketStatus>();
 

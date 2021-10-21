@@ -9,6 +9,8 @@ namespace Infrastructure.Modules.Bank.Entities
         public string Type { get; set; }
         public string UserId { get; set; }
 
+        public double Amount { get; set; }
+
         public IEnumerable<BankAccountTransaction> Transactions { get; set; }
     }
 }

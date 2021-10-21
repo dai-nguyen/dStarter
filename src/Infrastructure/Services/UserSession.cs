@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Data;
 using Infrastructure.Extensions;
-using Infrastructure.Helpers;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -21,18 +20,13 @@ namespace Infrastructure.Services
         public IEnumerable<string> Roles { get; private set; }
         public IEnumerable<Claim> Claims { get; private set; }
 
-        private readonly ILogger _logger;
-        //private readonly IUserStore _userStore;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger _logger;                
 
         public UserSession(
-            ILogger<UserSession> logger,
-            //Interfaces.IUserStore userStore,
+            ILogger<UserSession> logger,            
             IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
-            //_userStore = userStore;
-            _httpContextAccessor = httpContextAccessor;
+            _logger = logger;                        
 
             if (httpContextAccessor != null && httpContextAccessor.HttpContext != null)
                 this.SetUserSession(httpContextAccessor.HttpContext);
@@ -65,12 +59,9 @@ namespace Infrastructure.Services
 
                 UserId = httpContext.User.Claims.GetClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
                 Email = httpContext.User.Claims.GetClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress");
-                //FirstName = httpContext.User.Claims.GetClaim(Constants.Claims.FirstName);
-                //LastName = httpContext.User.Claims.GetClaim(Constants.Claims.LastName);
-
+                
                 Claims = httpContext.User.Claims.ToArray();
-                //Roles = httpContext.User.Claims.GetRoles();
-
+                
                 Roles = httpContext.User.Claims
                     .Where(_ => _.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
                     .Select(_ => _.Value)

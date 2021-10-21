@@ -22,6 +22,7 @@ namespace Infrastructure.Modules.Bank.Configurations
             builder.Property(_ => _.Name).HasMaxLength(100).IsRequired();
             builder.Property(_ => _.Type).HasMaxLength(100).IsRequired();
             builder.Property(_ => _.UserId).HasMaxLength(100).IsRequired();
+            builder.Property(_ => _.Amount).IsRequired();
         }
     }
 }
