@@ -29,24 +29,5 @@ namespace Infrastructure.Modules.Bank.Mappers
                 ["Amount"] = _ => _.Amount,
                 ["IsRealized"] = _ => _.IsRealized,                
             };
-
-        public static BankAccountTransactionSpecification ToBankAccountTransactionSpecification(
-            this BankAccountTransactionTableOptionDto option)
-        {
-            if (option == null)
-                throw new ArgumentNullException("TableOption is required.");
-
-            var baseFilter = option.ToBaseFilterDtoSpecification();
-
-            return new BankAccountTransactionSpecification(
-                option.Search ?? "",
-                option.UserId,
-                option.BankAccountId,
-                option.Name,
-                option.Amount,
-                option.IsRealized,
-                baseFilter,
-                ColMaps);
-        }
     }
 }

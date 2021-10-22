@@ -11,6 +11,7 @@ namespace Infrastructure.Modules.Bank.Entities
 
         public double Amount { get; set; }
 
-        public IEnumerable<BankAccountTransaction> Transactions { get; set; }
+        public IEnumerable<BankAccountLink> Links { get; set; }
+        public IEnumerable<BankAccountTransaction> Transactions { get; set; }        
     }
 }

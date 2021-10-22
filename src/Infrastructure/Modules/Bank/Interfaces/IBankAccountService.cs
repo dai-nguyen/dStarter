@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Shared.DTOs;
+using Shared.DTOs.Bank;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,6 @@ namespace Infrastructure.Modules.Bank.Interfaces
 {
     public interface IBankAccountService
     {
+        Task<ActionResultDto<BankAccountTransactionDto>> AddTransactionAsync(BankAccountTransactionDto dto);
     }
 }

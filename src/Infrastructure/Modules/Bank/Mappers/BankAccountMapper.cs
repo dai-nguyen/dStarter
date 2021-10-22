@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Infrastructure.Interfaces;
 using Infrastructure.Mappers;
 using Infrastructure.Modules.Bank.Entities;
 using Infrastructure.Modules.Bank.Specifications;
