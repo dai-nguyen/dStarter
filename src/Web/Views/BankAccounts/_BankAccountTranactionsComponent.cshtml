@@ -1,0 +1,95 @@
+﻿<script type="text/x-template" id="bankaccounttransactions-tpl">
+    <v-data-table :headers="headers"
+                  :items="items"
+                  :options.sync="options"
+                  :server-items-length="totalItems"
+                  :loading="loading"
+                  class="elevation-1">
+
+        <template v-slot:top>
+            <v-toolbar flat color="white">
+                <v-toolbar-title>Transactions</v-toolbar-title>                
+                <v-spacer></v-spacer>
+                <v-text-field v-model="search"
+                              v-on:keyup.enter="searchEntered"
+                              append-icon="mdi-magnify"
+                              label="Search"
+                              single-line
+                              hide-details></v-text-field>
+                <v-spacer></v-spacer>
+
+                <v-btn color="primary" dar class="mb-2" v-on:click="view()">Add</v-btn>
+
+            </v-toolbar>
+        </template>
+
+        <template v-slot:item.action="{ item }">
+            <v-icon small class="mr-2" v-on:click="view(item)">mdi-pencil</v-icon>
+        </template>
+        <template v-slot:no-data>
+            <v-btn color="primary" v-on:click="getData()">Reset</v-btn>
+        </template>
+    </v-data-table>
+</script>
+
+<script>
+    Vue.component('bank-account-transaction-component', {
+        props: ['bankaccountid'],
+        template: '#bankaccounttransactions-tpl',
+        data() {
+            return {
+                items: [],
+                totalItems: 0,
+                loading: true,
+                options: {
+                    page: 1,
+                    itemPerPage: 10,
+                    sortBy: ['dateCreated'],
+                    sortDesc: [true],
+                    groupBy: [],
+                    groupDesc: [],
+                    multiSort: false,
+                    mustSort: false,
+                    bankAccountId: this.bankaccountid,
+                    search: ''
+                },
+                search: '',
+                headers: [
+                    { text: 'Date', value: 'dateCreated' },
+                    { text: 'Name', value: 'name' },
+                    { text: 'Amount', value: 'Amount' }                    
+                ]
+            }
+        },
+        watch: {
+            options: {
+                handler() {
+                    this.getData();
+                }
+            },
+        },
+        methods: {
+
+            getData () {
+                this.loading = true;
+                console.log('option', this.options);
+                axios
+                    .post('@Url.Action("LoadTransactionData", "BankAccounts")', this.options)
+                    .then(response => {
+                        this.items = response.data.result.data;
+                        this.totalItems = response.data.result.total;
+                        this.loading = false;
+                        //console.log(response.data.result.data);
+                    });
+            },
+
+            searchEntered() {
+                this.options.search = this.search;
+
+                if (this.options.search.length == 0) {
+                    this.getData();
+                }
+            }
+        }
+    })
+</script>

@@ -4,18 +4,14 @@
     var id = Url.ActionContext.RouteData.Values["id"];
 }
 
-
 <partial name="~/Views/Contacts/_ContactsComponent.cshtml" />
 <partial name="~/Views/Tickets/_TicketsComponent.cshtml" />
 
 <div id="appDiv">
     <v-app>
         <partial name="~/Views/Shared/_Alert.cshtml" />
-
         <v-card>
-
             <v-container>
-
                 <v-tabs>
                     <v-tab>Customer</v-tab>
                     <v-tab v-if="model.id.length > 0">Contacts</v-tab>
@@ -83,12 +79,8 @@
                         <tickets-component v-bind:customerid="model.id"></tickets-component>
                     </v-tab-item>
                 </v-tabs>
-
-
-                
             </v-container>
         </v-card>
-
     </v-app>
 </div>
 
