@@ -138,7 +138,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute DeleteAsync {0}",
+                Logger.LogError(ex, "Unable to execute DeleteAsync {0} {UserName}",
                     id, UserSession.UserName);
             }
             return action;
@@ -157,7 +157,7 @@ namespace Infrastructure.Stores
                 var total = await query.LongCountAsync();
                 var data = await SpecificationEvaluator<TEntity>
                     .ApplyPaging(query, spec)
-                    .ToListAsync();
+                    .ToArrayAsync();
 
                 action.Result = new PageDto<TDto>(total, Mapper.Map<TDto[]>(data));
             }
@@ -228,7 +228,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute UpdateAsync method {@0}",
+                Logger.LogError(ex, "Unable to execute UpdateAsync method {@0} {UserName}",
                     dto, UserSession.UserName);
             }
             return action;
@@ -277,7 +277,7 @@ namespace Infrastructure.Stores
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to execute UpdateRangeAsync {@0}",
+                Logger.LogError(ex, "Unable to execute UpdateRangeAsync {@0} {UserName}",
                     dtos, UserSession.UserName);
             }
             return action;
