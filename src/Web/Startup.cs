@@ -1,7 +1,6 @@
 using Infrastructure;
 using Infrastructure.Authorization;
 using Infrastructure.Data;
-using Infrastructure.Modules.Bank;
 using Infrastructure.Modules.CRM;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -33,9 +32,7 @@ namespace Web
         {
             services.UseInfrastructure(Configuration);
             
-            services.UseCRM();
-            
-            services.UseBank();
+            services.UseCRM();                       
 
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
